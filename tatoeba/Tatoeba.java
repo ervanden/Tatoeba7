@@ -11,7 +11,7 @@ import turkeditor.TurkishTextPane;
 import turkeditor.TurkishEditor;
 import utils.AreaFont;
 
-//github test
+//github test 1/10/2015
 
 // If the source or target language is one single language, a language-specific text pane is used.
 // In all other cases it is a normal JTextPane.
@@ -1028,6 +1028,7 @@ public class Tatoeba {
 
     public static void main(String[] args) {
 
+        System.out.println("github test 1/10");
         tatoebaFrame = new TatoebaFrame();
         SelectionFrame.execute();
 
