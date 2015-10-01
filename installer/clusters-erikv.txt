@@ -1,0 +1,1903 @@
+﻿cluster	erikv
+tur	Bilmediğim şey var mi?
+nld	Is er iets dat ik niet weet?
+cluster	erikv
+tur	bana öyle geldi
+nld	ik beeld het mij maar in
+cluster	erikv
+tur	çok hafifledim
+nld	ik ben erg opgelucht
+cluster	erikv
+tur	müsait olunca ararım      
+nld	ik bel je wanneer ik vrij ben
+cluster	erikv
+tur	zamanında gelseydi         
+nld	hij moest maar op tijd gekomen zijn
+cluster	erikv
+tur	gelirim ne zaman dersen   
+nld	ik kom wanneer je maar zegt
+cluster	erikv
+tur	uğramıyor bu aralar       
+nld	hij komt al een tijdje niet meer langs
+cluster	erikv
+tur	birinden telefon mu bekliyorsun?    
+nld	verwacht je telefoon van iemand?
+cluster	erikv
+tur	onun müsait olduğu zamanda       
+nld	als het hem past
+cluster	erikv
+tur	acele var belli                
+nld	hij heeft duidelijk haast
+cluster	erikv
+tur	kusura bakma - estağfurullah             
+nld	Excuseer - u moet zich niet excuseren!
+cluster	erikv
+tur	peşimden gelme     
+nld	kom mij niet achterna
+cluster	erikv
+tur	sıcak çorba iyi gelir    
+nld	hete soep doet goed
+cluster	erikv
+tur	evlenmek için acele etme               
+nld	wees niet te snel om te trouwen
+cluster	erikv
+tur	daha gelmedik mi?    
+nld	zıjn we er nog niet?
+cluster	erikv
+tur	ağzım sulandı        
+nld	ik watertand
+cluster	erikv
+tur	böylesi daha iyi     
+nld	beter zo
+cluster	erikv
+tur	bir şey olmamış gibi    
+nld	alsof er niets gebeurd is
+cluster	erikv
+tur	Peki. Öyle diyorsan    
+nld	Goed dan. Als jij het zegt
+cluster	erikv
+tur	biliyorsun her seyin yerini      
+nld	je weet alles staan
+cluster	erikv
+tur	yetişemedim          
+nld	ik ben te laat
+cluster	erikv
+tur	pek sürprizlerden hoşlanmam   
+nld	ik houd helemaal niet van verrassingen
+cluster	erikv
+tur	ilgilenme    
+nld	bemoei je er niet mee
+cluster	erikv
+tur	göze çarpıyor     
+nld	het valt op
+cluster	erikv
+tur	niye saklanıyorsun     
+nld	waarom verberg je je?  
+cluster	erikv
+tur	en lazım olduğu anda    
+nld	(net) wanneer het meest nodig is
+cluster	erikv
+tur	özellikle         
+nld	met opzet
+cluster	erikv
+tur	ona selam söyle benden          
+nld	doe haar de groeten van mij
+cluster	erikv
+tur	rahatsız etmiyorum sizi ?     
+nld	ik stoor jullie toch niet?
+cluster	erikv
+tur	iyi uykular                    
+nld	slaapwel
+cluster	erikv
+tur	ateşle oynuyorsun                
+nld	je speelt met vuur
+cluster	erikv
+tur	ne o ?                      
+nld	wat is dat?
+cluster	erikv
+tur	dünden aynen devam        
+nld	hetzelfde verder van gisteren
+cluster	erikv
+tur	karışmıyorum. Fikrimi sorarlarsa söylerim.  
+nld	Ik bemoei me niet. Als ze mijn idee vragen zal ik het zeggen.
+cluster	erikv
+tur	tek kaldım                  
+nld	ik ben alleen achtergebleven
+cluster	erikv
+tur	mecburen      
+nld	ik moet/moest wel...
+cluster	erikv
+tur	sevindim 
+nld	ik ben blij
+cluster	erikv
+tur	anlaşıldı mi?   anlaşıldı.      
+nld	akkoord? akkoord.
+cluster	erikv
+tur	kimseden eksin yok. hepsinden güzelsin sen            
+nld	jij bent de mooiste van allemaal
+cluster	erikv
+tur	dünyanın sonu değil            
+nld	het is het einde van de wereld niet
+cluster	erikv
+tur	acele ettirme     
+nld	jaag mij niet op
+cluster	erikv
+tur	ne kadar örnek çözersen o kadar iyi
+nld	hoe meer voorbeelden je oplost hoe beter
+cluster	erikv
+tur	trafiğin durumuna göre yarım saat geç kalabilirim
+nld	afhankelijk van het verkeer kan ik een half uurtje later zijn
+cluster	erikv
+tur	iyi dedikodular                     
+nld	roddel lekker verder
+cluster	erikv
+tur	başka zaman       
+nld	op een andere keer
+cluster	erikv
+tur	sanki az derdimiz varmış gibi       
+nld	alsof we nog niet genoeg miserie hadden
+cluster	erikv
+tur	konuşmamız gereken mesele var         
+nld	er is en kwestie die we moeten bespreken
+cluster	erikv
+tur	şu halimize bak            
+nld	kijk hoe wij hıer zıtten
+cluster	erikv
+tur	beni karıştırma            
+nld	betrek er mij niet in
+cluster	erikv
+tur	çekinecek bir şey yok      
+nld	je moet niet twijfelen
+cluster	erikv
+tur	umrumda değil      
+nld	mijn zaak niet
+cluster	erikv
+tur	çok mu komik?              
+nld	is dat zo grappig?
+cluster	erikv
+tur	elimde değil               
+nld	ik kan er niet aan doen
+cluster	erikv
+tur	nasıl mutlu oluyorum bunları duydukça   
+nld	hoe gelukkig ik ben dit te horen  
+cluster	erikv
+tur	çok farklı olabilirdi      
+nld	het had heel anders kunnen zijn
+cluster	erikv
+tur	Bu beyler sizi soruyor       
+nld	deze heren vragen naar u
+cluster	erikv
+tur	bacaklarım titriyor        
+nld	ik sta te trillen op mijn benen
+cluster	erikv
+tur	nasıl söylesem             
+nld	hoe zou ik het zeggen?
+cluster	erikv
+tur	bir şey mi oldu ?          
+nld	is er iets?
+cluster	erikv
+tur	illa                        
+nld	absoluut!
+cluster	erikv
+tur	yatsam hemen uyuyorum       
+nld	als ik mij neerleg slaap ik direct
+cluster	erikv
+tur	nereye kayboldu?            
+nld	waar hangt hij uit?
+cluster	erikv
+tur	beni ne kadar mutlu ettiniz anlatamam    
+nld	je hebt er geen idee van hoe gelukkig jullie mij gemaakt hebben
+cluster	erikv
+tur	Yılanın başını küçükken ezeceksin     
+nld	laat het niet te ver komen (je moet de kop van de slang verpletteren als ze klein is)
+cluster	erikv
+tur	Kartal sinek avlamaz           
+nld	Een arend jaagt niet op een vlieg
+cluster	erikv
+tur	bir düşüneyim ben           
+nld	ik zal er eens over denken
+cluster	erikv
+tur	sırf meraktan geldim             
+nld	ik ben gekomen van pure nieuwsgierigheid
+cluster	erikv
+tur	doğru duymuşum?             
+nld	heb ik dat nu goed gehoord?
+cluster	erikv
+tur	endişelenecek bir şey yok    
+nld	er is niets om u zorgen over te maken
+cluster	erikv
+tur	bunu hayatta kaçıramam      
+nld	dat wil ik van mıjn leven niet missen
+cluster	erikv
+tur	Her işte bir hayır vardır      
+nld	aan alles is een goede kant
+cluster	erikv
+tur	uyandırmadım değil mi                     
+nld	ik heb je toch niet wakker gemaakt?
+cluster	erikv
+tur	hayal kurma                               
+nld	beeld je niets in
+cluster	erikv
+tur	biraz hava almaya çıktı                    
+nld	hij is een luchtje gaan scheppen
+cluster	erikv
+tur	Geldik mi? Sayılır            
+nld	Zijn we er? Zo goed als
+cluster	erikv
+tur	on dakika sonra oradayım       
+nld	binnen tien minuten ben ik daar
+cluster	erikv
+tur	ne kadar çabuk olursa o kadar iyi olur    
+nld	hoe sneller hoe beter
+cluster	erikv
+tur	Ne kadar dinlersen o kadar öğrenirsin      
+nld	hoe meer je luistert hoe meer je leert
+cluster	erikv
+tur	hepsi bu kadar                            
+nld	dat is alles
+cluster	erikv
+tur	öyle görünüyor     
+nld	het ziet er zo naar uit
+cluster	erikv
+tur	benimle alay mı ediyorsun?     
+nld	ben je met mij aan het lachen?
+cluster	erikv
+tur	takma kafana        
+nld	trek het je niet aan
+cluster	erikv
+tur	zorla güzellik olmaz   
+nld	ik kan (je) niet dwingen
+cluster	erikv
+tur	Bu muydu istediğin? mutlu musun şimdi?   
+nld	was het dat wat je wou? ben je nu gelukkig?
+cluster	erikv
+tur	keçi gibi inatçı               
+nld	koppig als een bok
+cluster	erikv
+tur	konu kapandı                   
+nld	het onderwerp is gesloten
+cluster	erikv
+tur	gördün yaptığını ?        
+nld	zie je wat je gedaan hebt?
+cluster	erikv
+tur	beni zor durumda birakiyorsun   
+nld	je brengt me in een lastig parket
+cluster	erikv
+tur	üstüne alma     
+nld	trek het u niet aan
+cluster	erikv
+tur	memnun olurum          
+nld	met plezier
+cluster	erikv
+tur	babam gorurse cok kizar       
+nld	als mijn vader dat ziet zal hij erg kwaad zijn
+cluster	erikv
+tur	inanayım mı?        
+nld	moet ik dat geloven?
+cluster	erikv
+tur	cimrilik etme      
+nld	hang de gıerigaard niet uit
+cluster	erikv
+tur	üst üste     
+nld	bovenop elkaar
+cluster	erikv
+tur	keşke söylemeseydim   
+nld	had ik dat maar niet gezegd
+cluster	erikv
+tur	rahatsız olma          
+nld	wees maar rustig
+cluster	erikv
+tur	herkes bir sır saklar sanki
+nld	het is alsof iedereen een geheim verbergt
+cluster	erikv
+tur	itiraf et meraktan çatlıyorsun   
+nld	geef maar toe je bent nieuwsgierig
+cluster	erikv
+tur	o kadar emin olma      
+nld	wees daar maar niet zo zeker van
+cluster	erikv
+tur	gözün arkada kalmasın     
+nld	ga zonder zorgen
+cluster	erikv
+tur	çıkarken kapıyı kapat lütfen
+nld	sluit bij het buitengaan de deur aub
+cluster	erikv
+tur	ne istiyorsun yine    
+nld	wat wil je nu weer
+cluster	erikv
+tur	bu koku hayatta evden çıkmaz    
+nld	die geur krijgen we 'van zijn leven' het huis niet meer uit    
+cluster	erikv
+tur	ilginiz için teşekkür ederim
+nld	dank voor uw belangstelling, om u ermee bezig te houden
+cluster	erikv
+tur	sevindim      
+nld	daar ben ik blij om
+cluster	erikv
+tur	tamam mesele yok
+nld	ok geen probleem
+cluster	erikv
+tur	dur vereyim    
+nld	wacht ik geef (het) 
+cluster	erikv
+tur	bencilik etme 
+nld	wees niet egoistisch
+cluster	erikv
+tur	işim var, sürmez dönerim
+nld	ik moet iets doen, het zal niet lang duren, ik kom terug
+cluster	erikv
+tur	bıktım artık bu soruyu duymaktan
+nld	ik ben het beu die vraag te horen
+cluster	erikv
+tur	bir şey yapmaya  cesaret  etmek
+nld	de moed hebben om iets te doen
+cluster	erikv
+nld	Ik maakte mij ongerust. - En wij dan!
+cluster	erikv
+tur	Biliyorum. - Biliyorsan nasıl rahat durabiliyorsun
+nld	Ik weet het. - Als je het weet hoe kan je dan zo rustig blijven?      
+cluster	erikv
+tur	çok çabuk bıkıyorsun         
+nld	je bent het snel beu
+cluster	erikv
+tur	numaramı unuttun sanmıştım
+nld	ik dacht dat je mıjn nr vergeten was
+cluster	erikv
+tur	ne oluyor? Asıl ben sana soruyorum
+nld	wat gebeurt er? - Dat vraag ik aan jou!
+cluster	erikv
+tur	iyi ki alışveriş yapmışız bugün
+nld	maar goed dat we vandaag inkopen gedaan hebben     
+cluster	erikv
+tur	memnuniyetle, bekleriz     
+nld	met plezier, we verwachten u
+cluster	erikv
+tur	beni pişman etme
+nld	doe er mij geen spijt van krijgen
+cluster	erikv
+tur	başlama yine!
+nld	begin weer niet!
+cluster	erikv
+tur	pişman olacağın şeyler yapma
+nld	doe geen dingen waar je spijt van krijgt
+cluster	erikv
+tur	bana mi   bozuksun?
+nld	ben je lastig op mij?
+cluster	erikv
+tur	nereden uydurursun bunları
+nld	vanwaar verzin je dergelijke dingen?
+cluster	erikv
+tur	Müsait mısın?
+nld	Past het u?
+cluster	erikv
+tur	Söyle çekinme
+nld	Spreek op, aarzel niet
+cluster	erikv
+tur	Kusura bakma. Kafam başka yerde.
+nld	Excuseer. Ik was met met hoofd ergens anders
+cluster	erikv
+tur	Basamağa dikkat et
+nld	Let op de trede
+cluster	erikv
+tur	türlü türlü insan var burada
+nld	hier zijn alle soorten mensen
+cluster	erikv
+tur	deniyorum. denemeden bilmem.         
+nld	ik probeer. Zonder proberen kan ik het niet weten
+cluster	erikv
+tur	madem biliyordun niye söylemedin     
+nld	als je het wist waarom heb je het niet gezegd?
+cluster	erikv
+tur	madem ısrar ediyorsunuz, geliriz     
+nld	aangezien je aandringt zullen we komen
+cluster	erikv
+tur	Bu ciddi mi yoksa şaka mı yapıyorsun?  
+nld	is dat nu serieus of is het een grap?
+cluster	erikv
+tur	araya girmeyin                       
+nld	kom er nıet tussen
+cluster	erikv
+tur	olan oldu bir kere
+nld	wat gebeurd is is nu eenmaal gebeurd
+cluster	erikv
+tur	neyse canım, olmuş bir kere          
+nld	hoe dan ook, het is nu eenmaal gebeurd
+cluster	erikv
+tur	meraktan çatlamak
+nld	razend nieuwsgierig zijn
+cluster	erikv
+tur	meşgul etmeyeyim
+nld	laat ik je niet langer bezighouden
+cluster	erikv
+tur	kızdın mi? niye kızayım ?
+nld	ben je boos? waarom zou ik?
+cluster	erikv
+tur	ne yaparlarsa yapsınlar
+nld	ze doen maar wat ze willen
+cluster	erikv
+tur	değişiklik olur      
+nld	dat zal eens iets anders zijn
+cluster	erikv
+tur	istenmediğim yerde 
+nld	waar ze mij niet willen blijf ik niet
+cluster	erikv
+tur	ne fark eder?                        
+nld	wat maakt het uit?
+cluster	erikv
+tur	ben hayır der miyim?     
+nld	waarom zou ik nee zeggen?
+cluster	erikv
+tur	bu işi bana bırak                    
+nld	laat dat maar aan mij
+cluster	erikv
+tur	bu sefer olacak                      
+nld	deze keer moet het gebeuren
+cluster	erikv
+tur	niye kızıyorsun                      
+nld	waarom maak je je kwaad
+cluster	erikv
+tur	sana bir şey itiraf edeceğim         
+nld	ik zal je iets bekennen
+cluster	erikv
+tur	korktuğum gibi olmadı şükür
+nld	het is niet gebeurd zoals ik gevreesd had, gelukkig
+cluster	erikv
+tur	şurada biraz dinlenseydik      
+nld	als we hier nu eens wat rustten?
+cluster	erikv
+tur	söz ver kızmayacaksın
+cluster	erikv
+tur	tahmin edemezsin        
+nld	je kan het nooit raden
+cluster	erikv
+tur	sen her şeye karşıma!                
+nld	bemoei je niet met alles
+cluster	erikv
+tur	ben dersimi aldım                     
+nld	ik heb mijn les geleerd
+cluster	erikv
+tur	tamam, uzatma                        
+nld	ok, het is al goed (stop met zeuren)
+cluster	erikv
+tur	işi zorlaştırma                      
+nld	maak het niet nog moeilijker
+cluster	erikv
+tur	tahmin ettiğim gibi...               
+nld	zoals ik al dacht...
+cluster	erikv
+tur	hemen öyle pes etmek yok             
+nld	van zomaar opgeven kan geen sprake zijn
+cluster	erikv
+tur	her zamanki yerinde oturuyor         
+nld	hij zit waar hij altijd zit
+cluster	erikv
+tur	birazdan                             
+nld	straks
+cluster	erikv
+tur	bakacağız                
+nld	we zullen zien
+cluster	erikv
+tur	tahmin ettiğimden zor
+nld	het is moeilijker dan ik gedacht had
+cluster	erikv
+tur	saçma sapın konuşma                    
+nld	zever niet
+cluster	erikv
+tur	keşke sadece istemek yeterli olsaydı...      
+nld	was willen maar genoeg
+cluster	erikv
+tur	istemez miyim ya? 
+nld	hoe zou ik dat niet willen?
+cluster	erikv
+tur	senin yerine utaniyorum
+nld	ik schaam mij in uw plaats
+cluster	erikv
+tur	ne gerek var böyle şeylere     
+nld	waar is dat voor nodig?
+cluster	erikv
+tur	sen olsan ne yapardın?      
+nld	wat zou jij doen? (als je in mijn plaats was)
+cluster	erikv
+tur	ondan kolay ne var?       
+nld	niets gemakkelijker dan dat
+cluster	erikv
+tur	zenginler için üzülüyorum      
+nld	ik heb medelijden met rijke mensen
+cluster	erikv
+tur	ne yapıyorsun? - Ne yapacağım?            
+nld	wat ben je aan het doen?   wat denk je?
+cluster	erikv
+tur	onun anlatmaya hiç niyeti yok  
+nld	hij is helemaal niet van plan om iets te vertellen
+cluster	erikv
+tur	bu kadar mesele yapmaya gerek yok    
+nld	niet nodig om er zo'n spel van te maken
+cluster	erikv
+tur	bizim evimiz sizin eviniz sayılır
+nld	ons huis is uw huis (zo goed als)
+cluster	erikv
+tur	geldik sayılır            
+nld	we zijn er zo goed als
+cluster	erikv
+tur	ya deprem olursa?          
+nld	en als er nu eens een aardbeving is?
+cluster	erikv
+tur	aaah aynı rahmetli baban gibi
+nld	aaah net jou vader zaliger!
+cluster	erikv
+tur	misafir beklemiyorduk kim geliyor?
+nld	we verwachtten geen gasten, wie is daar?
+cluster	erikv
+tur	dalga geçme, ciddi şey söylüyorum
+nld	grap niet, ik meen het ernstig
+cluster	erikv
+tur	hasta filan mi acaba ?
+nld	zou hıj ziek zijn of zoiets?
+cluster	erikv
+tur	kendini akıllı sanıyor      
+nld	hıj denkt dat hıj slim is
+cluster	erikv
+tur	Kendimi iyi hissediyorum       
+nld	ik voel me goed
+cluster	erikv
+tur	yarına kadar bulacağız
+nld	voor morgen zullen we het vinden
+cluster	erikv
+tur	ne plan yaptın? - Sabret görersin
+nld	welk plan heb je gemaakt? geduld je zal het zien
+cluster	erikv
+tur	gerektiği zaman     
+nld	als het nodig is, ter zijner tijd
+cluster	erikv
+tur	halledeceğim bu işi, bittireceğim bu işi
+nld	ik zal dat zaakje oplossen, ik zal daar eens een eind aan maken
+cluster	erikv
+tur	onu istemez miydin ?           
+nld	was het dat niet wat je wou?
+cluster	erikv
+tur	uzatmayalim                    
+nld	laat het ons kort houden
+cluster	erikv
+tur	çok güzel özetledin
+nld	dat het je mooi samengevat
+cluster	erikv
+tur	nerede kalmıştık?
+nld	waar waren we gebleven?
+cluster	erikv
+tur	üzülmüyorum diyelim              
+nld	laat ons zeggen dat ik het niet erg vind
+cluster	erikv
+tur	söz uçar, yazı kalır            
+nld	(gesproken) woorden vliegen, geschreven (woorden) blijven
+cluster	erikv
+tur	Benimle dalga geçme            
+nld	hou me niet voor de gek
+cluster	erikv
+tur	Onu kıskanıyorum               
+nld	ik ben jaloers op hem
+cluster	erikv
+tur	Buza ihtiyacım var             
+nld	ik heb ijs nodig
+cluster	erikv
+tur	Kafamı Karıştırdın             
+nld	je hebt mij in de war gebracht
+cluster	erikv
+tur	susadım                        
+nld	ik heb dorst
+cluster	erikv
+tur	Açlıktan ölüyorum              
+nld	ik sterf van de honger
+cluster	erikv
+tur	Endişe ediyorum                
+nld	ik maak mij ongerust
+cluster	erikv
+tur	Şaka yapıyorum                 
+nld	ik maak een grapje
+cluster	erikv
+tur	İşleri berbat ettim            
+nld	ik heb het boeltje naar de vaantjes geholpen
+cluster	erikv
+tur	Öfkelendim                     
+nld	ik wond me erg op
+cluster	erikv
+tur	şok oldum                      
+nld	ik ben in shock
+cluster	erikv
+tur	Kafam karıştı                  
+nld	ik ben in de war
+cluster	erikv
+tur	Kötü hissettim                 
+nld	ik voelde mij slecht
+cluster	erikv
+tur	Kendimi berbat hissediyorum    
+nld	ik voel mij rot
+cluster	erikv
+tur	Sıkıldım                       
+nld	ik verveelde mij
+cluster	erikv
+tur	Uykum var!                     
+nld	ik heb slaap
+cluster	erikv
+tur	Uyumaya git                    
+nld	ga slapen
+cluster	erikv
+tur	Gitmek zorunda kaldım          
+nld	ik moest weggaan
+cluster	erikv
+tur	Para cezası aldım              
+nld	ik heb een boete gekregen
+cluster	erikv
+tur	Gerçekten hiç şansım yok!      
+nld	ik heb echt geen geluk
+cluster	erikv
+tur	hepsi bu                       
+nld	dat is alles
+cluster	erikv
+tur	Zaman çabuk geçiyor            
+nld	de tijd vliegt
+cluster	erikv
+tur	kazanmayı başardık                       
+nld	het is ons gelukt
+tur	 om te winnen
+cluster	erikv
+tur	ona yardım etmeye git        
+nld	ga hem helpen
+cluster	erikv
+tur	Bırak öleyim                   
+nld	laat mij sterven
+cluster	erikv
+tur	Bir bakayım                    
+nld	laat mij eens kijken
+cluster	erikv
+tur	yorum yok                      
+nld	geen commentaar
+cluster	erikv
+tur	sorun yok                      
+nld	geen probleem
+cluster	erikv
+tur	Bu sıcaklığa dayanamıyorum     
+nld	ik verdraag deze hitte niet meer
+cluster	erikv
+tur	Ben önyargılıyım               
+nld	ik ben bevooroordeeld
+cluster	erikv
+tur	açgözlüyüm                     
+nld	ik ben  gulzig
+cluster	erikv
+tur	Uykum var!                     
+nld	ik heb slaap
+cluster	erikv
+tur	Kendimle gurur duyuyorum       
+nld	ik ben fier op mijzelf
+cluster	erikv
+tur	Tamamen mutluyum               
+nld	ik ben perfect gelukkig
+cluster	erikv
+tur	Sabrım tükendi                 
+nld	mijn geduld is op
+cluster	erikv
+tur	O kadar da aptal değilim!      
+nld	zo dom ben ik nu ook weer niet
+cluster	erikv
+tur	Hiç ağrım yok                  
+nld	ik voel helemaal geen pijn
+cluster	erikv
+tur	Seni suçlamıyorum              
+nld	ik zeg niet dat het jouw fout is
+cluster	erikv
+tur	Neredeyse hazırım              
+nld	ik ben bijna klaar
+cluster	erikv
+tur	Yalan söylemede kötüyüm        
+nld	ik kan slecht liegen (ik ben slecht in liegen)
+cluster	erikv
+tur	Bilimde iyiyim                 
+nld	ik ben goed in wetenschappen
+cluster	erikv
+tur	Burada olmaktan mutluyum       
+nld	ik ben blij dat ik hier ben
+cluster	erikv
+tur	Alaycı oluyorum                
+nld	ik ben (nu even) sarcastisch
+cluster	erikv
+tur	Sen gideceksen gideceğim       
+nld	als jij gaat ga ik ook
+cluster	erikv
+tur	Ondan kaçınmayı tercih ederim  
+nld	ik vermijd dat liever
+cluster	erikv
+tur	Sensiz ölürdüm                 
+nld	zonder jou zou ik sterven
+cluster	erikv
+tur	Sensiz üzgünüm                 
+nld	ik ben verdrietig zonder jou
+cluster	erikv
+tur	Kendimden çok emindim          
+nld	ik was te zeker van mezelf
+cluster	erikv
+tur	Bunu planlamamıştım            
+nld	Dat was ik niet van plan (had ik niet gepland)
+cluster	erikv
+tur	Etkilenmedim                   
+nld	ik ben niet onder de indruk 
+cluster	erikv
+tur	Endişelenmeli miyim?           
+nld	moet ik me ongerust maken?
+cluster	erikv
+tur	Benim için farketmez           
+nld	Voor mij om het even
+cluster	erikv
+tur	Bu ödülü hak ediyorum          
+nld	ik verdien die prijs                 
+cluster	erikv
+tur	Onu uydurdum                   
+nld	ik heb het verzonnen
+cluster	erikv
+tur	Oturma sıramı bekliyorum       
+nld	ik wacht op mijn beurt om te gaan zitten
+cluster	erikv
+tur	Neredeyse kazandım             
+nld	ik was bijna gewonnen
+cluster	erikv
+tur	Baş ağrım geçti                
+nld	mijn hoofdpijn is over
+cluster	erikv
+tur	Kimse beni durduramaz          
+nld	niemand zal mij tegenhouden
+cluster	erikv
+tur	Yapabilseydim, yapardım        
+nld	als ik had gekund ik had het gedaan
+cluster	erikv
+tur	Sözünüzü kesebilir miyim?      
+nld	mag ik u onderbreken?
+cluster	erikv
+tur	Hiç endişem yok                
+nld	ik heb helemaal geen zorgen
+cluster	erikv
+tur	Yoğun bir gün geçirdim         
+nld	het was een drukke dag
+cluster	erikv
+tur	O bana söylendi                
+nld	dat is mij gezegd geweest
+cluster	erikv
+tur	Grip oldum                     
+nld	ik heb griep gekregen
+cluster	erikv
+tur	Şaka yapıyor olmalısın!        
+nld	je bent toch een grapje aan het maken ?!
+cluster	erikv
+tur	Gülünç görünüyorsun            
+nld	je ziet er belachelijk uit
+cluster	erikv
+tur	İstediğin yere gidebilirsin    
+nld	je mag gaan waar je wil
+cluster	erikv
+tur	Ona güvenemezsin               
+nld	je kan hem niet vertrouwen (vertrouw hem niet)
+cluster	erikv
+tur	Davet edilmedin                
+nld	je was niet uitgenodigd
+cluster	erikv
+tur	Gerçekten canımı sıkıyorsun    
+nld	je verveelt me echt
+cluster	erikv
+tur	Üşüyor gibi görünüyorsun       
+nld	je ziet eruit alsof je kou hebt
+cluster	erikv
+tur	Dikkatli olmalısın             
+nld	je moet opletten
+cluster	erikv
+tur	Normalde yalan söylemem        
+nld	normaal lieg ik niet
+cluster	erikv
+tur	işime burnunu sokma!           
+nld	steek je neus niet in mijn zaken
+cluster	erikv
+tur	Koşmayı sevmiyorum             
+nld	ik hou niet van lopen
+cluster	erikv
+tur	Sigara içmemelisin             
+nld	je zou beter niet roken
+cluster	erikv
+tur	onu aramayı unuttum            
+nld	ik ben vergeten hem op te bellen
+cluster	erikv
+tur	onu rüyamda gördüm             
+nld	ik heb van hem gedroomd
+cluster	erikv
+tur	senin için üzülüyorum          
+nld	ik vind het erg voor jou
+cluster	erikv
+tur	Bilmeme gerek yok              
+nld	het is niet nodig dat ik het weet
+cluster	erikv
+tur	Evet demeliydim            
+nld	ik had ja moeten zeggen
+cluster	erikv
+tur	Ayrılmak üzereydim             
+nld	ik ging net weg
+cluster	erikv
+tur	şaka olarak söyledim           
+nld	ik zei het als grap
+cluster	erikv
+tur	Ne demek istediğini anlıyorum  
+nld	ik begrijp wat je wil zeggen
+cluster	erikv
+tur	58 kiloyum                     
+nld	ik weeg 58 kilo
+cluster	erikv
+tur	Tavsiyen ne?                   
+nld	wat raad jij aan?
+cluster	erikv
+tur	Şikayet etmemeliyim            
+nld	ik moet niet klagen
+cluster	erikv
+tur	balığa alerjim var             
+nld	ik ben allergisch aan vis
+cluster	erikv
+tur	neyden yapılmıştır?            
+nld	van wat is het gemaakt?
+cluster	erikv
+tur	Burada park edemezsin          
+nld	je kan hier niet parkeren
+cluster	erikv
+tur	Bugün acelem var               
+nld	vandaag ben ik gehaast
+cluster	erikv
+tur	Beni yenemezsin                
+nld	je kan mij niet verslaan
+cluster	erikv
+tur	Henüz gidemezsin               
+nld	je kan nog niet weggaan
+cluster	erikv
+tur	Daha iyisini hak ediyor        
+nld	hij verdient beter
+cluster	erikv
+tur	Onu inkar edemezsin            
+nld	je kan dat niet ontkennen
+cluster	erikv
+tur	Burada kalamazsın              
+nld	je kan hier niet blijven
+cluster	erikv
+tur	Kendininkini al                
+nld	neem die van jou
+cluster	erikv
+tur	Iletişim konusunda   
+nld	Op vlak van communicatie
+cluster	erikv
+tur	birine hayran olmak            
+nld	iemand bewonderen
+cluster	erikv
+tur	Düşe Kalka Büyümek             
+nld	met vallen en opstaan opgroeien
+cluster	erikv
+tur	git buradan                    
+nld	ga weg
+cluster	erikv
+tur	O, 16 yaşına girdi             
+nld	hij is 16 geworden
+cluster	erikv
+tur	Bırak konuşsun                 
+nld	laat hem spreken!
+cluster	erikv
+tur	Kim olduğunu merak ediyorum    
+nld	ik vraag mij af wie dat is
+cluster	erikv
+tur	Bırak gideyim                  
+nld	laat mij gaan
+cluster	erikv
+tur	Önce bayanlar                  
+nld	vrouwen eerst
+cluster	erikv
+tur	Bağırmayı kes!                 
+nld	stop met roepen!
+cluster	erikv
+tur	sözünü kesme                   
+nld	laat hem uitspreken!
+cluster	erikv
+tur	Ben pek öyle düşünmüyorum      
+nld	zo denk ik er helemaal niet over
+cluster	erikv
+tur	Kendinden utan!                
+nld	schaam je!
+cluster	erikv
+tur	Kaynamış bir yumurta istiyorum 
+nld	ik wil een gekookt ei
+cluster	erikv
+tur	Ne olduğunu görmedim           
+nld	ik heb niet gezien wat er gebeurd is
+cluster	erikv
+tur	dünyanın sonu değil!           
+nld	dat is niet het einde van de wereld
+cluster	erikv
+tur	Aksilik üstüne aksilik!        
+nld	tegenslag na tegenslag!
+cluster	erikv
+tur	hiçbir şey olmamış gibi yapma  
+nld	doe niet alsof er niets gebeurd is
+cluster	erikv
+tur	-i  dört gözle bekliyorum      
+nld	ik kijk (met ongeduld) uit naar ...
+cluster	erikv
+tur	Şanssızlık peşimi Bırakmadı    
+nld	Het ongeluk achtervolgde mij
+cluster	erikv
+tur	anneme benzerim                
+nld	ik lijk op mijn moeder
+cluster	erikv
+tur	onu asla istemedim             
+nld	dat heb ik helemaal niet gevraagd
+cluster	erikv
+tur	birini kıskanmak               
+nld	jaloers zijn op iemand
+cluster	erikv
+tur	Jim kadar hızlı koşarım        
+nld	ik loop zo snel als Jim
+cluster	erikv
+tur	Keşke daha zeki olsaydım       
+nld	was ik maar slimmer geweest
+cluster	erikv
+tur	Keşke bir kuş olsam            
+nld	was ik maar een vogel
+cluster	erikv
+tur	Onu tartışmayacağım            
+nld	ik ga hierover niet discussieren
+cluster	erikv
+tur	Keşke babam burada olsa          
+nld	was mijn vader maar hier
+cluster	erikv
+tur	Bu konuda tam bir aptalım      
+nld	wat dat betreft ben ik een volslagen idioot
+cluster	erikv
+tur	Kendim gitsem daha iyi olur    
+nld	ik zou beter zelf gaan
+cluster	erikv
+tur	Nargile, sigaradan 2 kat daha zararlı    
+nld	Een waterpijp is 2 keer schadelijker dan een sigaret
+cluster	erikv
+tur	Yinede teşekkürler             
+nld	toch bedankt!
+cluster	erikv
+tur	çok fazla konuşur              
+nld	zij praat teveel
+cluster	erikv
+tur	Olduğun yerde kal              
+nld	blijf waar je bent
+cluster	erikv
+tur	Sonunda başardı                
+nld	het is hem uiteindelijk gelukt
+cluster	erikv
+tur	sigara içmekten vazgeçti       
+nld	hij is gestopt met roken
+cluster	erikv
+tur	Hiçbir şey değişmeyecek        
+nld	er zal niets veranderen
+cluster	erikv
+tur	Gözlügünü tak                  
+nld	zet je bril op
+cluster	erikv
+tur	Burası çok soğuk               
+nld	het is hier erg koud
+cluster	erikv
+tur	ikna edici            
+nld	overtuigend
+cluster	erikv
+tur	hayret içinde kaldı            
+nld	hij stond perplex
+cluster	erikv
+tur	yarı yoldayız                  
+nld	wij zijn halfweg
+cluster	erikv
+tur	Görüşeceğiz                    
+nld	We zien mekaar nog
+cluster	erikv
+tur	Yakında öğreneceğiz            
+nld	We zullen het binnenkort zien (vernemen)
+cluster	erikv
+tur	Bu sıra dışı değil             
+nld	Dat is niet zo abnormaal
+cluster	erikv
+tur	Tom sırasını bekledi           
+nld	Tom wachtte zijn beurt af
+cluster	erikv
+tur	Bana Tom demekten vazgeç       
+nld	stop met mij Tom te noemen
+cluster	erikv
+tur	şüpheli bir e-posta aldım      
+nld	ik heb een verdachte e-mail gekregen
+cluster	erikv
+tur	Acil bir durumdu               
+nld	het was een noodgeval
+cluster	erikv
+tur	Uzun süremez      
+nld	het kan niet lang duren
+cluster	erikv
+tur	O beni sinirlendiriyor         
+nld	dat maakt mij zenuwachtig
+cluster	erikv
+tur	Bir kalem ödünç alacağım       
+nld	ik zal een pen lenen
+cluster	erikv
+tur	Durum biraz şüpheli görünüyor  
+nld	de toestand ziet er nogal verdacht uit
+cluster	erikv
+tur	Gitmeni öneririm               
+nld	ik stel voor dat jij weggaat
+cluster	erikv
+tur	Yapılacak bir şey yok  
+nld	er kan niets aan gedaan worden
+cluster	erikv
+tur	Kalkma zamanı                  
+nld	het is tijd om op te staan
+cluster	erikv
+tur	Çok sayıda köpek               
+nld	een groot aantal honden
+cluster	erikv
+tur	İşte bu kadar kolay            
+nld	Ziezo, zo gemakkelijk is het
+cluster	erikv
+tur	yatma zamanı                   
+nld	het is bedtijd
+cluster	erikv
+tur	Ya hep ya hiç                  
+nld	alles of niets
+cluster	erikv
+tur	Bu kimsenin hatası değil       
+nld	dit is niemands fout
+cluster	erikv
+tur	Tehlikeli görünüyor            
+nld	het ziet er gevaarlijk uit
+cluster	erikv
+tur	Sonunda Cuma geldi             
+nld	het is eindelijk vrijdag
+cluster	erikv
+tur	ayrılmaz           
+nld	onafscheidelijk
+cluster	erikv
+tur	unutulmaz          
+nld	onvergetelijk
+cluster	erikv
+tur	affedilmez         
+nld	onvergefelijk
+cluster	erikv
+tur	tükenmez           
+nld	onuitputtelijk
+cluster	erikv
+tur	anlaşılmaz         
+nld	onbegrijpelijk
+cluster	erikv
+tur	dayanılmaz         
+nld	onverdraaglijk
+cluster	erikv
+tur	açıklanamaz        
+nld	onverklaarbaar
+cluster	erikv
+tur	inanılmaz          
+nld	ongelofelijk
+cluster	erikv
+tur	Keşke o burada olsa              
+nld	was hij maar hier
+cluster	erikv
+tur	Hayır demeliydim           
+nld	ik had nee moeten zeggen
+cluster	erikv
+tur	Çalışmaya gitsem iyi olur        
+nld	ik zou beter gaan studeren
+cluster	erikv
+tur	Keşke yüzebilsem
+nld	Kon ik maar zwemmen
+cluster	erikv
+tur	Kontrol etmeliydim         
+nld	ik had het moeten checken
+cluster	erikv
+tur	güvenilmez         
+nld	onbetrouwbaar
+cluster	erikv
+tur	Burada olmamalıyım         
+nld	ik zou hier niet moeten zijn
+cluster	erikv
+tur	Dinleniyor olmalıyım       
+nld	ik zou moeten aan het rusten zijn
+cluster	erikv
+tur	ezici                 
+nld	verpletterend
+cluster	erikv
+tur	şaşırtıcı             
+nld	verbazend, verbijsterend
+cluster	erikv
+tur	korkutucu             
+nld	schrikwekkend
+cluster	erikv
+tur	Çekici                
+nld	aantrekkelijk
+cluster	erikv
+tur	heyecan verici        
+nld	opwindend
+cluster	erikv
+tur	kalıcı                
+nld	blijvend, permanent
+cluster	erikv
+tur	etkileyici            
+nld	indrukwekkend
+cluster	erikv
+tur	büyüleyici            
+nld	fascinerend, betoverend
+cluster	erikv
+tur	kafa karıştırıcı      
+nld	verwarrend
+cluster	erikv
+tur	baştan çıkarıcı       
+nld	verleidelijk
+cluster	erikv
+tur	üzücü                 
+nld	triestig (makend)
+cluster	erikv
+tur	çekilmez           
+tur	onverdraaglijk
+cluster	erikv
+tur	tüyler ürpertici      
+nld	afgrijselijk
+cluster	erikv
+tur	iç karartıcı          
+nld	deprimerend, neerslachtig makend
+cluster	erikv
+tur	geçici                
+nld	tijdelijk
+cluster	erikv
+tur	utanç verici          
+nld	beschamend, genant
+cluster	erikv
+tur	Atmosfer Basıncı Yere Ve Zamana Göre Değişir Mi?
+nld	Hangt de luchtdruk af van de tijd en de plaats?
+cluster	erikv
+tur	hatırladığım kadarıyla   
+nld	voor zover ik mij herinner
+cluster	erikv
+tur	neye göre değişir?                  
+nld	van wat is het afhankelijk?
+cluster	erikv
+tur	Mutluluk herkese göre değişir                    
+nld	geluk is voor iedereen anders
+cluster	erikv
+tur	anladığım kadarıyla       
+nld	voor zover ik begreep
+cluster	erikv
+tur	Pil ömrünüzü mümkün olduğunca uzatın     
+nld	verleng de levensduur van de batterij zoveel mogelijk
+cluster	erikv
+tur	Türkiye'nin geleceği buna bağlıdır.
+nld	De toekomst van Turkije hangt daarvan af
+cluster	erikv
+tur	bildiğim kadarıyla          
+nld	voor zover ik weet
+cluster	erikv
+tur	Artık umursamıyorum    
+nld	ik trek het mij verder niet meer aan
+cluster	erikv
+tur	Tehlikenin farkında mısınız?
+nld	Bent u zich bewust van het gevaar?
+cluster	erikv
+tur	Artık bıktık 
+nld	nu zijn we het beu!
+cluster	erikv
+tur	Artık kimseyi umursamıyorum  
+nld	ik trek me van niemand nog iets aan
+cluster	erikv
+tur	Ne yaptığımın farkında bile olmadım
+nld	ik was er me zelfs niet van bewust wat ik gedaan had 
+cluster	erikv
+tur	Yumurta dış kabuğunun rengi neye göre değişir?
+nld	Waarvan is de kleur van een eierschaal afhankelijk? 
+cluster	erikv
+tur	Artık umursamıyorum hiçbir şeyi
+nld	ik trek me van niets nog iets aan
+cluster	erikv
+tur	Çoğu kadın farkında değil ama...
+nld	De meeste vrouwen zijn er zich niet van bewust maar...
+cluster	erikv
+tur	Elinde bastonuyla yürümekte bile güçlük çeken yaşlı kadın
+nld	Een oude vrouw die zelfs met een stok moeilijk kon stappen
+cluster	erikv
+tur	Karar vermekte zorlanıyorum
+nld	Ik kan moeilijk beslissingen nemen
+cluster	erikv
+tur	Onun evini bulmakta zorlandım.
+nld	Ik had moeite om zijn huis te vinden
+cluster	erikv
+tur	Erken uyanmakta zorlanıyorum, ne yapmalıyım?
+nld	Ik heb moeite om vroeg op te staan, wat moet ik doen?
+cluster	erikv
+tur	Bıktım senden
+nld	ik ben je beu
+cluster	erikv
+tur	Katy ayakta durmakta güçlük çekti 
+nld	Katy kon met moeite op haar benen staan
+cluster	erikv
+tur	Artık alış veriş yapmaktan bıktım
+nld	Ik ben het shoppen beu
+cluster	erikv
+tur	seçim yapmakta zorlandım
+nld	Ik vond het moeilijk om te kiezen
+cluster	erikv
+tur	ilk bakışta karmaşık göründü                 
+nld	op het eerste zicht leek het ingewikkeld
+cluster	erikv
+tur	Havlayan bir köpek, uyuyan bir aslandan daha çok işe yarar
+nld	Een blaffende hond is nuttiger dan een slapende leeuw
+cluster	erikv
+tur	sofradan doymadan kalkacaksın
+nld	Je moet van tafel opstaan vooraleer je volgegeten bent
+cluster	erikv
+tur	Keşke dinlesen                   
+nld	luisterde hij maar
+cluster	erikv
+tur	Çocuğuma yemek yedirmekte zorlanıyorum
+nld	Ik heb het moeilijk om mijn kind te doen eten
+cluster	erikv
+tur	Broşür tasarımı göründüğü kadar kolay değildir     
+nld	Het ontwerpen van een brochure is niet zo gemakkelijk als het lijkt
+cluster	erikv
+tur	Hamileyim, uyumakta zorlanıyorum
+nld	Ik ben zwanger, ik heb moeite om te slapen
+cluster	erikv
+tur	bana garip geldi.
+nld	het leek mij vreemd
+cluster	erikv
+tur	birazdan geliyorum    
+nld	ik kom straks
+cluster	erikv
+tur	Son 10 yıldır bu kadar güldüğümü hatırlamıyorum.     
+nld	ik herinner mij niet dat ik de laatste 10 jaar zo gelachen heb
+cluster	erikv
+tur	Büyüdüğünde ne olmak istiyorsun?            
+nld	wat wil je worden als je groot bent?
+cluster	erikv
+tur	Ne zamandan beri kaşık ve çatal kullanıyoruz?
+nld	Sinds hoelang gebruiken wij mes en vork?
+cluster	erikv
+tur	Saatlerdir ekran başında oturuyorum ve düşünüyorum     
+nld	Ik zit al uren voor het scherm na te denken
+cluster	erikv
+tur	yan yana 
+nld	naast elkaar
+cluster	erikv
+tur	Özellikle de hafta sonu                    
+nld	vooral in het weekend
+cluster	erikv
+tur	karşı karşıya 
+nld	tegenover elkaar
+cluster	erikv
+tur	400'den fazla ağaç kesildi                       
+nld	Er werden meer dan 400 bomen geveld
+cluster	erikv
+tur	Üniversiteli gençler artık günlük yaşamda en fazla 300-400 kelime kullanarak konuşuyor
+nld	Universitair opgeleide jongeren gebruiken vandaag bij het spreken in het dagelijks leven maximaal 300-400 woorden
+cluster	erikv
+tur	artık daha fazla tereddüt etmeyin    
+nld	aarzel niet langer
+cluster	erikv
+tur	hedefim bir an önce akici Turkce konusmak           
+nld	mijn doel is zo snel mogelijk vloeiend turks te spreken
+cluster	erikv
+tur	Haberi alır almaz İstanbul’a geldi.    
+nld	Zodra hij het nieuws hoorde kwam hij naar Istanbul
+cluster	erikv
+tur	Çoktan      
+nld	sinds lang, allang
+cluster	erikv
+tur	bir saat önce    
+nld	een uur geleden
+cluster	erikv
+tur	tam zamanında                  
+nld	precies op tijd 
+cluster	erikv
+tur	Yapabileceğimiz başka bir şey yok      
+nld	wij kunnen niets meer doen
+cluster	erikv
+tur	Her zamanki gibi                        
+nld	Zoals altijd
+cluster	erikv
+tur	Taraftarımızdan özür dilemekten başka yapacak bir şey yok
+nld	Er zit niets anders op dan aan onze supporters excuses te vragen
+cluster	erikv
+tur	Ben başkan olduğum sürece Ersun bu takımda çalışamaz
+nld	Zolang ik voorzitter ben zal Ersun in dit team niet werken
+cluster	erikv
+tur	unuttuğun bir şey yok mu ?      
+nld	Ben je niets vergeten? (is er niets dat je vergeten bent?)
+cluster	erikv
+tur	kaybedecek bir şeyim yok                     
+nld	ik heb niets te verliezen
+cluster	erikv
+tur	Günde sekiz saatten fazla çalışmak zararlı
+nld	Meer dan acht uur per dag werken is schadelijk
+cluster	erikv
+tur	Enerjimizi bunlara harcamamamız lazım. Yapacak çok daha önemli işlerimiz var
+nld	We moeten onze energie daaraan niet verspelen. We hebben veel belangrijker dingen te doen.
+cluster	erikv
+tur	Mümkün olduğunca uzak durun      
+nld	blijf er zo ver mogelijk van weg!
+cluster	erikv
+tur	bulabildigim kadariyla   
+nld	voor zover ik kon vinden
+cluster	erikv
+tur	Ne kadar olursa olsun
+nld	hoeveel het ook moge zijn
+cluster	erikv
+tur	mümkün olduğunca hızlı/erken/çabuk/...    
+nld	zo snel/vroeg/gauw mogelijk
+cluster	erikv
+tur	Maraton  her zaman olduğu gibi saat 09.30’da başladı
+nld	De maraton startte zoals altijd om 9:30
+cluster	erikv
+tur	Ufak da olsa bir pişmanlık hisseder mi ?       
+nld	Heeft hij spijt, hoe weinig ook ?
+cluster	erikv
+tur	sınavda boş kağıt vermediğin sürece umut vardır
+nld	Zolang je op het examen geen blanko blad afgeeft is er hoop 
+cluster	erikv
+tur	ne kadar uzun sürerse sürsün   
+nld	hoelang het ook moge duren 
+cluster	erikv
+tur	Seni ilgilendirmez                   
+nld	Daar heb jij niets mee te maken
+cluster	erikv
+tur	Aradiginiz bir sey var mi ? - Özellikle bir sey yok. bakıyorum          
+nld	Zoekt u iets? - Niets bijzonders. ik kijk maar wat                     
+cluster	erikv
+tur	Ne önemi var ?                            
+nld	Welke belang heeft dat?
+cluster	erikv
+tur	Nasıl buldun ?                                
+nld	hoe vond/vind je het ?
+cluster	erikv
+tur	Hedefime ulaştım
+nld	Ik heb mijn doel bereikt
+cluster	erikv
+tur	Aklıma ne geldi biliyor musun?       
+nld	weet je waar ik nu net aan denk?
+cluster	erikv
+tur	Beyin fırtınası 
+nld	brainstorm
+cluster	erikv
+tur	bir arabaya yetismek
+nld	een auto inhalen
+cluster	erikv
+tur	En iyisini ümit et. En kötüsüne hazırlan
+nld	Hoop op het beste, maak je klaar voor het slechtste
+cluster	erikv
+tur	yıllar sonra rastladım çocukluk sevgilime 
+nld	jaren later kwam ik mijn jeugdliefde tegen
+cluster	erikv
+tur	herşeyin fazlası zararlıdır
+nld	'te' is nooit goed
+cluster	erikv
+tur	kültür çatışması 
+nld	kultuurschok
+cluster	erikv
+tur	Deliye taş atma, başına taş yağdırır 
+nld	Gooi geen steen naar een gek, hij zal het stenen doen regenen op jouw hoofd
+cluster	erikv
+tur	En iyisini bekle, en kötüsüne hazır ol
+nld	Verwacht het beste, wees klaar voor het slechtste
+cluster	erikv
+tur	Acele işe şeytan karışır
+nld	Haast en spoed is zelden goed (met haastig werk bemoeit de duivel zich)
+cluster	erikv
+tur	Delilere her gün bayram 
+nld	Voor gekken is het alle dagen feest
+cluster	erikv
+tur	erkek kadınla yalnız kalırsa üçüncüsü şeytandır 
+nld	Als een man alleen is met een vrouw is de duivel er (als derde) bij
+cluster	erikv
+tur	şaşkın ,dalgın ,huzursuz ,kızgın ,sinirli ,üzgün ,kırgın,sakin,
+nld	de kluts kwijt,verstrooid-afwezig,rusteloos,kwaad,nerveus,verdrietig,gekwetst,rustig
+cluster	erikv
+tur	askeri,hukuki,cezai,tarihi,fiziki,insani,merkezi
+nld	militair,legaal,strafbaar,historisch,fysiek,menselijk,centraal
+cluster	erikv
+tur	Bu adamların hepsi de en az iki dili iyi biliyor
+nld	al deze mannen spreken minstens 2 talen goed
+cluster	erikv
+tur	Kardeşlerimin hepsi evli                     
+nld	al mijn broers (zussen) zijn getrouwd
+cluster	erikv
+tur	ailemin bütün kadınları /ailemin bazı  kadınları  
+nld	alle vrouwen in mijn familie / sommige vrouwen in mijn familie
+cluster	erikv
+tur	Ölü sayısı artabilir. 100'ün üzerinde de yaralı var.
+nld	Het aantal doden kan nog stijgen. En er zijn ook meer dan 100 gewonden
+cluster	erikv
+tur	Bu kızın neden bu kadar az arkadaşı var?
+nld	Waarom heeft dat meisje zo weinig vrienden?
+cluster	erikv
+tur	Çok sayıda kişi / Az sayıda kişi
+nld	Veel mensen / weinig mensen
+cluster	erikv
+tur	O kadar karanlık ki yüzünüzün karşısında tuttuğunda kendi elinizi göremiyorsunuz.
+nld	Het is zo donker dat je geen hand voor je ogen kan zien (je eigen hand dat je voor je gezicht houdt)
+cluster	erikv
+tur	Yeterince uyuyamadığım için kilo alıyorum
+nld	Ik kom kilos bij doordat ik te weinig kan slapen
+cluster	erikv
+tur	Gozlerine inanamayacaksın
+nld	Je zal je ogen niet geloven 
+cluster	erikv
+tur	Onun nasıl böyle bir karar verdiğine inanamıyorum!
+nld	ik kan niet geloven hoe hij zoiets beslist heeft!
+cluster	erikv
+tur	üst üste 
+nld	bovenop elkaar
+cluster	erikv
+tur	Her ikisi de haklı olamaz                      
+nld	Ze kunnen niet allebei gelijk hebben
+cluster	erikv
+tur	arka arkaya 
+nld	achter elkaar
+cluster	erikv
+tur	başka zaman konuşuruz              
+nld	we zullen er op een andere keer over praten
+cluster	erikv
+tur	beni endişelendiriyorsun
+nld	je maakt mij ongerust
+cluster	erikv
+tur	sana kötü bir haberim var             
+nld	ik heb slecht nieuws voor jou
+cluster	erikv
+tur	bunun iyi bir fikir olduğunu sanmıyorum   
+nld	ik denk niet dat dat een goed idee is
+cluster	erikv
+tur	suç bende (değil) 
+nld	Het is mijn schuld (niet)
+cluster	erikv
+tur	benim yapmam gereken bir  iş var   
+nld	ik heb iets te doen, er is iets dat ik moet doen
+cluster	erikv
+tur	sıra sende / sıran geldi / sıran geçti 
+nld	Het is jouw beurt / het is jouw beurt / jouw beurt is voorbij
+cluster	erikv
+tur	Bu iş burada bitmedi daha           
+nld	Hiermee is de zaak nog niet afgelopen
+cluster	erikv
+tur	Bununla ilgili bir fikri olan var mı?         
+nld	Heeft iemand daarover een idee?
+cluster	erikv
+tur	hata bende (değil)
+nld	het is mijn fout (niet) 
+cluster	erikv
+tur	kusur bende  (değil)                    
+nld	Het is mijn fout (niet)
+cluster	erikv
+tur	Onun hiç bir sucu yok 
+nld	het is helemaal zijn schuld niet
+cluster	erikv
+tur	sokağın karşısına geçmek          
+nld	de straat oversteken
+cluster	erikv
+tur	Anne canım sıkıldı                      
+nld	mama ik verveel mij
+cluster	erikv
+tur	başka işin yok mu?                    
+nld	heb je niets anders te doen?
+cluster	erikv
+tur	sen bilirsin. Ama ben karşıyım  
+nld	jij moet het weten. maar ik ben ertegen
+cluster	erikv
+tur	Benimle ayni fikirde değil
+nld	Hij denkt er anders over dan ik
+cluster	erikv
+tur	inanılmaz ama gerçek 
+nld	ongelooflijk maar waar
+cluster	erikv
+tur	Senin  ne işin var burada ?        
+nld	Wat doe jij hier?
+cluster	erikv
+tur	Itiraf etmem gerekiyor ki ...                  
+nld	ik moet bekennen dat...
+cluster	erikv
+tur	garip ama gerçek                       
+nld	raar maar waar
+cluster	erikv
+tur	bilmem farkında mısın 
+nld	ik weet niet of je het gemerkt heb
+cluster	erikv
+tur	Bu gerçek. Kendi gözlerimle gördüm 
+nld	het is zo. Ik heb het met mijn eigen ogen gezien
+cluster	erikv
+tur	Er ya da geç                                
+nld	Vroeg of laat
+cluster	erikv
+tur	Niye gülüyorsun? - Komik, cünkü
+nld	Waarom lach je? - Omdat het grappig is, daarom
+cluster	erikv
+tur	Nasıl o kadar emin olabiliyorsun ?  
+nld	Hoe kan je daar zo zeker van zijn?
+cluster	erikv
+tur	umarım dediğin gibi olur  
+nld	ik hoop dat het is zoals je zei
+cluster	erikv
+tur	Gelmedi daha ?                                 
+nld	is hij er nog niet?
+cluster	erikv
+tur	Delirdin mi?  çıldırdın mı ? 
+nld	Ben je gek geworden?
+cluster	erikv
+tur	Biraz sohbet edelim mi?  - Olur              
+nld	praten we wat? - ok
+cluster	erikv
+tur	Yanlış bir zamanda mı geldim ?        
+nld	Ben ik op een slecht moment gekomen?
+cluster	erikv
+tur	Nereden çıkardın bunu ?                      
+nld	Waar heb je dat gehaald ? (fig)
+cluster	erikv
+tur	İşe yaradı 
+nld	het heeft geholpen
+cluster	erikv
+tur	dayanılmaz,çekilmez,inanılmaz,anlaşılmaz,unutulmaz,açıklanamaz,tükenmez,ayrılmaz,güvenilmez
+nld	onverdraaglijk (2)/ongelofelijk/onbegrijpelijk/onvergetelijk/onverklaarbaar/onuitputtelijk/onafscheidelijk/onbetrouwbaar
+cluster	erikv
+tur	korkarım öyle
+nld	ik ben bang van wel
+cluster	erikv
+tur	Herkes benimle alay ediyor.
+nld	iedereen lacht mij uit
+cluster	erikv
+tur	Ne yapmalıyım hiç bir tahminim yok
+nld	ik heb er geen benul van mat ik moet doen
+cluster	erikv
+tur	nedense
+nld	om een of andere reden
+cluster	erikv
+tur	biz kendimiz yaptık
+nld	wij hebben het zelf gedaan
+cluster	erikv
+tur	hiç bir tahminim yok     
+nld	ik heb er geen flauw idee van, ik kan het niet raden
+cluster	erikv
+tur	bakmadan edemedim
+nld	ik kon het niet laten van te kijken
+cluster	erikv
+tur	öncelikli    
+nld	bij voorkeur, eerst en vooral
+cluster	erikv
+tur	olan olmayan her şey        
+nld	al wat er gebeurt 
+cluster	erikv
+tur	bana kalsaydi gitmezdim      
+nld	als het aan mij gelegen had was ik niet gegaan
+cluster	erikv
+tur	Umarım kazanırız
+nld	ik hoop dat we winnen
+cluster	erikv
+tur	sormadan edemedim     
+nld	ik kon het niet laten van te vragen
+cluster	erikv
+tur	bana kalsa gitmem                 
+nld	als het aan mij ligt ga ik niet
+cluster	erikv
+tur	kimin umrunda     
+eng	who cares?
+cluster	erikv
+tur	merak edecek bir şey yok                
+nld	er is niets om je zorgen over te maken
+cluster	erikv
+tur	Her kim olursa olsun yangın çıkaranları sonsuza kadar lanetliyorum!
+nld	wie het ook weze, ik vervloek degenen die de brand hebben aangestoken voor eeuwig
+cluster	erikv
+tur	ders çalışmaktansa  müzik dinlemeyi tercih ederim 
+nld	ik luister liever naar muziek dan te studeren 
+cluster	erikv
+tur	sıradan bir virüsten 20 kat büyük             
+nld	20 keer groter dan een normaal virus
+cluster	erikv
+tur	ben yapabiliyorsam herkes yapabilir      
+nld	als ik dat kan kan iedereen dat
+cluster	erikv
+tur	önceden,sonradan,şimdiden
+nld	op voorhand, nadien, nu al
+cluster	erikv
+tur	Türkiye'de olan olmayan her şeyden başbakan sorumludur. 
+nld	de eerste minister is verantwoordelijk voor alles wat in turkije gebeurt (of niet gebeurt)
+cluster	erikv
+tur	üstelik       
+nld	daarenboven
+cluster	erikv
+tur	Sinemaya gittiğimizde film çoktan/zaten başlamıştı 
+nld	toen wij de bioscoop binnengingen was de film al (lang) begonnen
+cluster	erikv
+tur	Sen bir kitap okuyorken ben Tv izliyordum 
+nld	terwijl jij een boek las was ik tv aan het kijken
+cluster	erikv
+tur	Cuma gününe kadar, bu iş bitmiş olacak                                       
+nld	Tegen vrijdag zal dit werkje al gedaan zijn
+cluster	erikv
+tur	Sen bu notu okuduğun zaman, ben ayrılmış olacağım 
+nld	Wanneer jij deze boodschap leest, zal ik (al) vertrokken zijn
+cluster	erikv
+tur	her şeyi düşündüm ben               
+nld	ik heb aan alles gedacht
+cluster	erikv
+tur	kararım kesin
+nld	mijn besluit staat vast
+cluster	erikv
+tur	olan oldu                                         
+nld	wat gebeurd is is gebeurd
+cluster	erikv
+tur	bu sadece ikimizin arasında kalır    
+nld	dit blijft tussen ons twee
+cluster	erikv
+tur	sabretmek zorundayız                   
+nld	We zijn verplicht om geduld te oefenen
+cluster	erikv
+tur	eşeklik etmek                                   
+nld	een stommiteit uithalen
+cluster	erikv
+tur	apar topar çıktı                             
+nld	hij is hals over kop vertrokken
+cluster	erikv
+tur	benim elimden geleni yapaçağım     
+nld	ik zal doen wat ik kan
+cluster	erikv
+tur	sana bol şans                                   
+nld	Veel geluk!
+cluster	erikv
+tur	kiminle konuşuyordun ? kimseyle              
+nld	met wie was je aan het praten? met niemand
+cluster	erikv
+tur	bunun için üzülüyorsun? Aksine, mutluyum  
+nld	Ben je daarvoor verdrietig? integendeel, gelukkig
+cluster	erikv
+tur	zaman gelince öğrenirsin                  
+nld	Als het zover is zal je het horen
+cluster	erikv
+tur	umarım kazanırsın                           
+nld	ik hoop dat je wint
+cluster	erikv
+tur	Kulaklarıma inanmıyorum             
+nld	ik geloof mijn oren niet
+cluster	erikv
+tur	Benden ne istiyor anlamıyorum          
+nld	Ik weet niet wat hij van mij wil
+cluster	erikv
+tur	kafan karıştı                                   
+nld	je bent in de war
+cluster	erikv
+tur	bana büyük bir iyilik yaptın            
+nld	je hebt mij een grote dienst bewezen
+cluster	erikv
+tur	bu defa çok ileri gitti                        
+nld	deze keer is hij te ver gegaan
+cluster	erikv
+tur	pişman olmayacaksın                     
+nld	je zal er geen spijt van hebben
+cluster	erikv
+tur	böyle birşey olduğunu bilmiyordum.         
+nld	Ik wist niet dat er zoiets bestond
+cluster	erikv
+tur	daha doğrusu..    
+nld	of beter gezegd...
+cluster	erikv
+tur	bekledim boşuna                           
+nld	ik heb voor niets gewacht
+cluster	erikv
+tur	başka bir  çözüm bulmam gerekiyor       
+nld	ik moet een andere oplossing vinden
+cluster	erikv
+tur	daha çok beklersin                        
+nld	je zal nog lang wachten...
+cluster	erikv
+tur	Nihayet !                                           
+nld	Eindelijk !
+cluster	erikv
+tur	ortalama bir gelir masrafları karşılamaz             
+nld	een gemiddeld inkomen komt niet toe voor de kosten
+cluster	erikv
+tur	seni görmek ne hoş ( bir sürpriz )  
+nld	Wat een leuke verrassing je te zien
+cluster	erikv
+tur	şansıma                   
+nld	gelukkig voor mij (tot mijn geluk)
+cluster	erikv
+tur	yalnızca birkaç yüz metre      
+nld	slechts enkele honderden meters
+cluster	erikv
+tur	ben kendim yaptım    
+nld	ik heb hetzelf gedaan
+cluster	erikv
+tur	Derim çok kalın     
+nld	ik heb een dik vel
+cluster	erikv
+tur	bunu özellikle yaptı                       
+nld	hij heeft dat met opzet gedaan
+cluster	erikv
+tur	Her şey yoluna gidecek                  
+nld	Alles komt goed
+cluster	erikv
+tur	neredeyse her hafta
+nld	zo goed als elke week
+cluster	erikv
+tur	eminim öyledir                              
+nld	ik twijfel er niet aan, ik ben zeker dat het zo is
+language	mhr	Meadow Mari
+language	wuu	Shanghainese
+language	nya	Chinyanja
+language	ckt	Chukchi
+language	npi	Nepali
+language	por	Portuguese
+language	cycl	CycL
+language	sah	Yakut
+language	abk	Abkhaz
+language	swh	Swahili
+language	heb	Hebrew
+language	xho	Xhosa
+language	swe	Swedish
+language	toki	Toki Pona
+language	hye	Armenian
+language	est	Estonian
+language	guj	Gujarati
+language	shs	Shuswap
+language	ara	Arabic
+language	pol	Polish
+language	kur	Kurdish
+language	kin	Kinyarwanda
+language	glg	Galician
+language	aze	Azerbaijani
+language	kaz	Kazakh
+language	gle	Irish
+language	kir	Kyrgyz
+language	kum	Kumyk
+language	bre	Breton
+language	vie	Vietnamese
+language	spa	Spanish
+language	udm	Udmurt
+language	kat	Georgian
+language	bak	Bashkir
+language	nob	Norwegian (Bokmål)
+language	isl	Icelandic
+language	arq	Algerian Arabic
+language	nog	Nogai
+language	gla	Scottish Gaelic
+language	ron	Romanian
+language	mgm	Mambae
+language	ell	Greek
+language	kal	Greenlandic
+language	mon	Mongolian
+language	som	Somali
+language	arz	Egyptian Arabic
+language	non	Norwegian (Nynorsk)
+language	yue	Cantonese
+language	san	Sanskrit
+language	ppl	Pipil
+language	ain	Ainu
+language	nov	Novial
+language	ita	Italian
+language	tat	Tatar
+language	lvs	Latvian
+language	roh	Romansh
+language	qya	Quenya
+language	tam	Tamil
+language	ukr	Ukrainian
+language	deu	German
+language	mrj	Hill Mari
+language	mri	Maori
+language	pms	Piedmontese
+language	cmn	Chinese
+language	ces	Czech
+language	srp	Serbian
+language	kor	Korean
+language	eus	Basque
+language	rus	Russian
+language	mar	Marathi
+language	orv	Old East Slavic
+language	ksh	Kölsch
+language	sjn	Sindarin
+language	eng	English
+language	mal	Malayalam
+language	enm	Middle English
+language	tlh	Klingon
+language	hun	Hungarian
+language	ewe	Ewe
+language	bul	Bulgarian
+language	sin	Sinhala
+language	sqi	Albanian
+language	pes	Persian
+language	pnb	Punjabi (Western)
+language	jpn	Japanese
+language	zsm	Malay
+language	khm	Khmer
+language	wln	Walloon
+language	cym	Welsh
+language	bod	Tibetan
+language	lzh	Literary Chinese
+language	slk	Slovak
+language	uig	Uyghur
+language	afr	Afrikaans
+language	cor	Cornish
+language	oci	Occitan
+language	tel	Telugu
+language	mlt	Maltese
+language	hau	Hausa
+language	hin	Hindi
+language	haw	Hawaiian
+language	hil	Hiligaynon
+language	cha	Chamorro
+language	slv	Slovenian
+language	nld	Dutch
+language	hat	Haitian Creole
+language	ltz	Luxembourgish
+language	lld	Ladin
+language	mlg	Malagasy
+language	ind	Indonesian
+language	ina	Interlingua
+language	avk	Kotava
+language	pdc	Pennsylvania German
+language	chv	Chuvash
+language	ang	Old English
+language	nds	Low Saxon
+language	urd	Urdu
+language	awa	Awadhi
+language	lkt	Lakota
+language	pcd	Picard
+language	ber	Berber
+language	ota	Ottoman Turkish
+language	uzb	Uzbek
+language	tur	Turkish
+language	fao	Faroese
+language	ben	Bengali
+language	bel	Belarusian
+language	tuk	Turkmen
+language	zul	Zulu
+language	dan	Danish
+language	jbo	Lojban
+language	mkd	Macedonian
+language	oss	Ossetian
+language	tet	Tetun
+language	epo	Esperanto
+language	scn	Sicilian
+language	chr	Cherokee
+language	tgk	Tajik
+language	tgl	Tagalog
+language	cat	Catalan
+language	amh	Amharic
+language	nan	Min Nan Chinese
+language	fra	French
+language	bho	Bhojpuri
+language	xal	Kalmyk
+language	ast	Asturian
+language	fin	Finnish
+language	hsb	Upper Sorbian
+language	nah	Nahuatl
+language	lad	Ladino
+language	mnw	Mon
+language	sna	Shona
+language	vol	Volapük
+language	grn	Guarani
+language	hrv	Croatian
+language	que	Quechua
+language	yid	Yiddish
+language	lao	Lao
+language	lat	Latin
+language	crh	Crimean Tatar
+language	lit	Lithuanian
+language	tpi	Tok Pisin
+language	acm	Iraqi Arabic
+language	yor	Yoruba
+language	ido	Ido
+language	grc	Ancient Greek
+language	liv	Livonian
+language	ile	Interlingue
+language	pan	Punjabi (Eastern)
+language	prg	Old Prussian
+language	frm	Middle French
+language	jdt	Juhuri (Judeo-Tat)
+language	tpw	Old Tupi
+language	tha	Thai
+language	bos	Bosnian
+language	nav	Navajo
+language	dsb	Lower Sorbian
+language	cbk	Chavacano
+language	fry	Frisian
+source	eng
+source	nld
+target	tur

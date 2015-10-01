@@ -1,0 +1,184 @@
+﻿cluster	dummy
+nld	ik ben er
+tur	ben geldim
+language	wuu	Shanghainese
+language	nya	Chinyanja
+language	ckt	Chukchi
+language	npi	Nepali
+language	por	Portuguese
+language	cycl	CycL
+language	sah	Yakut
+language	abk	Abkhaz
+language	swh	Swahili
+language	heb	Hebrew
+language	xho	Xhosa
+language	swe	Swedish
+language	toki	Toki Pona
+language	hye	Armenian
+language	est	Estonian
+language	guj	Gujarati
+language	shs	Shuswap
+language	ara	Arabic
+language	pol	Polish
+language	kur	Kurdish
+language	kin	Kinyarwanda
+language	glg	Galician
+language	aze	Azerbaijani
+language	kaz	Kazakh
+language	gle	Irish
+language	kir	Kyrgyz
+language	kum	Kumyk
+language	bre	Breton
+language	vie	Vietnamese
+language	spa	Spanish
+language	udm	Udmurt
+language	kat	Georgian
+language	bak	Bashkir
+language	nob	Norwegian (Bokmål)
+language	isl	Icelandic
+language	arq	Algerian Arabic
+language	nog	Nogai
+language	gla	Scottish Gaelic
+language	ron	Romanian
+language	mgm	Mambae
+language	ell	Greek
+language	kal	Greenlandic
+language	mon	Mongolian
+language	som	Somali
+language	arz	Egyptian Arabic
+language	non	Norwegian (Nynorsk)
+language	yue	Cantonese
+language	san	Sanskrit
+language	ppl	Pipil
+language	ain	Ainu
+language	nov	Novial
+language	ita	Italian
+language	tat	Tatar
+language	lvs	Latvian
+language	roh	Romansh
+language	qya	Quenya
+language	tam	Tamil
+language	ukr	Ukrainian
+language	deu	German
+language	mrj	Hill Mari
+language	mri	Maori
+language	pms	Piedmontese
+language	cmn	Chinese
+language	ces	Czech
+language	srp	Serbian
+language	kor	Korean
+language	eus	Basque
+language	rus	Russian
+language	mar	Marathi
+language	orv	Old East Slavic
+language	ksh	Kölsch
+language	sjn	Sindarin
+language	eng	English
+language	mal	Malayalam
+language	enm	Middle English
+language	tlh	Klingon
+language	hun	Hungarian
+language	ewe	Ewe
+language	bul	Bulgarian
+language	sin	Sinhala
+language	sqi	Albanian
+language	pes	Persian
+language	pnb	Punjabi (Western)
+language	jpn	Japanese
+language	zsm	Malay
+language	khm	Khmer
+language	wln	Walloon
+language	cym	Welsh
+language	bod	Tibetan
+language	lzh	Literary Chinese
+language	slk	Slovak
+language	uig	Uyghur
+language	afr	Afrikaans
+language	cor	Cornish
+language	oci	Occitan
+language	tel	Telugu
+language	mlt	Maltese
+language	hau	Hausa
+language	hin	Hindi
+language	haw	Hawaiian
+language	hil	Hiligaynon
+language	cha	Chamorro
+language	slv	Slovenian
+language	nld	Dutch
+language	hat	Haitian Creole
+language	ltz	Luxembourgish
+language	lld	Ladin
+language	mlg	Malagasy
+language	ind	Indonesian
+language	ina	Interlingua
+language	avk	Kotava
+language	pdc	Pennsylvania German
+language	chv	Chuvash
+language	ang	Old English
+language	nds	Low Saxon
+language	urd	Urdu
+language	awa	Awadhi
+language	lkt	Lakota
+language	pcd	Picard
+language	ber	Berber
+language	ota	Ottoman Turkish
+language	uzb	Uzbek
+language	tur	Turkish
+language	fao	Faroese
+language	ben	Bengali
+language	bel	Belarusian
+language	tuk	Turkmen
+language	zul	Zulu
+language	dan	Danish
+language	jbo	Lojban
+language	mkd	Macedonian
+language	oss	Ossetian
+language	tet	Tetun
+language	epo	Esperanto
+language	scn	Sicilian
+language	chr	Cherokee
+language	tgk	Tajik
+language	tgl	Tagalog
+language	cat	Catalan
+language	amh	Amharic
+language	nan	Min Nan Chinese
+language	fra	French
+language	bho	Bhojpuri
+language	xal	Kalmyk
+language	ast	Asturian
+language	fin	Finnish
+language	hsb	Upper Sorbian
+language	nah	Nahuatl
+language	lad	Ladino
+language	mnw	Mon
+language	sna	Shona
+language	vol	Volapük
+language	grn	Guarani
+language	hrv	Croatian
+language	que	Quechua
+language	yid	Yiddish
+language	lao	Lao
+language	lat	Latin
+language	crh	Crimean Tatar
+language	lit	Lithuanian
+language	tpi	Tok Pisin
+language	acm	Iraqi Arabic
+language	yor	Yoruba
+language	ido	Ido
+language	grc	Ancient Greek
+language	liv	Livonian
+language	ile	Interlingue
+language	pan	Punjabi (Eastern)
+language	prg	Old Prussian
+language	frm	Middle French
+language	jdt	Juhuri (Judeo-Tat)
+language	tpw	Old Tupi
+language	tha	Thai
+language	bos	Bosnian
+language	nav	Navajo
+language	dsb	Lower Sorbian
+language	cbk	Chavacano
+language	fry	Frisian
+source	eng
+source	nld
+target	tur
