@@ -1,12 +1,8 @@
 package tatoeba;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -299,72 +295,7 @@ public class Graph {
         }
     }
 
-    public static void createNGrams(GenericTextFrame frame, String language) {
-        HashMap<String, Integer> ngrams = new HashMap<>();
-        int count = 0;
-        String ngram;
-        int ngramCount = 0;
-        for (Cluster c : clusters.values()) {
-            for (Sentence s : c.sentences) {
-                //                               System.out.println("|"+s.language+"|"+" |" + s.sentence + "|");
-                if (s.language.equals(language)) {
-    //                if (count < 1000) {
-    //                    System.out.println("|" + s.sentence + "|");
-                        for (int i = 0; i < (s.sentence.length() - 1); i++) {
-                            ngramCount++;
-                            ngram = s.sentence.substring(i, i + 2);
-                            Integer freq=ngrams.get(ngram);
-                            if (freq==null){
-                                ngrams.put(ngram,1);
-                            } else {
-                            ngrams.put(ngram, freq+1);
-                            }
-                        }
-    //                };
-                    count++;
-                }
-            }
-        }
- /*       
-        System.out.println("-----------------");       
-        for (String n :ngrams.keySet()){
-            System.out.println(n+" "+ngrams.get(n));
-        }
-        System.out.println("-----------------");
-        System.out.println("ngrams = "+ngramCount + "   unique = "+ngrams.size());
- */       
-        // Convert Map to List
-		List<Map.Entry<String, Integer>> ngramList = 
-			new ArrayList<Map.Entry<String, Integer>>(ngrams.entrySet());
-                
-                	// Sort list with comparator, to compare the Map values
-		Collections.sort(ngramList, new Comparator<Map.Entry<String, Integer>>() {
-			public int compare(Map.Entry<String, Integer> o1,
-                                           Map.Entry<String, Integer> o2) {
-				return (o1.getValue()).compareTo(o2.getValue());
-			}
-		});
-                
-           System.out.println("-----------------"); 
-           int ngramc=0;
-           float ngramp=0;  
-        for (Map.Entry<String, Integer> e : ngramList){
-            float percentage=(float) e.getValue()/(float) ngramCount;
 
-            ngramc=ngramc+e.getValue();
-            ngramp=(float)(ngramCount-ngramc)/(float)ngramCount;
- //                      if (percentage > 0.01)
-            {
-            System.out.format("%s %d %.3f%% %.3f%%%n",e.getKey(),e.getValue(),percentage,ngramp);
-            }
-        }
-        System.out.println("-----------------");
-        System.out.println("ngrams = "+ngramCount + "   unique = "+ngrams.size());
-        System.out.println("ngramCountCheck = "+ngramc);
-        
-             
-        
-    }
 
     public static int unsavedClusters() {
         int i = 0;

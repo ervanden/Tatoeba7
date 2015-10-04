@@ -1,4 +1,4 @@
-package turkeditor;
+package langeditor;
 
 import javax.swing.JFileChooser;
 import javax.swing.JTextPane;
@@ -15,9 +15,9 @@ import javax.swing.text.StyledDocument;
 import utils.AreaFont;
 import utils.MsgTextPane;
 
-public class TurkishTextPane extends JTextPane {
+public class LanguageTextPane extends JTextPane {
 
-    TurkishTextPane thisTextPane;
+    LanguageTextPane thisTextPane;
     static boolean dictionaryIsRead=false;
     
     boolean autoCorrect=true;
@@ -40,12 +40,11 @@ public class TurkishTextPane extends JTextPane {
     }
 
     
-    public TurkishTextPane() {
+    public LanguageTextPane() {
         this.getStyledDocument().addDocumentListener(editAreaListener);
         this.addCaretListener(editAreaCaretListener);
         thisTextPane=this;
-        String defaultFolder=new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        Dictionary.dictionaryFileName=defaultFolder+"\\Tatoeba\\TurkishDictionary.txt";
+        Dictionary.dictionaryFileName=LanguageEditor.ops.dictionaryFilename();
         if (!dictionaryIsRead){
         Dictionary.readDictionaryFromFile(Dictionary.dictionaryFileName);
         dictionaryIsRead=true;
@@ -72,8 +71,9 @@ class SubstitutionTask implements Runnable {
 
         try {
             selection = doc.getText(position, length);
-            selection = Dictionary.invertTurkify(selection);
-
+//        System.out.println("inverting "+selection);
+            selection = LanguageEditor.ops.invertDiacritics(selection);
+//        System.out.println("inverted= "+selection);
             finalInsert=true;
             doc.remove(position, length);
             doc.insertString(position, selection, doc.getStyle("default"));
@@ -137,7 +137,6 @@ class setAttributesTask implements Runnable {
     }
 
     public void run() {
-        StyledDocument doc;
         sas = new SimpleAttributeSet();
         StyleConstants.setFontSize(sas, AreaFont.getSize());
         thisTextPane.getStyledDocument().setCharacterAttributes(position, length, sas, false);
@@ -163,11 +162,9 @@ class setAttributesTask implements Runnable {
         }
 
         public void removeUpdate(DocumentEvent e) {
-//        MsgTextPane.write("doc remove offset=" + e.getOffset() + " len=" + e.getLength());
         }
 
         public void changedUpdate(DocumentEvent e) {
-//        MsgTextPane.write("doc change offset=" + e.getOffset() + " len=" + e.getLength());
         }
 
     };
@@ -175,7 +172,6 @@ class setAttributesTask implements Runnable {
     CaretListener editAreaCaretListener = new CaretListener() {
 
         public void caretUpdate(CaretEvent e) {
-            boolean confirm = true;
             int position = e.getMark();
             int length = e.getDot() - e.getMark();
             if (length < 0) {

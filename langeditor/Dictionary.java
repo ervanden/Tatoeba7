@@ -1,4 +1,4 @@
-package turkeditor;
+package langeditor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,7 +23,7 @@ import utils.MsgTextPane;
 
 class Dictionary {
 
-    public static Hashtable<String, String> dict = new Hashtable<String, String>();
+    public static Hashtable<String, String> words = new Hashtable<String, String>();
     public static Hashtable<String, String> stems = new Hashtable<String, String>();
 
     static String dictionaryFileName = "?";
@@ -37,7 +37,7 @@ class Dictionary {
     }
 
     public static void addWord(String word) {
-        dict.put(deTurkify(word), word);
+        words.put(LanguageEditor.ops.removeDiacritics(word), word);
         DocUtils.writeDictArea("Word added: ", false);
         DocUtils.writeSelectDictArea(word);
         DocUtils.writeDictArea("\n", false);
@@ -45,7 +45,7 @@ class Dictionary {
     }
 
     public static void addStem(String word) {
-        stems.put(deTurkify(word), word);
+        stems.put(LanguageEditor.ops.removeDiacritics(word), word);
         DocUtils.writeDictArea("Stem added: ", false);
         DocUtils.writeSelectDictArea(word);
         DocUtils.writeDictArea("\n", false);
@@ -53,7 +53,7 @@ class Dictionary {
     }
 
     public static void removeWord(String word) {
-        dict.remove(deTurkify(word));
+        words.remove(LanguageEditor.ops.removeDiacritics(word));
         DocUtils.writeDictArea("Word removed: ", false);
         DocUtils.writeDictArea(word, false);
         DocUtils.writeDictArea("\n", false);
@@ -61,73 +61,13 @@ class Dictionary {
     }
 
     public static void removeStem(String word) {
-        stems.remove(deTurkify(word));
+        stems.remove(LanguageEditor.ops.removeDiacritics(word));
         DocUtils.writeDictArea("Stem removed: ", false);
         DocUtils.writeSelectDictArea(word);
         DocUtils.writeDictArea("\n", false);
         DocUtils.scrollEnd();
-        stems.remove(deTurkify(word));
+        stems.remove(LanguageEditor.ops.removeDiacritics(word));
     }
-    /*
-     public static String dictionaryLocationFileName() {
-     String sourceDir = "";
-     String locationFileName = "";
-     Pattern pattern;
-     Matcher matcher;
-
-     sourceDir = DocUtils.class.getProtectionDomain().getCodeSource().getLocation().getFile();
-     MsgTextPane.write("jar File = " + sourceDir);
-
-     sourceDir = sourceDir.replaceAll("%20", " ");
-     sourceDir = sourceDir.replaceAll("/[^/]*jar$", "");
-     MsgTextPane.write("jar file directory = " + sourceDir);
-
-     pattern = Pattern.compile("/.*$");
-     matcher = pattern.matcher(sourceDir);
-     if (matcher.find()) {
-     sourceDir = sourceDir.substring(1);
-     }
-
-     MsgTextPane.write("jar file directory = " + sourceDir);
-
-     locationFileName = sourceDir + "/dictionaryLocation.txt";
-     locationFileName = locationFileName.replace('/', '\\');
-     MsgTextPane.write("dictionary location file = " + locationFileName);
-
-     return locationFileName;
-
-     }
-
-     public static String dictionaryFileName() {
-
-     String sourceDir = "";
-     String locationFileName = "";
-     Pattern pattern;
-     Matcher matcher;
-
-     String dFileName = "?";
-
-     try {
-     locationFileName = dictionaryLocationFileName();
-
-     File f = new File(locationFileName);
-     InputStream is = new FileInputStream(f);
-     InputStreamReader isr = new InputStreamReader(is);
-     BufferedReader inputStream = new BufferedReader(isr);
-
-     dFileName = inputStream.readLine();
-     if (dFileName == null) {
-     MsgTextPane.write("Nothing read from " + locationFileName);
-     dFileName = "?";
-     }
-
-     } catch (IOException io) {
-     MsgTextPane.write("Can not open " + locationFileName);
-     }
-     MsgTextPane.write("Dictionary File Name = " + dFileName);
-     return dFileName;
-     }
-     */
 
     public static String readDictionaryFromFile(String fileName) {
 
@@ -161,10 +101,10 @@ class Dictionary {
             while ((l = inputStream.readLine()) != null) {
                 if (l.charAt(0) == '[') {
                     l = l.substring(1, l.length() - 1);
-                    stems.put(deTurkify(l), l);
+                    stems.put(LanguageEditor.ops.removeDiacritics(l), l);
                     scount++;
                 } else {
-                    dict.put(deTurkify(l), l);
+                    words.put(LanguageEditor.ops.removeDiacritics(l), l);
                     wcount++;
                 }
             }
@@ -186,8 +126,8 @@ class Dictionary {
 
         boolean confirm;
         ConfirmDialog cd = new ConfirmDialog();
-        cd.popUp(TurkishEditor.turkishEditorFrame,
-                dict.size() + "/"
+        cd.popUp(LanguageEditor.languageEditorFrame,
+                words.size() + "/"
                 + stems.size() + " entries will be written to " + fileName, "Continue", "Cancel");
         confirm = cd.confirm;
 
@@ -200,26 +140,19 @@ class Dictionary {
                 MsgTextPane.write("write encoding = " + isr.getEncoding());
                 BufferedWriter outputStream = new BufferedWriter(isr);
 
-                int count;
-
                 java.util.List<String> v;
 
-                v = new ArrayList<String>(dict.keySet());
-                count = 0;
+                v = new ArrayList<String>(words.keySet());
                 for (String str : v) {
-                    outputStream.write((String) dict.get(str));
+                    outputStream.write((String) words.get(str));
                     outputStream.newLine();
-                    count++;
                 }
 
                 v = new ArrayList<String>(stems.keySet());
 
-                count = 0;
-
                 for (String str : v) {
                     outputStream.write("[" + (String) stems.get(str) + "]");
                     outputStream.newLine();
-                    count++;
                 }
                 outputStream.close();
 
@@ -280,8 +213,8 @@ class Dictionary {
         boolean debug = false;
 
         // word is expected to be lowercase and deturkified
-        if (wordLookup && dict.containsKey(word)) {
-            String correctedWord = dict.get(word);
+        if (wordLookup && words.containsKey(word)) {
+            String correctedWord = words.get(word);
             if (matchInfo) {
                 DocUtils.writeDictArea(word + " >> ", false);
                 DocUtils.writeSelectDictArea(correctedWord);
@@ -465,7 +398,7 @@ class Dictionary {
                 startWordPosition = DocUtils.nextAlphabetic(doc, position);
                 endWordPosition = DocUtils.nextNonAlphabetic(doc, startWordPosition);
                 wordorig = doc.getText(startWordPosition, endWordPosition - startWordPosition);
-                word = deTurkify(wordorig);
+                word = LanguageEditor.ops.removeDiacritics(wordorig);
 //                MsgTextPane.write("word = "+word);
                 wordlc = word.replaceAll("[İI]", "i").toLowerCase();
 //  MsgTextPane.write("wordlc = "+wordlc);              
@@ -483,14 +416,14 @@ class Dictionary {
                 }
                 //MsgTextPane.write("wordnew = "+wordnew);               
                 if (!wordnew.equals(wordorig)) {
-                    TurkishTextPane.finalInsert = true;
+                    LanguageTextPane.finalInsert = true;
                     doc.remove(startWordPosition, endWordPosition - startWordPosition);
                     doc.insertString(startWordPosition, wordnew, null);
                     if (markCorrection) {
                         doc.setCharacterAttributes(startWordPosition, wordnew.length(), DocUtils.sas_red, false);
                         nrCorrected++;
                     }
-                    TurkishTextPane.finalInsert = false;
+                    LanguageTextPane.finalInsert = false;
                 }
             } catch (BadLocationException ex) {
                 MsgTextPane.write("Bad Location in runDictionary ");
@@ -514,7 +447,7 @@ class Dictionary {
 
     public static void optimizeWords() {
         String correctedWord;
-        java.util.List<String> v = new ArrayList<String>(dict.keySet());
+        java.util.List<String> v = new ArrayList<String>(words.keySet());
 //        MsgTextPane.write("Applying stem correction to Dictionary...");
         matchInfo = false;
         Collections.sort(v);
@@ -523,7 +456,7 @@ class Dictionary {
         for (String str : v) {
             // str is lowercase and deturkified because it is in keySet
             correctedWord = runDictionaryOnWord(str, false, true); //  only stem based correction
-            if (!correctedWord.equals(dict.get(str))) {
+            if (!correctedWord.equals(words.get(str))) {
                 failed++;
             } else {
                 if (success < 100) {
@@ -531,7 +464,7 @@ class Dictionary {
                 } else if (success == 100) {
                     DocUtils.writeDictArea("...", false);
                 }
-                dict.remove(str);
+                words.remove(str);
                 success++;
             }
         }
@@ -542,8 +475,8 @@ class Dictionary {
     public static void optimizeStems() {
 
         WordTree w = new WordTree();
-        for (String key : dict.keySet()) {
-            String word = dict.get(key);
+        for (String key : words.keySet()) {
+            String word = words.get(key);
             if (word.replaceFirst("[^a-zşçğıöü]", " ").equals(word)) {
                 w.addWord(word, 1);
             } else {
@@ -555,7 +488,7 @@ class Dictionary {
         ArrayList<String> stemList;
         stemList = w.scanStems();
         for (String stem : stemList) {
-            stems.put(deTurkify(stem), stem);
+            stems.put(LanguageEditor.ops.removeDiacritics(stem), stem);
         }
         MsgTextPane.write(stemList.size() + " stems extracted");
 
@@ -603,7 +536,7 @@ class Dictionary {
             dictionaryPattern = "^.*$";
         }
         pattern = Pattern.compile(dictionaryPattern);
-        v = new ArrayList<String>(dict.keySet());
+        v = new ArrayList<String>(words.keySet());
         Collections.sort(v);
         DocUtils.writeDictArea("Searching Dictionary..." + "\n", true);
         count = 1;
@@ -611,7 +544,7 @@ class Dictionary {
             matcher = pattern.matcher((String) str);  // search the keys
             Boolean found = false;
             if (matcher.find()) {
-                DocUtils.writeDictArea(count + " " + (String) dict.get(str) + "\n", false);
+                DocUtils.writeDictArea(count + " " + (String) words.get(str) + "\n", false);
                 count++;
             }
         }
@@ -632,75 +565,7 @@ class Dictionary {
         DocUtils.writeDictArea(count - 1 + " stems" + "\n", true);
     }
 
-    public static String deTurkify(String word) {
-        word = word.replaceAll("ş", "s");
-        word = word.replaceAll("Ş", "S");
-        word = word.replaceAll("ç", "c");
-        word = word.replaceAll("Ç", "C");
-        word = word.replaceAll("ğ", "g");
-        word = word.replaceAll("ı", "i");
-        word = word.replaceAll("I", "İ");
-        word = word.replaceAll("ö", "o");
-        word = word.replaceAll("Ö", "O");
-        word = word.replaceAll("ü", "u");
-        word = word.replaceAll("Ü", "U");
-        return word;
 
-    }
 
-    public static String invertTurkify(String word) {
-        char c;
-        String newword = "";
-        for (int i = 0; i <= word.length() - 1; i++) {
-            c = word.charAt(i);
-            if (c == 'ş') {
-                c = 's';
-            } else if (c == 'Ş') {
-                c = 'S';
-            } else if (c == 'ç') {
-                c = 'c';
-            } else if (c == 'Ç') {
-                c = 'C';
-            } else if (c == 'ğ') {
-                c = 'g';
-            } else if (c == 'ı') {
-                c = 'i';
-            } else if (c == 'İ') {
-                c = 'I';
-            } else if (c == 'ö') {
-                c = 'o';
-            } else if (c == 'Ö') {
-                c = 'O';
-            } else if (c == 'ü') {
-                c = 'u';
-            } else if (c == 'Ü') {
-                c = 'U';
-            } else if (c == 's') {
-                c = 'ş';
-            } else if (c == 'S') {
-                c = 'Ş';
-            } else if (c == 'c') {
-                c = 'ç';
-            } else if (c == 'C') {
-                c = 'Ç';
-            } else if (c == 'g') {
-                c = 'ğ';
-            } else if (c == 'i') {
-                c = 'ı';
-            } else if (c == 'I') {
-                c = 'İ';
-            } else if (c == 'o') {
-                c = 'ö';
-            } else if (c == 'O') {
-                c = 'Ö';
-            } else if (c == 'u') {
-                c = 'ü';
-            } else if (c == 'U') {
-                c = 'Ü';
-            }
-            newword = newword + c;
 
-        }
-        return newword;
-    }
 }

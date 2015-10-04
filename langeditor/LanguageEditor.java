@@ -1,4 +1,4 @@
-package turkeditor;
+package langeditor;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -10,9 +10,6 @@ import java.util.*;
 
 import utils.MsgTextPane;
 import utils.AreaFont;
-
-
-
 
 class setAttributesTask2 implements Runnable {
 
@@ -27,7 +24,7 @@ class setAttributesTask2 implements Runnable {
     public void run() {
         sas = new SimpleAttributeSet();
         StyleConstants.setFontSize(sas, AreaFont.getSize());
-        TurkishEditor.turkishEditorFrame.docDict.setCharacterAttributes(position, length, sas, false);
+        LanguageEditor.languageEditorFrame.docDict.setCharacterAttributes(position, length, sas, false);
 
     }
 }
@@ -46,18 +43,18 @@ class ManualSelectTask implements Runnable {
     }
 }
 
-class TurkishEditorFrame extends JFrame implements ActionListener, ItemListener {
+class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener {
 
     private JFrame thisFrame = (JFrame) this;
-    private boolean expertMode=false;
-    
-    private TurkishTextPane editArea;
-    public static JTextPane dictArea=null;  // public static for scrollEnd() function
+    private boolean expertMode = false;
+
+    private LanguageTextPane editArea;
+    public static JTextPane dictArea = null;  // public static for scrollEnd() function
     private JTextPane msgArea;
-    
+
     private JFileChooser fileChooser = new JFileChooser();
     private StyledDocument docEdit;          // edit area
-    public static StyledDocument docDict=null;   // dictionary area, accessed from DocUtils
+    public static StyledDocument docDict = null;   // dictionary area, accessed from DocUtils
 
     JScrollPane scrollingEditArea;
     JScrollPane scrollingDictArea;
@@ -76,18 +73,17 @@ class TurkishEditorFrame extends JFrame implements ActionListener, ItemListener 
     JTextField textFieldDictFileName = new JTextField("");
     Dimension textFieldDictFileNameSize;
 
-    
     class WindowUtils extends WindowAdapter {
 
-    public void windowClosing(WindowEvent e) {
-        if (expertMode) {
-            JOptionPane.showMessageDialog(thisFrame, "Close window via Exit menu");
-        } else {
-            thisFrame.setVisible(false);
+        public void windowClosing(WindowEvent e) {
+            if (expertMode) {
+                JOptionPane.showMessageDialog(thisFrame, "Close window via Exit menu");
+            } else {
+                thisFrame.setVisible(false);
+            }
         }
     }
-}
-    
+
     DocumentListener dictAreaListener = new DocumentListener() {
 
         public void insertUpdate(DocumentEvent e) {
@@ -125,8 +121,6 @@ class TurkishEditorFrame extends JFrame implements ActionListener, ItemListener 
 
     };
 
-
-    
     public void itemStateChanged(ItemEvent e) {
 
         Object source = e.getItemSelectable();
@@ -168,37 +162,36 @@ class TurkishEditorFrame extends JFrame implements ActionListener, ItemListener 
             System.exit(0);
         }
 
-/*
-        if (action.equals("Change dictionary location")) {
-            String dirName = "";
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int retval = fileChooser.showOpenDialog(this);
-            if (retval == JFileChooser.APPROVE_OPTION) {
-                // check if it is a directory !!!            
-                File f = fileChooser.getSelectedFile();
-                dirName = f.getAbsolutePath();
-                Dictionary.dictionaryFileName = dirName + "\\TurkEditor.dictionary";
-                textFieldDictFileName.setText(Dictionary.dictionaryFileName);
-            }
+        /*
+         if (action.equals("Change dictionary location")) {
+         String dirName = "";
+         JFileChooser fileChooser = new JFileChooser();
+         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+         int retval = fileChooser.showOpenDialog(this);
+         if (retval == JFileChooser.APPROVE_OPTION) {
+         // check if it is a directory !!!            
+         File f = fileChooser.getSelectedFile();
+         dirName = f.getAbsolutePath();
+         Dictionary.dictionaryFileName = dirName + "\\TurkEditor.dictionary";
+         textFieldDictFileName.setText(Dictionary.dictionaryFileName);
+         }
 
-            try {  // write dictionary location file
-                File f = new File(Dictionary.dictionaryLocationFileName());
-                OutputStream is = new FileOutputStream(f);
-                OutputStreamWriter isr = new OutputStreamWriter(is, "UTF-8");
-                BufferedWriter outputStream = new BufferedWriter(isr);
+         try {  // write dictionary location file
+         File f = new File(Dictionary.dictionaryLocationFileName());
+         OutputStream is = new FileOutputStream(f);
+         OutputStreamWriter isr = new OutputStreamWriter(is, "UTF-8");
+         BufferedWriter outputStream = new BufferedWriter(isr);
 
-                outputStream.write(Dictionary.dictionaryFileName);
-                outputStream.newLine();
-                outputStream.close();
+         outputStream.write(Dictionary.dictionaryFileName);
+         outputStream.newLine();
+         outputStream.close();
 
-            } catch (IOException io) {
-                MsgTextPane.write(" io exception while writing dictionary location file");
-            }
+         } catch (IOException io) {
+         MsgTextPane.write(" io exception while writing dictionary location file");
+         }
 
-        }
-*/
-        
+         }
+         */
         if (action.equals("Read another dictionary")) {
 
             String fileName = "";
@@ -211,12 +204,12 @@ class TurkishEditorFrame extends JFrame implements ActionListener, ItemListener 
 
                 boolean confirm;
                 ConfirmDialog cd = new ConfirmDialog();
-                cd.popUp(TurkishEditor.turkishEditorFrame,
+                cd.popUp(LanguageEditor.languageEditorFrame,
                         "In-memory dictionary will be replaced with contents of " + fileName, "Continue", "Cancel");
                 confirm = cd.confirm;
 
                 if (confirm) {
-                    Dictionary.dict.clear();
+                    Dictionary.words.clear();
                     Dictionary.stems.clear();
                     Dictionary.readDictionaryFromFile(fileName);
                 }
@@ -545,8 +538,7 @@ class TurkishEditorFrame extends JFrame implements ActionListener, ItemListener 
 
     }
 
-    //============================================================== constructor
-    public void execute() {
+    public void display() {
         dictArea = new JTextPane();
         dictArea.setMinimumSize(new Dimension(300, 300));
         dictArea.setPreferredSize(new Dimension(300, 300));
@@ -555,7 +547,7 @@ class TurkishEditorFrame extends JFrame implements ActionListener, ItemListener 
         dictArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
         scrollingDictArea = new JScrollPane(dictArea);
 
-        editArea = new TurkishTextPane();
+        editArea = new LanguageTextPane();
         editArea.setAutoCorrect(true);
         editArea.setFinalInsert(false);
         editArea.setManualCorrect(true);
@@ -610,7 +602,7 @@ class TurkishEditorFrame extends JFrame implements ActionListener, ItemListener 
       
         textFieldPattern.setText("");
 
-        expertMode=false;
+        expertMode = false;
         displayGUI(false);
 
         setContentPane(content);
@@ -632,16 +624,27 @@ class TurkishEditorFrame extends JFrame implements ActionListener, ItemListener 
     }
 }
 
-public class TurkishEditor {
+public class LanguageEditor {
 
-    static TurkishEditorFrame turkishEditorFrame = null;
+    static LanguageEditorFrame languageEditorFrame = null;
+    static LanguageOperations ops = null;
 
-    public static void initialize() {
-        if (turkishEditorFrame==null){ turkishEditorFrame = new TurkishEditorFrame();}
-        turkishEditorFrame.execute();
+    public static void initialize(String language) {
+        if (language.equals("Turkish")) {
+            ops = new TurkishOperations();
+        }
+        if (language.equals("Polish")) {
+            ops = new PolishOperations();
+        }
+
+        if (languageEditorFrame == null) {
+            languageEditorFrame = new LanguageEditorFrame();
+        }
+
+        languageEditorFrame.display();
     }
-    
-    public static void setVisible(boolean b){
-        turkishEditorFrame.setVisible(b);
+
+    public static void setVisible(boolean b) {
+        languageEditorFrame.setVisible(b);
     }
 }

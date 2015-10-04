@@ -7,20 +7,19 @@ import javax.swing.*;
 import javax.swing.text.*;
 import java.util.*;
 
-import turkeditor.TurkishTextPane;
-import turkeditor.TurkishEditor;
+import langeditor.LanguageTextPane;
+import langeditor.LanguageEditor;
 import utils.AreaFont;
 
 //github test 1/10/2015
-
 // If the source or target language is one single language, a language-specific text pane is used.
 // In all other cases it is a normal JTextPane.
 // The class 'LanguageTextPane remembers which kind of text pane is active and has wrapper methods so that
 // the method of the language-specific text pane can be called.
 class LanguageTextPanes {
 
-    static TurkishTextPane source = null;
-    static TurkishTextPane target = null;
+    static LanguageTextPane source = null;
+    static LanguageTextPane target = null;
 
     private static void setParameters(JTextPane area) {
         area.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2)); // 2 pixels around text in JTextPane    
@@ -29,7 +28,7 @@ class LanguageTextPanes {
 
     public static JTextPane getSourceTextPane(String language) {
         if (language.equals("tur")) {
-            source = new TurkishTextPane();
+            source = new LanguageTextPane();
             setParameters(source);
             return (JTextPane) source;
         } else {
@@ -41,7 +40,7 @@ class LanguageTextPanes {
 
     public static JTextPane getTargetTextPane(String language) {
         if (language.equals("tur")) {
-            target = new TurkishTextPane();
+            target = new LanguageTextPane();
             setParameters(target);
             return (JTextPane) target;
         } else {
@@ -238,16 +237,6 @@ class TatoebaFrame extends JFrame implements ActionListener {
             ClustersInOut.saveClusters("selected");
         }
 
-        if (action.equals("Create n-grams")) {
-            /*
-            if (ngramFrame == null) {
-                ngramFrame = new GenericTextFrame();
-            }
-            ngramFrame.setVisible(true);
-            */
-            Graph.createNGrams(ngramFrame,"tur");
-        }
-
         if (action.equals("Read Tatoeba Database")) {
             String dirName;
             fileChooser = new JFileChooser();
@@ -329,8 +318,13 @@ class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Turkish")) {
-            TurkishEditor.initialize();
-            TurkishEditor.setVisible(true);
+            LanguageEditor.initialize("Turkish");
+            LanguageEditor.setVisible(true);
+        }
+
+        if (action.equals("Polish")) {
+            LanguageEditor.initialize("Polish");
+            LanguageEditor.setVisible(true);
         }
 
         // buttons
@@ -851,10 +845,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
         menuClusters = new JMenu("Editors");
         menuBar.add(menuClusters);
         AddMenuItem(menuClusters, "Turkish");
-
-        menuClusters = new JMenu("Language Recognition");
-        menuBar.add(menuClusters);
-        AddMenuItem(menuClusters, "Create n-grams");
+        AddMenuItem(menuClusters, "Polish");
 
         pack();
     }
@@ -947,68 +938,8 @@ class TatoebaFrame extends JFrame implements ActionListener {
     }
 }
 
-/*
- class TestStack extends JFrame {
-
- JButton buttonPop = new JButton("pop");
- JButton buttonPush = new JButton("push");
- JButton buttonDescend = new JButton("descend");
- JButton buttonRise = new JButton("rise");
-
- JPanel content = new JPanel();
-
- Integer value = 333;
-    
- public TestStack() {
-
- final ClusterStack integerStack = new ClusterStack();
-        
- content.add(buttonPush); //, BorderLayout.CENTER);
- content.add(buttonPop);//, BorderLayout.CENTER);
- content.add(buttonDescend);//, BorderLayout.CENTER);
- content.add(buttonRise);//, BorderLayout.CENTER);
-
- setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
- setContentPane(content);
- pack();
- setVisible(true);
-
- buttonPush.addActionListener((new ActionListener() {
- public void actionPerformed(ActionEvent e) {
- value++;
- System.out.println("push "+ value);
- integerStack.push(value); 
- }
- }));
-
- buttonPop.addActionListener((new ActionListener() {
- public void actionPerformed(ActionEvent e) {
- Integer i = integerStack.pop();
- System.out.println("pop = "+i);
- }
- }));
-        
-        
- buttonDescend.addActionListener((new ActionListener() {
- public void actionPerformed(ActionEvent e) {
- integerStack.descend();
- System.out.println("descend to "+integerStack.peekFirst());
- }
- }));
-        
-        
- buttonRise.addActionListener((new ActionListener() {
- public void actionPerformed(ActionEvent e) {
- integerStack.rise();
- System.out.println("rise to "+integerStack.peekFirst());
- }
- }));
- }
- }
- */
 public class Tatoeba {
 
-//    static TestStack testStack;
     static TatoebaFrame tatoebaFrame;
     static ClusterCountFrame clusterCountFrame = new ClusterCountFrame();
     static String currentSourceLanguage = "";
@@ -1028,7 +959,6 @@ public class Tatoeba {
 
     public static void main(String[] args) {
 
-        System.out.println("github test 1/10");
         tatoebaFrame = new TatoebaFrame();
         SelectionFrame.execute();
 
