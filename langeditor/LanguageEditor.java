@@ -11,23 +11,22 @@ import java.util.*;
 import utils.MsgTextPane;
 import utils.AreaFont;
 
-
 class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener {
 
+    private LanguageEditorFrame thisLanguageEditorFrame = this;
     private JFrame thisFrame = (JFrame) this;
+    public String editorLanguage;
     private boolean expertMode = false;
 
     private LanguageTextPane editArea;
-    public static JTextPane dictArea = null;  // public static for scrollEnd() function
-    private JTextPane msgArea;
+    public JTextPane dictArea = null;  // public static for scrollEnd() function
 
     private JFileChooser fileChooser = new JFileChooser();
     private StyledDocument docEdit;          // edit area
-    public static StyledDocument docDict = null;   // dictionary area, accessed from DocUtils
+    public StyledDocument docDict = null;   // dictionary area, accessed from DocUtils
 
     JScrollPane scrollingEditArea;
     JScrollPane scrollingDictArea;
-    //   JScrollPane scrollingMsgArea;
 
     JPanel content = new JPanel();
 
@@ -58,21 +57,20 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
             docDict.setCharacterAttributes(position, length, sas, false);
         }
     }
-    
+
     class ManualSelectTask implements Runnable {
 
-    private int position, length;
+        private int position, length;
 
-    ManualSelectTask(int position, int length) {
-        this.position = position;
-        this.length = length;
+        ManualSelectTask(int position, int length) {
+            this.position = position;
+            this.length = length;
+        }
+
+        public void run() {
+            DocUtils.manualSelectDictArea(position, length);
+        }
     }
-
-    public void run() {
-        DocUtils.manualSelectDictArea(position, length);
-    }
-}
-
 
     class WindowUtils extends WindowAdapter {
 
@@ -88,17 +86,16 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
     DocumentListener dictAreaListener = new DocumentListener() {
 
         public void insertUpdate(DocumentEvent e) {
+            LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"dictAreaListener insertUpdate");
             int position = e.getOffset();
             int length = e.getLength();
             SwingUtilities.invokeLater(new setAttributesTask2(position, length));
         }
 
         public void removeUpdate(DocumentEvent e) {
-//        MsgTextPane.write("doc remove offset=" + e.getOffset() + " len=" + e.getLength());
         }
 
         public void changedUpdate(DocumentEvent e) {
-//        MsgTextPane.write("doc change offset=" + e.getOffset() + " len=" + e.getLength());
         }
 
     };
@@ -106,7 +103,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
     CaretListener dictAreaCaretListener = new CaretListener() {
 
         public void caretUpdate(CaretEvent e) {
-
+            LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"dictAreaCaretListener caretUpdate");
             int position = e.getMark();
             int length = e.getDot() - e.getMark();
             if (length != 0) { // called when dict area is written to > erases selection
@@ -139,6 +136,8 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
     public void actionPerformed(ActionEvent ae) {
 
         String action = ae.getActionCommand();
+        
+        LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"actionPerformed "+action);
 
         if (action.equals("Correct selected text")) {
             editArea.setManualCorrect(false);
@@ -177,7 +176,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
 
                 boolean confirm;
                 ConfirmDialog cd = new ConfirmDialog();
-                cd.popUp(LanguageEditor.languageEditorFrame,
+                cd.popUp(this,
                         "In-memory dictionary will be replaced with contents of " + fileName, "Continue", "Cancel");
                 confirm = cd.confirm;
 
@@ -260,11 +259,15 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         if (action.equals("System messages on")) {
             expertMode = true;
             displayGUI(true);
+            MsgTextPane.write("System messages on");
+            MsgTextPane.setVisible(true);
         }
 
         if (action.equals("System messages off")) {
             expertMode = false;
             displayGUI(false);
+            MsgTextPane.write("System messages off");
+            MsgTextPane.setVisible(false);
         }
 
     }
@@ -312,9 +315,6 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         scrollingEditArea.setMinimumSize(new Dimension(800, 300));
         scrollingEditArea.setMaximumSize(new Dimension(800, 300));
         scrollingEditArea.setPreferredSize(new Dimension(800, 300));
-        //       scrollingMsgArea.setMinimumSize(new Dimension(800, 100));
-        //       scrollingMsgArea.setMaximumSize(new Dimension(800, 100));
-        //       scrollingMsgArea.setPreferredSize(new Dimension(800, 100));
 
         GridBagConstraints c;
         c = newGridBagConstraints();
@@ -410,15 +410,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         c.gridwidth = 5;   // align with number of dictArea buttons
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         content.add(scrollingDictArea, c);
-        /*
-         c = newGridBagConstraints();
-         c.fill = GridBagConstraints.BOTH;
-         c.weightx = 1;
-         c.gridx = 0;
-         c.gridy = 2;
-         c.gridwidth = 9;   // full width
-         content.add(scrollingMsgArea, c);
-         */
+
         JMenuBar menuBar;
         JMenu menuExit;
         JMenu menuText;
@@ -495,7 +487,6 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menuExit = new JMenu("Exit");
-        JMenu menuDictionary = new JMenu("Dictionary");
         JMenu menuExpert = new JMenu("Expert");
 
         menuBar = new JMenuBar();
@@ -511,7 +502,9 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
 
     }
 
-    public void display(String language) {
+    public LanguageEditorFrame(String language) {
+        editorLanguage = language;
+
         dictArea = new JTextPane();
         dictArea.setMinimumSize(new Dimension(300, 300));
         dictArea.setPreferredSize(new Dimension(300, 300));
@@ -520,7 +513,8 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         dictArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
         scrollingDictArea = new JScrollPane(dictArea);
 
-        editArea = new LanguageTextPane(language);
+        editArea = new LanguageTextPane(editorLanguage);
+        editArea.parent=thisLanguageEditorFrame;
         editArea.setAutoCorrect(true);
         editArea.setFinalInsert(false);
         editArea.setManualCorrect(true);
@@ -531,14 +525,6 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         editArea.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2)); // 2 pixels around text in JTextPane    
         editArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
         scrollingEditArea = new JScrollPane(editArea);
-
-        msgArea = MsgTextPane.getMsgTextPane();
-        msgArea.setMinimumSize(new Dimension(800, 100));
-        msgArea.setPreferredSize(new Dimension(800, 100));
-        msgArea.setMaximumSize(new Dimension(800, 100));
-        msgArea.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2)); // 2 pixels around text   
-        msgArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-        //       scrollingMsgArea = new JScrollPane(msgArea);
 
         content.setLayout(new GridBagLayout());
 
@@ -564,6 +550,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
 
         textFieldPattern.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                        LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"textfieldpattern ");
                 LanguageContext.get().dictionary().dictionaryPattern = textFieldPattern.getText();
                 LanguageContext.get().dictionary().printAll();
                 DocUtils.scrollEnd();
@@ -604,8 +591,7 @@ public class LanguageEditor {
 
     public static void initialize(String language) {
         editorLanguage = language;
-        languageEditorFrame = new LanguageEditorFrame();
-        languageEditorFrame.display(editorLanguage);
+        languageEditorFrame = new LanguageEditorFrame(editorLanguage);
     }
 
     public StyledDocument getDocument() {

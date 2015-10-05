@@ -5,7 +5,6 @@ import java.util.*;
 import java.awt.Color;
 import javax.swing.JTextPane;
 import utils.MsgTextPane;
-import static langeditor.LanguageEditorFrame.docDict;
 
 public class DocUtils {
 
@@ -28,8 +27,13 @@ public class DocUtils {
     static ArrayList<String> selectedWords = new ArrayList<String>();
 
     public static void writeSelectDictArea(String str) {
-
-        StyledDocument docDict = LanguageEditorFrame.docDict;
+        StyledDocument docDict = null;
+//        StyledDocument docDict = LanguageEditorFrame.docDict;
+        if (LanguageContext.getFrame() == null) {
+            MsgTextPane.write("getFrame()==null can not find docDict");
+        } else {
+            docDict = LanguageContext.getFrame().docDict;
+        }
 
         if (docDict == null) {
             return;
@@ -51,7 +55,13 @@ public class DocUtils {
 
     public static void manualSelectDictArea(int position, int length) {
 
-        StyledDocument docDict = LanguageEditorFrame.docDict;
+        StyledDocument docDict = null;
+//        StyledDocument docDict = LanguageEditorFrame.docDict;
+        if (LanguageContext.getFrame() == null) {
+            MsgTextPane.write("getFrame()==null can not find docDict");
+        } else {
+            docDict = LanguageContext.getFrame().docDict;
+        }
 
         if (docDict == null) {
             return;
@@ -105,20 +115,36 @@ public class DocUtils {
 
     public static void writeDictArea(String s, boolean bold) {
 
-        StyledDocument docDict = LanguageEditorFrame.docDict;
+        StyledDocument docDict = null;
+//        StyledDocument docDict = LanguageEditorFrame.docDict;
+        if (LanguageContext.getFrame() == null) {
+            MsgTextPane.write("getFrame()==null can not find docDict");
+        } else {
+            docDict = LanguageContext.getFrame().docDict;
+        }
 
-        if (LanguageEditorFrame.docDict == null) {
+        if (docDict == null) {
             return;
         }
 
-        writeArea(LanguageEditorFrame.docDict, s, bold);
+        writeArea(docDict, s, bold);
     }
 
     public static void scrollEnd() {
-        JTextPane dictArea = LanguageEditorFrame.dictArea;
-        if (dictArea==null) return;
-        dictArea.setCaretPosition(docDict.getLength());
-    };
+        JTextPane dictArea=null;
+
+        if (LanguageContext.getFrame() == null) {
+            MsgTextPane.write("getFrame()==null can not find docDict");
+        } else {
+            dictArea = LanguageContext.getFrame().dictArea;
+        }
+        if (dictArea == null) {
+            return;
+        }
+        dictArea.setCaretPosition(LanguageContext.getFrame().docDict.getLength());
+    }
+
+    ;
 
     public static boolean isVowel(char c) {
         if (c == 'e') {

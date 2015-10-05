@@ -89,6 +89,8 @@ public class Dictionary {
             }
         }
 
+        dictionaryFileName=fileName;
+        
         try {
 
             File initialFile = new File(fileName);

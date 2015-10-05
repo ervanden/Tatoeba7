@@ -1,6 +1,5 @@
 package langeditor;
 
-import javax.swing.JFileChooser;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
@@ -18,17 +17,16 @@ import utils.MsgTextPane;
 public class LanguageTextPane extends JTextPane {
 
     LanguageTextPane thisTextPane;
+    LanguageEditorFrame parent=null;  // set when this is used as editArea in a LanguageEditorFrame
     String textPaneLanguage;
-    
-    static boolean dictionaryIsRead=false;
-    
-    boolean autoCorrect=true;
-    static boolean finalInsert=false; // prevents correction/insertion infinite loop
-    boolean manualCorrect=true; // set during correction of selected text
+
+    boolean autoCorrect = true;
+    static boolean finalInsert = false; // prevents correction/insertion infinite loop
+    boolean manualCorrect = true; // set during correction of selected text
     // store position of last selected text for "correct selected text" function
-    public int selectedPosition=0;
-    public int selectedLength=0;
-    
+    public int selectedPosition = 0;
+    public int selectedLength = 0;
+
     public void setAutoCorrect(boolean b) {
         autoCorrect = b;
     }
@@ -41,124 +39,120 @@ public class LanguageTextPane extends JTextPane {
         manualCorrect = b;
     }
 
-    
     public LanguageTextPane(String language) {
-        textPaneLanguage=language;
+        textPaneLanguage = language;
         this.getStyledDocument().addDocumentListener(editAreaListener);
         this.addCaretListener(editAreaCaretListener);
-        thisTextPane=this;
-        LanguageContext.set(language);
-/*        
-        LanguageContext.get().dictionary().dictionaryFileName=LanguageContext.get().dictionaryFilename();
-        if (!dictionaryIsRead){
-        LanguageContext.get().dictionary().readDictionaryFromFile(LanguageContext.get().dictionary().dictionaryFileName);
-        dictionaryIsRead=true;        
+        thisTextPane = this;
+        LanguageContext.set(parent,language,"LanguageTextPane constructor");
+        /*        
+         LanguageContext.get().dictionary().dictionaryFileName=LanguageContext.get().dictionaryFilename();
+         if (!dictionaryIsRead){
+         LanguageContext.get().dictionary().readDictionaryFromFile(LanguageContext.get().dictionary().dictionaryFileName);
+         dictionaryIsRead=true;        
+         }
+         */
+    }
+
+    class SubstitutionTask implements Runnable {
+
+        private StyledDocument doc;
+        private int position, length;
+
+        SubstitutionTask(int position, int length) {
+            this.doc = thisTextPane.getStyledDocument();
+            this.position = position;
+            this.length = length;
         }
- */       
-    }
-    
-class SubstitutionTask implements Runnable {
 
-    private StyledDocument doc;
-    private int position, length;
+        public void run() {
+            String selection;
 
-    SubstitutionTask(int position, int length) {
-        this.doc = thisTextPane.getStyledDocument();
-        this.position = position;
-        this.length = length;
-    }
+            int wordposition = position;
+            int wordlength = length;
 
-    public void run() {
-        String selection;
-
-        int wordposition = position;
-        int wordlength = length;
-
-        try {
-            selection = doc.getText(position, length);
+            try {
+                selection = doc.getText(position, length);
 //        System.out.println("inverting "+selection);
-            selection = LanguageContext.get().invertDiacritics(selection);
+                selection = LanguageContext.get().invertDiacritics(selection);
 //        System.out.println("inverted= "+selection);
-            finalInsert=true;
-            doc.remove(position, length);
-            doc.insertString(position, selection, doc.getStyle("default"));
-            finalInsert=false;
+                finalInsert = true;
+                doc.remove(position, length);
+                doc.insertString(position, selection, doc.getStyle("default"));
+                finalInsert = false;
 
             //  put the words in the dictionary
-            // First extend the selection to complete words
-            wordposition = DocUtils.startOfWord(doc, position);
-            wordlength = DocUtils.endOfWord(doc, position + length) - wordposition;
+                // First extend the selection to complete words
+                wordposition = DocUtils.startOfWord(doc, position);
+                wordlength = DocUtils.endOfWord(doc, position + length) - wordposition;
 
-            String selectedString = doc.getText(wordposition, wordlength);
+                String selectedString = doc.getText(wordposition, wordlength);
 //            MsgTextPane.write("selection <" + selectedString + ">");
 
-            // remove all punctuation from the selected string
-            for (int i = 0; i < selectedString.length(); i++) {
-                if (!Character.isAlphabetic(selectedString.codePointAt(i))) {
-                    selectedString = selectedString.replace(selectedString.charAt(i), ' ');
+                // remove all punctuation from the selected string
+                for (int i = 0; i < selectedString.length(); i++) {
+                    if (!Character.isAlphabetic(selectedString.codePointAt(i))) {
+                        selectedString = selectedString.replace(selectedString.charAt(i), ' ');
+                    }
                 }
-            }
-            // split in words  and put the words in the dictionary
-            String[] words = selectedString.split(" ");
-            for (String word : words) {
+                // split in words  and put the words in the dictionary
+                String[] words = selectedString.split(" ");
+                for (String word : words) {
 //                MsgTextPane.write("selected word <" + word + ">");
-                if (word.length() != 0) {
-                    LanguageContext.get().dictionary().addWord(word.replaceAll("I", "ı").replaceAll("İ", "i").toLowerCase());
+                    if (word.length() != 0) {
+                        LanguageContext.get().dictionary().addWord(word.replaceAll("I", "ı").replaceAll("İ", "i").toLowerCase());
+                    }
                 }
-            }
-        } catch (BadLocationException ex) {
-            MsgTextPane.write("BadLocationException " + wordposition);
-            ex.printStackTrace();
-            System.exit(1);
-        };
+            } catch (BadLocationException ex) {
+                MsgTextPane.write("BadLocationException " + wordposition);
+                ex.printStackTrace();
+                System.exit(1);
+            };
 
-    }
-}
-
-class RunDictionaryTask implements Runnable {
-
-    private Document doc;
-    private int position, length;
-
-    RunDictionaryTask(int position, int length) {
-        this.doc = thisTextPane.getStyledDocument();
-        this.position = position;
-        this.length = length;
+        }
     }
 
-    public void run() {
-        LanguageContext.get().dictionary().runDictionary((StyledDocument) doc, position, length);
+    class RunDictionaryTask implements Runnable {
+
+        private Document doc;
+        private int position, length;
+
+        RunDictionaryTask(int position, int length) {
+            this.doc = thisTextPane.getStyledDocument();
+            this.position = position;
+            this.length = length;
+        }
+
+        public void run() {
+            LanguageContext.get().dictionary().runDictionary((StyledDocument) doc, position, length);
+        }
     }
-}
 
-class setAttributesTask implements Runnable {
+    class setAttributesTask implements Runnable {
 
-    private int position, length;
-    private SimpleAttributeSet sas;
+        private int position, length;
+        private SimpleAttributeSet sas;
 
-    setAttributesTask(int position, int length) {
-        this.position = position;
-        this.length = length;
+        setAttributesTask(int position, int length) {
+            this.position = position;
+            this.length = length;
+        }
+
+        public void run() {
+            sas = new SimpleAttributeSet();
+            StyleConstants.setFontSize(sas, AreaFont.getSize());
+            thisTextPane.getStyledDocument().setCharacterAttributes(position, length, sas, false);
+
+        }
     }
-
-    public void run() {
-        sas = new SimpleAttributeSet();
-        StyleConstants.setFontSize(sas, AreaFont.getSize());
-        thisTextPane.getStyledDocument().setCharacterAttributes(position, length, sas, false);
-
-    }
-}
-
-
-
-    
 
     DocumentListener editAreaListener = new DocumentListener() {
 
         public void insertUpdate(DocumentEvent e) {
+            LanguageContext.set(parent,textPaneLanguage,"editAreaListener insertUpdate");
             int position = e.getOffset();
             int length = e.getLength();
-            
+
             if (autoCorrect && !finalInsert) {
                 SwingUtilities.invokeLater(new RunDictionaryTask(position, length));
             }
@@ -177,6 +171,7 @@ class setAttributesTask implements Runnable {
     CaretListener editAreaCaretListener = new CaretListener() {
 
         public void caretUpdate(CaretEvent e) {
+            LanguageContext.set(parent,textPaneLanguage,"editAreaCaretListener caretUpdate");
             int position = e.getMark();
             int length = e.getDot() - e.getMark();
             if (length < 0) {
@@ -184,8 +179,8 @@ class setAttributesTask implements Runnable {
                 length = -length;
             }
 
-            selectedPosition=position;
-            selectedLength=length;
+            selectedPosition = position;
+            selectedLength = length;
 
             if (manualCorrect) {
                 if (length > 0) {

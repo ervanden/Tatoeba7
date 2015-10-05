@@ -1,5 +1,6 @@
 package tatoeba;
 
+import utils.GenericTextFrame;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
