@@ -4,27 +4,29 @@ package utils;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import tatoeba.GenericTextFrame;
 
-// one single text pane for system messages
-// the caller can get it and put in a JFrame or other window
+// Common text frame for system messages
 
 public class MsgTextPane {
-    static JTextPane msgArea = new JTextPane();
+
+    static GenericTextFrame msgFrame = new GenericTextFrame();
     
     public static JTextPane getMsgTextPane(){
-        return msgArea;
+        msgFrame.setVisible(true);
+        return msgFrame.getTextPane();
     }
 
     public static void write(String msg) {
         Document doc;
-        doc = msgArea.getDocument();
+        doc = msgFrame.getTextPane().getDocument();
         try {
             doc.insertString(doc.getLength(), msg + "\n", null);
         } catch (BadLocationException blex) {
             System.out.println("BadLocationException in MsgTextPane.write()");
         }
 
-        msgArea.setCaretPosition(doc.getLength());
+        msgFrame.getTextPane().setCaretPosition(doc.getLength());
 
     }
 }

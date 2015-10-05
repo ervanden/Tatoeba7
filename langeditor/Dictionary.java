@@ -126,7 +126,7 @@ public class Dictionary {
 
         boolean confirm;
         ConfirmDialog cd = new ConfirmDialog();
-        cd.popUp(LanguageEditor.languageEditorFrame,
+        cd.popUp(null,
                 words.size() + "/"
                 + stems.size() + " entries will be written to " + fileName, "Continue", "Cancel");
         confirm = cd.confirm;

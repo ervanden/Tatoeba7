@@ -11,37 +11,6 @@ import java.util.*;
 import utils.MsgTextPane;
 import utils.AreaFont;
 
-class setAttributesTask2 implements Runnable {
-
-    private int position, length;
-    private SimpleAttributeSet sas;
-
-    setAttributesTask2(int position, int length) {
-        this.position = position;
-        this.length = length;
-    }
-
-    public void run() {
-        sas = new SimpleAttributeSet();
-        StyleConstants.setFontSize(sas, AreaFont.getSize());
-        LanguageEditor.languageEditorFrame.docDict.setCharacterAttributes(position, length, sas, false);
-
-    }
-}
-
-class ManualSelectTask implements Runnable {
-
-    private int position, length;
-
-    ManualSelectTask(int position, int length) {
-        this.position = position;
-        this.length = length;
-    }
-
-    public void run() {
-        DocUtils.manualSelectDictArea(position, length);
-    }
-}
 
 class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener {
 
@@ -58,7 +27,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
 
     JScrollPane scrollingEditArea;
     JScrollPane scrollingDictArea;
-    JScrollPane scrollingMsgArea;
+    //   JScrollPane scrollingMsgArea;
 
     JPanel content = new JPanel();
 
@@ -72,6 +41,38 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
     JTextField textFieldPattern = new JTextField("pattern");
     JTextField textFieldDictFileName = new JTextField("");
     Dimension textFieldDictFileNameSize;
+
+    class setAttributesTask2 implements Runnable {
+
+        private int position, length;
+        private SimpleAttributeSet sas;
+
+        setAttributesTask2(int position, int length) {
+            this.position = position;
+            this.length = length;
+        }
+
+        public void run() {
+            sas = new SimpleAttributeSet();
+            StyleConstants.setFontSize(sas, AreaFont.getSize());
+            docDict.setCharacterAttributes(position, length, sas, false);
+        }
+    }
+    
+    class ManualSelectTask implements Runnable {
+
+    private int position, length;
+
+    ManualSelectTask(int position, int length) {
+        this.position = position;
+        this.length = length;
+    }
+
+    public void run() {
+        DocUtils.manualSelectDictArea(position, length);
+    }
+}
+
 
     class WindowUtils extends WindowAdapter {
 
@@ -151,7 +152,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         if (action.equals("Save dictionary and exit")) {
             if (LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionary().dictionaryFileName)) {
 //                thisFrame.setVisible(false);
-                                           thisFrame.dispose();
+                thisFrame.dispose();
             }
         }
 
@@ -160,8 +161,8 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         }
 
         if (action.equals("Exit without saving dictionary")) {
- //                          thisFrame.setVisible(false);
-                           thisFrame.dispose();
+            //                          thisFrame.setVisible(false);
+            thisFrame.dispose();
         }
 
         if (action.equals("Read another dictionary")) {
@@ -311,9 +312,9 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         scrollingEditArea.setMinimumSize(new Dimension(800, 300));
         scrollingEditArea.setMaximumSize(new Dimension(800, 300));
         scrollingEditArea.setPreferredSize(new Dimension(800, 300));
-        scrollingMsgArea.setMinimumSize(new Dimension(800, 100));
-        scrollingMsgArea.setMaximumSize(new Dimension(800, 100));
-        scrollingMsgArea.setPreferredSize(new Dimension(800, 100));
+        //       scrollingMsgArea.setMinimumSize(new Dimension(800, 100));
+        //       scrollingMsgArea.setMaximumSize(new Dimension(800, 100));
+        //       scrollingMsgArea.setPreferredSize(new Dimension(800, 100));
 
         GridBagConstraints c;
         c = newGridBagConstraints();
@@ -409,15 +410,15 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         c.gridwidth = 5;   // align with number of dictArea buttons
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         content.add(scrollingDictArea, c);
-
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
-        c.weightx = 1;
-        c.gridx = 0;
-        c.gridy = 2;
-        c.gridwidth = 9;   // full width
-        content.add(scrollingMsgArea, c);
-
+        /*
+         c = newGridBagConstraints();
+         c.fill = GridBagConstraints.BOTH;
+         c.weightx = 1;
+         c.gridx = 0;
+         c.gridy = 2;
+         c.gridwidth = 9;   // full width
+         content.add(scrollingMsgArea, c);
+         */
         JMenuBar menuBar;
         JMenu menuExit;
         JMenu menuText;
@@ -537,7 +538,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         msgArea.setMaximumSize(new Dimension(800, 100));
         msgArea.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2)); // 2 pixels around text   
         msgArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-        scrollingMsgArea = new JScrollPane(msgArea);
+        //       scrollingMsgArea = new JScrollPane(msgArea);
 
         content.setLayout(new GridBagLayout());
 
@@ -602,14 +603,13 @@ public class LanguageEditor {
     static String editorLanguage;
 
     public static void initialize(String language) {
-        
-        editorLanguage=language;
-
-//        if (languageEditorFrame == null) {
-            languageEditorFrame = new LanguageEditorFrame();
-//        }
-
+        editorLanguage = language;
+        languageEditorFrame = new LanguageEditorFrame();
         languageEditorFrame.display(editorLanguage);
+    }
+
+    public StyledDocument getDocument() {
+        return languageEditorFrame.docDict;
     }
 
     public static void setVisible(boolean b) {

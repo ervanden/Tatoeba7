@@ -56,4 +56,8 @@ public class GenericTextFrame extends JFrame {
         textPane.setCaretPosition(doc.getLength());
     }
     
+    public JTextPane getTextPane(){
+        return textPane;
+    }
+    
 }
