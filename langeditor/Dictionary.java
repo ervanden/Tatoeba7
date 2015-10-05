@@ -21,55 +21,55 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import utils.MsgTextPane;
 
-class Dictionary {
+public class Dictionary {
 
-    public static Hashtable<String, String> words = new Hashtable<String, String>();
-    public static Hashtable<String, String> stems = new Hashtable<String, String>();
+    public  Hashtable<String, String> words = new Hashtable<String, String>();
+    public  Hashtable<String, String> stems = new Hashtable<String, String>();
 
-    static String dictionaryFileName = "?";
-    static String dictionaryPattern = "";
+     String dictionaryFileName = "?";
+     String dictionaryPattern = "";
 
-    static Boolean markCorrection = false;
-    static Boolean matchInfo = true;
+     Boolean markCorrection = false;
+     Boolean matchInfo = true;
 
-    public static void setMatchInfo(boolean m) {
+    public  void setMatchInfo(boolean m) {
         matchInfo = m;
     }
 
-    public static void addWord(String word) {
-        words.put(LanguageEditor.ops.removeDiacritics(word), word);
+    public  void addWord(String word) {
+        words.put(LanguageContext.get().removeDiacritics(word), word);
         DocUtils.writeDictArea("Word added: ", false);
         DocUtils.writeSelectDictArea(word);
         DocUtils.writeDictArea("\n", false);
         DocUtils.scrollEnd();
     }
 
-    public static void addStem(String word) {
-        stems.put(LanguageEditor.ops.removeDiacritics(word), word);
+    public  void addStem(String word) {
+        stems.put(LanguageContext.get().removeDiacritics(word), word);
         DocUtils.writeDictArea("Stem added: ", false);
         DocUtils.writeSelectDictArea(word);
         DocUtils.writeDictArea("\n", false);
         DocUtils.scrollEnd();
     }
 
-    public static void removeWord(String word) {
-        words.remove(LanguageEditor.ops.removeDiacritics(word));
+    public  void removeWord(String word) {
+        words.remove(LanguageContext.get().removeDiacritics(word));
         DocUtils.writeDictArea("Word removed: ", false);
         DocUtils.writeDictArea(word, false);
         DocUtils.writeDictArea("\n", false);
         DocUtils.scrollEnd();
     }
 
-    public static void removeStem(String word) {
-        stems.remove(LanguageEditor.ops.removeDiacritics(word));
+    public  void removeStem(String word) {
+        stems.remove(LanguageContext.get().removeDiacritics(word));
         DocUtils.writeDictArea("Stem removed: ", false);
         DocUtils.writeSelectDictArea(word);
         DocUtils.writeDictArea("\n", false);
         DocUtils.scrollEnd();
-        stems.remove(LanguageEditor.ops.removeDiacritics(word));
+        stems.remove(LanguageContext.get().removeDiacritics(word));
     }
 
-    public static String readDictionaryFromFile(String fileName) {
+    public  String readDictionaryFromFile(String fileName) {
 
         // returns the dictionary file name
         // if the fileName argument is a fileName , this is returned
@@ -101,10 +101,10 @@ class Dictionary {
             while ((l = inputStream.readLine()) != null) {
                 if (l.charAt(0) == '[') {
                     l = l.substring(1, l.length() - 1);
-                    stems.put(LanguageEditor.ops.removeDiacritics(l), l);
+                    stems.put(LanguageContext.get().removeDiacritics(l), l);
                     scount++;
                 } else {
-                    words.put(LanguageEditor.ops.removeDiacritics(l), l);
+                    words.put(LanguageContext.get().removeDiacritics(l), l);
                     wcount++;
                 }
             }
@@ -122,7 +122,7 @@ class Dictionary {
         return fileName;
     }
 
-    public static boolean saveDictionary(String fileName) {
+    public  boolean saveDictionary(String fileName) {
 
         boolean confirm;
         ConfirmDialog cd = new ConfirmDialog();
@@ -167,7 +167,7 @@ class Dictionary {
         }
     }
 
-    public static String findStem(String word, boolean wordLookup, boolean stemLookup) {
+    public  String findStem(String word, boolean wordLookup, boolean stemLookup) {
         String substring;
         String stem = "";
         int len, i;
@@ -201,7 +201,7 @@ class Dictionary {
         return stem;
     }
 
-    public static String runDictionaryOnWord(String word, boolean wordLookup, boolean stemLookup) {
+    public  String runDictionaryOnWord(String word, boolean wordLookup, boolean stemLookup) {
 
         int nextpos = 0;
         char nextchar;
@@ -374,7 +374,7 @@ class Dictionary {
         return newword;
     }
 
-    public static void runDictionary(StyledDocument doc, int position, int length) {
+    public  void runDictionary(StyledDocument doc, int position, int length) {
         int startWordPosition = 0;
         int endWordPosition = 0;
         String wordorig, word, wordlc, wordnew, wordnewlc;
@@ -398,7 +398,7 @@ class Dictionary {
                 startWordPosition = DocUtils.nextAlphabetic(doc, position);
                 endWordPosition = DocUtils.nextNonAlphabetic(doc, startWordPosition);
                 wordorig = doc.getText(startWordPosition, endWordPosition - startWordPosition);
-                word = LanguageEditor.ops.removeDiacritics(wordorig);
+                word = LanguageContext.get().removeDiacritics(wordorig);
 //                MsgTextPane.write("word = "+word);
                 wordlc = word.replaceAll("[İI]", "i").toLowerCase();
 //  MsgTextPane.write("wordlc = "+wordlc);              
@@ -445,7 +445,7 @@ class Dictionary {
         }
     }
 
-    public static void optimizeWords() {
+    public  void optimizeWords() {
         String correctedWord;
         java.util.List<String> v = new ArrayList<String>(words.keySet());
 //        MsgTextPane.write("Applying stem correction to Dictionary...");
@@ -472,7 +472,7 @@ class Dictionary {
         matchInfo = true;
     }
 
-    public static void optimizeStems() {
+    public  void optimizeStems() {
 
         WordTree w = new WordTree();
         for (String key : words.keySet()) {
@@ -488,7 +488,7 @@ class Dictionary {
         ArrayList<String> stemList;
         stemList = w.scanStems();
         for (String stem : stemList) {
-            stems.put(LanguageEditor.ops.removeDiacritics(stem), stem);
+            stems.put(LanguageContext.get().removeDiacritics(stem), stem);
         }
         MsgTextPane.write(stemList.size() + " stems extracted");
 
@@ -525,7 +525,7 @@ class Dictionary {
         }
     }
 
-    public static void printAll() {
+    public  void printAll() {
 
         Pattern pattern;
         Matcher matcher;

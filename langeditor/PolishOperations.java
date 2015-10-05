@@ -4,6 +4,24 @@ import javax.swing.JFileChooser;
 
 public class PolishOperations implements LanguageOperations {
 
+    Dictionary d=null;
+
+    public String dictionaryFileName() {
+        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
+        return defaultFolder + "\\Tatoeba\\PolishDictionary.txt";
+    }
+
+    public Dictionary dictionary() {
+        return d;
+    }
+
+    public void initialize() {
+        if (d==null) {
+        d = new Dictionary();
+        d.readDictionaryFromFile(dictionaryFileName());
+        }
+    }
+
     public String invertDiacritics(String word) {
         char c;
         String newword = "";
@@ -104,11 +122,6 @@ public class PolishOperations implements LanguageOperations {
         word = word.replaceAll("ż", "z");
         word = word.replaceAll("Ż", "Z");
         return word;
-    }
-
-    public String dictionaryFilename() {
-        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        return defaultFolder + "\\Tatoeba\\PolishDictionary.txt";
     }
 
 }

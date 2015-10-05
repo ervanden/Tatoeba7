@@ -437,20 +437,20 @@ public class URLChooser extends JFrame implements ActionListener {
                             }
 
                             // calculate accuracy against current dictionary
-                            Dictionary.setMatchInfo(false);
-                            keyword = LanguageEditor.ops.removeDiacritics(word);
-                            dictword = Dictionary.runDictionaryOnWord(keyword, true, true);
+                            LanguageContext.get().dictionary().setMatchInfo(false);
+                            keyword = LanguageContext.get().removeDiacritics(word);
+                            dictword = LanguageContext.get().dictionary().runDictionaryOnWord(keyword, true, true);
                             if (!word.equals(dictword)) {
                                 variants++;
                             }
-                            Dictionary.setMatchInfo(true);
+                            LanguageContext.get().dictionary().setMatchInfo(true);
 
                             freq = dictCandidatesFrequency.get(word);
                             if (freq == null) {
                                 freq = 0;
                             }
                             dictCandidatesFrequency.put(word, freq + 1);
-                            String key = LanguageEditor.ops.removeDiacritics(word);
+                            String key = LanguageContext.get().removeDiacritics(word);
                             xDictWords.put(key, word);
                             xDictFrequency.put(key, 0);
                         }
@@ -463,7 +463,7 @@ public class URLChooser extends JFrame implements ActionListener {
 
                 //  xDictWords and xDictFrequency contain the keys of all spelling variants, with frequency 0
                 for (String w : dictCandidatesFrequency.keySet()) {
-                    String key = LanguageEditor.ops.removeDiacritics(w);
+                    String key = LanguageContext.get().removeDiacritics(w);
                     if (dictCandidatesFrequency.get(w) > xDictFrequency.get(key)) {
                         xDictWords.put(key, w);
                         xDictFrequency.put(key, dictCandidatesFrequency.get(w));
@@ -476,10 +476,10 @@ public class URLChooser extends JFrame implements ActionListener {
             }
 
             writeMsg("Resetting Dictionary");
-            Dictionary.words.clear();
+            LanguageContext.get().dictionary().words.clear();
             writeMsg("Adding " + xDictWords.size() + " dictionary entries");
             for (String key : xDictWords.keySet()) {
-                Dictionary.words.put(key, xDictWords.get(key));
+                LanguageContext.get().dictionary().words.put(key, xDictWords.get(key));
             }
             writeMsg("Done");
 

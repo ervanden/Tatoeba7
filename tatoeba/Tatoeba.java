@@ -27,8 +27,8 @@ class LanguageTextPanes {
     }
 
     public static JTextPane getSourceTextPane(String language) {
-        if (language.equals("tur")) {
-            source = new LanguageTextPane();
+        if (!language.equals("")) {
+            source = new LanguageTextPane(language);
             setParameters(source);
             return (JTextPane) source;
         } else {
@@ -39,8 +39,8 @@ class LanguageTextPanes {
     }
 
     public static JTextPane getTargetTextPane(String language) {
-        if (language.equals("tur")) {
-            target = new LanguageTextPane();
+        if (!language.equals("")) {
+            target = new LanguageTextPane(language);
             setParameters(target);
             return (JTextPane) target;
         } else {
@@ -318,12 +318,12 @@ class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Turkish")) {
-            LanguageEditor.initialize("Turkish");
+            LanguageEditor.initialize("tur");
             LanguageEditor.setVisible(true);
         }
 
         if (action.equals("Polish")) {
-            LanguageEditor.initialize("Polish");
+            LanguageEditor.initialize("pol");
             LanguageEditor.setVisible(true);
         }
 

@@ -18,6 +18,8 @@ import utils.MsgTextPane;
 public class LanguageTextPane extends JTextPane {
 
     LanguageTextPane thisTextPane;
+    String textPaneLanguage;
+    
     static boolean dictionaryIsRead=false;
     
     boolean autoCorrect=true;
@@ -40,16 +42,19 @@ public class LanguageTextPane extends JTextPane {
     }
 
     
-    public LanguageTextPane() {
+    public LanguageTextPane(String language) {
+        textPaneLanguage=language;
         this.getStyledDocument().addDocumentListener(editAreaListener);
         this.addCaretListener(editAreaCaretListener);
         thisTextPane=this;
-        Dictionary.dictionaryFileName=LanguageEditor.ops.dictionaryFilename();
+        LanguageContext.set(language);
+/*        
+        LanguageContext.get().dictionary().dictionaryFileName=LanguageContext.get().dictionaryFilename();
         if (!dictionaryIsRead){
-        Dictionary.readDictionaryFromFile(Dictionary.dictionaryFileName);
-        dictionaryIsRead=true;
+        LanguageContext.get().dictionary().readDictionaryFromFile(LanguageContext.get().dictionary().dictionaryFileName);
+        dictionaryIsRead=true;        
         }
-        
+ */       
     }
     
 class SubstitutionTask implements Runnable {
@@ -72,7 +77,7 @@ class SubstitutionTask implements Runnable {
         try {
             selection = doc.getText(position, length);
 //        System.out.println("inverting "+selection);
-            selection = LanguageEditor.ops.invertDiacritics(selection);
+            selection = LanguageContext.get().invertDiacritics(selection);
 //        System.out.println("inverted= "+selection);
             finalInsert=true;
             doc.remove(position, length);
@@ -98,7 +103,7 @@ class SubstitutionTask implements Runnable {
             for (String word : words) {
 //                MsgTextPane.write("selected word <" + word + ">");
                 if (word.length() != 0) {
-                    Dictionary.addWord(word.replaceAll("I", "ı").replaceAll("İ", "i").toLowerCase());
+                    LanguageContext.get().dictionary().addWord(word.replaceAll("I", "ı").replaceAll("İ", "i").toLowerCase());
                 }
             }
         } catch (BadLocationException ex) {
@@ -122,7 +127,7 @@ class RunDictionaryTask implements Runnable {
     }
 
     public void run() {
-        Dictionary.runDictionary((StyledDocument) doc, position, length);
+        LanguageContext.get().dictionary().runDictionary((StyledDocument) doc, position, length);
     }
 }
 

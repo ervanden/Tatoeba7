@@ -4,6 +4,25 @@ import javax.swing.JFileChooser;
 
 public class TurkishOperations implements LanguageOperations {
 
+    
+    Dictionary d=null;
+
+    public String dictionaryFileName() {
+        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
+        return defaultFolder + "\\Tatoeba\\TurkishDictionary.txt";
+    }
+
+    public Dictionary dictionary() {
+        return d;
+    }
+
+    public void initialize() {
+        if (d==null){
+        d = new Dictionary();
+        d.readDictionaryFromFile(dictionaryFileName());
+        }
+    }
+
     public String invertDiacritics(String word) {
         char c;
         String newword = "";
@@ -75,8 +94,4 @@ public class TurkishOperations implements LanguageOperations {
         return word;
     }
 
-    public String dictionaryFilename() {
-        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        return defaultFolder + "\\Tatoeba\\TurkishDictionary.txt";
-    }
 }

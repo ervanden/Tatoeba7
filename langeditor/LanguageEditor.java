@@ -141,57 +141,29 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
 
         if (action.equals("Correct selected text")) {
             editArea.setManualCorrect(false);
-            Dictionary.markCorrection = true;
-            Dictionary.runDictionary((StyledDocument) editArea.getStyledDocument(),
+            LanguageContext.get().dictionary().markCorrection = true;
+            LanguageContext.get().dictionary().runDictionary((StyledDocument) editArea.getStyledDocument(),
                     editArea.selectedPosition, editArea.selectedLength);
-            Dictionary.markCorrection = false;
+            LanguageContext.get().dictionary().markCorrection = false;
             editArea.setManualCorrect(true);
         }
 
         if (action.equals("Save dictionary and exit")) {
-            if (Dictionary.saveDictionary(Dictionary.dictionaryFileName)) {
-                System.exit(0);
+            if (LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionary().dictionaryFileName)) {
+//                thisFrame.setVisible(false);
+                                           thisFrame.dispose();
             }
         }
 
         if (action.equals("Save dictionary")) {
-            Dictionary.saveDictionary(Dictionary.dictionaryFileName);
+            LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionary().dictionaryFileName);
         }
 
         if (action.equals("Exit without saving dictionary")) {
-            System.exit(0);
+ //                          thisFrame.setVisible(false);
+                           thisFrame.dispose();
         }
 
-        /*
-         if (action.equals("Change dictionary location")) {
-         String dirName = "";
-         JFileChooser fileChooser = new JFileChooser();
-         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-         int retval = fileChooser.showOpenDialog(this);
-         if (retval == JFileChooser.APPROVE_OPTION) {
-         // check if it is a directory !!!            
-         File f = fileChooser.getSelectedFile();
-         dirName = f.getAbsolutePath();
-         Dictionary.dictionaryFileName = dirName + "\\TurkEditor.dictionary";
-         textFieldDictFileName.setText(Dictionary.dictionaryFileName);
-         }
-
-         try {  // write dictionary location file
-         File f = new File(Dictionary.dictionaryLocationFileName());
-         OutputStream is = new FileOutputStream(f);
-         OutputStreamWriter isr = new OutputStreamWriter(is, "UTF-8");
-         BufferedWriter outputStream = new BufferedWriter(isr);
-
-         outputStream.write(Dictionary.dictionaryFileName);
-         outputStream.newLine();
-         outputStream.close();
-
-         } catch (IOException io) {
-         MsgTextPane.write(" io exception while writing dictionary location file");
-         }
-
-         }
-         */
         if (action.equals("Read another dictionary")) {
 
             String fileName = "";
@@ -209,27 +181,27 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
                 confirm = cd.confirm;
 
                 if (confirm) {
-                    Dictionary.words.clear();
-                    Dictionary.stems.clear();
-                    Dictionary.readDictionaryFromFile(fileName);
+                    LanguageContext.get().dictionary().words.clear();
+                    LanguageContext.get().dictionary().stems.clear();
+                    LanguageContext.get().dictionary().readDictionaryFromFile(fileName);
                 }
             }
         }
 
         if (action.equals("Create a backup dictionary")) {
             Date dNow = new Date();
-            Dictionary.saveDictionary(Dictionary.dictionaryFileName
+            LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionary().dictionaryFileName
                     + String.format(" %1$te%1$tb%1$ty %1$tHh%1$tM", dNow));
         }
 
         if (action.equals(
                 "Optimize word dictionary")) {
-            Dictionary.optimizeWords();
+            LanguageContext.get().dictionary().optimizeWords();
         }
 
         if (action.equals(
                 "Optimize stem dictionary")) {
-            Dictionary.optimizeStems();
+            LanguageContext.get().dictionary().optimizeStems();
         }
 
         if (action.equals("words from web")) {
@@ -241,25 +213,25 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         if (action.equals(
                 "buttonAddWord")) {
             for (String word : DocUtils.selectedWords) {
-                Dictionary.addWord(word);
+                LanguageContext.get().dictionary().addWord(word);
             }
         }
 
         if (action.equals("buttonAddStem")) {
             for (String word : DocUtils.selectedWords) {
-                Dictionary.addStem(word);
+                LanguageContext.get().dictionary().addStem(word);
             }
         }
 
         if (action.equals("buttonRemoveWord")) {
             for (String word : DocUtils.selectedWords) {
-                Dictionary.removeWord(word);
+                LanguageContext.get().dictionary().removeWord(word);
             }
         }
 
         if (action.equals("buttonRemoveStem")) {
             for (String word : DocUtils.selectedWords) {
-                Dictionary.removeStem(word);
+                LanguageContext.get().dictionary().removeStem(word);
             }
         }
 
@@ -538,7 +510,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
 
     }
 
-    public void display() {
+    public void display(String language) {
         dictArea = new JTextPane();
         dictArea.setMinimumSize(new Dimension(300, 300));
         dictArea.setPreferredSize(new Dimension(300, 300));
@@ -547,7 +519,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         dictArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
         scrollingDictArea = new JScrollPane(dictArea);
 
-        editArea = new LanguageTextPane();
+        editArea = new LanguageTextPane(language);
         editArea.setAutoCorrect(true);
         editArea.setFinalInsert(false);
         editArea.setManualCorrect(true);
@@ -585,14 +557,14 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
 
         radioButtonAuto.addItemListener(this);
 
-        textFieldDictFileName.setText(Dictionary.dictionaryFileName);
+        textFieldDictFileName.setText(LanguageContext.get().dictionary().dictionaryFileName);
         textFieldDictFileName.setEditable(false);
         textFieldDictFileNameSize = textFieldDictFileName.getPreferredSize();
 
         textFieldPattern.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Dictionary.dictionaryPattern = textFieldPattern.getText();
-                Dictionary.printAll();
+                LanguageContext.get().dictionary().dictionaryPattern = textFieldPattern.getText();
+                LanguageContext.get().dictionary().printAll();
                 DocUtils.scrollEnd();
                 dictArea.setCaretPosition(docDict.getLength());
             }
@@ -627,21 +599,17 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
 public class LanguageEditor {
 
     static LanguageEditorFrame languageEditorFrame = null;
-    static LanguageOperations ops = null;
+    static String editorLanguage;
 
     public static void initialize(String language) {
-        if (language.equals("Turkish")) {
-            ops = new TurkishOperations();
-        }
-        if (language.equals("Polish")) {
-            ops = new PolishOperations();
-        }
+        
+        editorLanguage=language;
 
-        if (languageEditorFrame == null) {
+//        if (languageEditorFrame == null) {
             languageEditorFrame = new LanguageEditorFrame();
-        }
+//        }
 
-        languageEditorFrame.display();
+        languageEditorFrame.display(editorLanguage);
     }
 
     public static void setVisible(boolean b) {
