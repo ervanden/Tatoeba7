@@ -83,8 +83,8 @@ public class LanguageTextPane extends JTextPane {
 
             //  put the words in the dictionary
                 // First extend the selection to complete words
-                wordposition = DocUtils.startOfWord(doc, position);
-                wordlength = DocUtils.endOfWord(doc, position + length) - wordposition;
+                wordposition = WordUtils.startOfWord(doc, position);
+                wordlength = WordUtils.endOfWord(doc, position + length) - wordposition;
 
                 String selectedString = doc.getText(wordposition, wordlength);
 //            MsgTextPane.write("selection <" + selectedString + ">");

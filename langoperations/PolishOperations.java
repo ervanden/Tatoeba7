@@ -1,6 +1,7 @@
-package langeditor;
+package langoperations;
 
 import javax.swing.JFileChooser;
+import langeditor.Dictionary;
 
 public class PolishOperations implements LanguageOperations {
 

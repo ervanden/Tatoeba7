@@ -367,8 +367,8 @@ public class URLChooser extends JFrame implements ActionListener {
             length = doc.getLength();
             while (position < length) {
 
-                startWordPosition = DocUtils.nextAlphabetic(doc, position);
-                endWordPosition = DocUtils.nextNonAlphabetic(doc, startWordPosition);
+                startWordPosition = WordUtils.nextAlphabetic(doc, position);
+                endWordPosition = WordUtils.nextNonAlphabetic(doc, startWordPosition);
                 wordorig = doc.getText(startWordPosition, endWordPosition - startWordPosition);
 
 //                if (wordorig.matches("^[a-zA-ZşŞçÇğıİöÖüÜ]*$")) {

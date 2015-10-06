@@ -1,5 +1,7 @@
 
-package langeditor;
+package langoperations;
+
+import langeditor.Dictionary;
 
 
 

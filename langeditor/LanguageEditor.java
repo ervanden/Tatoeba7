@@ -68,7 +68,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         }
 
         public void run() {
-            DocUtils.manualSelectDictArea(position, length);
+            DictUtils.manualSelectDictArea(position, length);
         }
     }
 
@@ -212,25 +212,25 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
 
         if (action.equals(
                 "buttonAddWord")) {
-            for (String word : DocUtils.selectedWords) {
+            for (String word : DictUtils.selectedWords) {
                 LanguageContext.get().dictionary().addWord(word);
             }
         }
 
         if (action.equals("buttonAddStem")) {
-            for (String word : DocUtils.selectedWords) {
+            for (String word : DictUtils.selectedWords) {
                 LanguageContext.get().dictionary().addStem(word);
             }
         }
 
         if (action.equals("buttonRemoveWord")) {
-            for (String word : DocUtils.selectedWords) {
+            for (String word : DictUtils.selectedWords) {
                 LanguageContext.get().dictionary().removeWord(word);
             }
         }
 
         if (action.equals("buttonRemoveStem")) {
-            for (String word : DocUtils.selectedWords) {
+            for (String word : DictUtils.selectedWords) {
                 LanguageContext.get().dictionary().removeStem(word);
             }
         }
@@ -553,7 +553,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
                         LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"textfieldpattern ");
                 LanguageContext.get().dictionary().dictionaryPattern = textFieldPattern.getText();
                 LanguageContext.get().dictionary().printAll();
-                DocUtils.scrollEnd();
+                DictUtils.scrollEnd();
                 dictArea.setCaretPosition(docDict.getLength());
             }
         ;

@@ -38,34 +38,34 @@ public class Dictionary {
 
     public  void addWord(String word) {
         words.put(LanguageContext.get().removeDiacritics(word), word);
-        DocUtils.writeDictArea("Word added: ", false);
-        DocUtils.writeSelectDictArea(word);
-        DocUtils.writeDictArea("\n", false);
-        DocUtils.scrollEnd();
+        DictUtils.writeDictArea("Word added: ", false);
+        DictUtils.writeSelectDictArea(word);
+        DictUtils.writeDictArea("\n", false);
+        DictUtils.scrollEnd();
     }
 
     public  void addStem(String word) {
         stems.put(LanguageContext.get().removeDiacritics(word), word);
-        DocUtils.writeDictArea("Stem added: ", false);
-        DocUtils.writeSelectDictArea(word);
-        DocUtils.writeDictArea("\n", false);
-        DocUtils.scrollEnd();
+        DictUtils.writeDictArea("Stem added: ", false);
+        DictUtils.writeSelectDictArea(word);
+        DictUtils.writeDictArea("\n", false);
+        DictUtils.scrollEnd();
     }
 
     public  void removeWord(String word) {
         words.remove(LanguageContext.get().removeDiacritics(word));
-        DocUtils.writeDictArea("Word removed: ", false);
-        DocUtils.writeDictArea(word, false);
-        DocUtils.writeDictArea("\n", false);
-        DocUtils.scrollEnd();
+        DictUtils.writeDictArea("Word removed: ", false);
+        DictUtils.writeDictArea(word, false);
+        DictUtils.writeDictArea("\n", false);
+        DictUtils.scrollEnd();
     }
 
     public  void removeStem(String word) {
         stems.remove(LanguageContext.get().removeDiacritics(word));
-        DocUtils.writeDictArea("Stem removed: ", false);
-        DocUtils.writeSelectDictArea(word);
-        DocUtils.writeDictArea("\n", false);
-        DocUtils.scrollEnd();
+        DictUtils.writeDictArea("Stem removed: ", false);
+        DictUtils.writeSelectDictArea(word);
+        DictUtils.writeDictArea("\n", false);
+        DictUtils.scrollEnd();
         stems.remove(LanguageContext.get().removeDiacritics(word));
     }
 
@@ -180,10 +180,10 @@ public class Dictionary {
                 if (stems.containsKey(substring)) {
                     stem = stems.get(substring);
                     if (matchInfo) {  // no output if called from optimizer
-                        DocUtils.writeDictArea("[", false);
-                        DocUtils.writeSelectDictArea(stem);
-                        DocUtils.writeDictArea("]\n", false);
-                        DocUtils.scrollEnd();
+                        DictUtils.writeDictArea("[", false);
+                        DictUtils.writeSelectDictArea(stem);
+                        DictUtils.writeDictArea("]\n", false);
+                        DictUtils.scrollEnd();
                     }
                 }
             }
@@ -191,7 +191,7 @@ public class Dictionary {
 
         if (stem.equals("")) { // determine stem as all letters up to and including the first vowel
             i = 0;
-            while ((i <= word.length() - 1) && !(DocUtils.isVowel(word.charAt(i)))) {
+            while ((i <= word.length() - 1) && !(WordUtils.isVowel(word.charAt(i)))) {
                 i++;
             }
             if (i == word.length()) {  // no vowel found
@@ -218,10 +218,10 @@ public class Dictionary {
         if (wordLookup && words.containsKey(word)) {
             String correctedWord = words.get(word);
             if (matchInfo) {
-                DocUtils.writeDictArea(word + " >> ", false);
-                DocUtils.writeSelectDictArea(correctedWord);
-                DocUtils.writeDictArea("\n", false);
-                DocUtils.scrollEnd();
+                DictUtils.writeDictArea(word + " >> ", false);
+                DictUtils.writeSelectDictArea(correctedWord);
+                DictUtils.writeDictArea("\n", false);
+                DictUtils.scrollEnd();
             }
             return correctedWord;
 
@@ -239,7 +239,7 @@ public class Dictionary {
                 char lastVowel = ' ';
                 for (int i = 0; i <= stem.length() - 1; i++) {
                     char c = newword.charAt(i);
-                    if (DocUtils.isVowel(c)) {
+                    if (WordUtils.isVowel(c)) {
                         lastVowel = c;
                     }
                 }
@@ -388,8 +388,8 @@ public class Dictionary {
             nrCorrected = 0;
         }
 
-        position = DocUtils.startOfWord(doc, position);
-        length = DocUtils.endOfWord(doc, position + length) - position;
+        position = WordUtils.startOfWord(doc, position);
+        length = WordUtils.endOfWord(doc, position + length) - position;
         int endPosition = position + length;
         while (position < endPosition) {
             try {
@@ -397,8 +397,8 @@ public class Dictionary {
                     nrWords++;
                 }
 
-                startWordPosition = DocUtils.nextAlphabetic(doc, position);
-                endWordPosition = DocUtils.nextNonAlphabetic(doc, startWordPosition);
+                startWordPosition = WordUtils.nextAlphabetic(doc, position);
+                endWordPosition = WordUtils.nextNonAlphabetic(doc, startWordPosition);
                 wordorig = doc.getText(startWordPosition, endWordPosition - startWordPosition);
                 word = LanguageContext.get().removeDiacritics(wordorig);
 //                MsgTextPane.write("word = "+word);
@@ -411,7 +411,7 @@ public class Dictionary {
                 for (int i = 0; i < word.length(); i++) {
                     char nextChar = wordnewlc.charAt(i);
                     if (Character.isUpperCase(word.charAt(i))) {
-                        wordnew = wordnew + DocUtils.toUpperCase(nextChar); // DocUtils does I correctly
+                        wordnew = wordnew + WordUtils.toUpperCase(nextChar); // DocUtils does I correctly
                     } else {
                         wordnew = wordnew + nextChar;
                     }
@@ -422,7 +422,7 @@ public class Dictionary {
                     doc.remove(startWordPosition, endWordPosition - startWordPosition);
                     doc.insertString(startWordPosition, wordnew, null);
                     if (markCorrection) {
-                        doc.setCharacterAttributes(startWordPosition, wordnew.length(), DocUtils.sas_red, false);
+                        doc.setCharacterAttributes(startWordPosition, wordnew.length(), DictUtils.sas_red, false);
                         nrCorrected++;
                     }
                     LanguageTextPane.finalInsert = false;
@@ -462,9 +462,9 @@ public class Dictionary {
                 failed++;
             } else {
                 if (success < 100) {
-                    DocUtils.writeDictArea("Redundant word removed : " + correctedWord + "\n", false);
+                    DictUtils.writeDictArea("Redundant word removed : " + correctedWord + "\n", false);
                 } else if (success == 100) {
-                    DocUtils.writeDictArea("...", false);
+                    DictUtils.writeDictArea("...", false);
                 }
                 words.remove(str);
                 success++;
@@ -512,9 +512,9 @@ public class Dictionary {
                 // no dictionary lookup because otherwise if stem happens to be in words it is removed
                 if (correctedWord.equals(correctStem)) {
                     if (success < 100) {
-                        DocUtils.writeDictArea("Redundant stem removed : " + correctedWord + "\n", false);
+                        DictUtils.writeDictArea("Redundant stem removed : " + correctedWord + "\n", false);
                     } else if (success == 100) {
-                        DocUtils.writeDictArea("...", false);
+                        DictUtils.writeDictArea("...", false);
                     }
                     success++;
                 } else { // put it back
@@ -540,31 +540,31 @@ public class Dictionary {
         pattern = Pattern.compile(dictionaryPattern);
         v = new ArrayList<String>(words.keySet());
         Collections.sort(v);
-        DocUtils.writeDictArea("Searching Dictionary..." + "\n", true);
+        DictUtils.writeDictArea("Searching Dictionary..." + "\n", true);
         count = 1;
         for (String str : v) {
             matcher = pattern.matcher((String) str);  // search the keys
             Boolean found = false;
             if (matcher.find()) {
-                DocUtils.writeDictArea(count + " " + (String) words.get(str) + "\n", false);
+                DictUtils.writeDictArea(count + " " + (String) words.get(str) + "\n", false);
                 count++;
             }
         }
-        DocUtils.writeDictArea(count - 1 + " entries in dictionary" + "\n", true);
+        DictUtils.writeDictArea(count - 1 + " entries in dictionary" + "\n", true);
 
         v = new ArrayList<String>(stems.keySet());
         Collections.sort(v);
-        DocUtils.writeDictArea("Searching stems..." + "\n", true);
+        DictUtils.writeDictArea("Searching stems..." + "\n", true);
         count = 1;
         for (String str : v) {
             matcher = pattern.matcher((String) str);  // search the keys
             Boolean found = false;
             if (matcher.find()) {
-                DocUtils.writeDictArea(count + " " + str + " " + (String) stems.get(str) + "\n", false);
+                DictUtils.writeDictArea(count + " " + str + " " + (String) stems.get(str) + "\n", false);
                 count++;
             }
         }
-        DocUtils.writeDictArea(count - 1 + " stems" + "\n", true);
+        DictUtils.writeDictArea(count - 1 + " stems" + "\n", true);
     }
 
 
