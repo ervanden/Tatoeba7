@@ -31,4 +31,8 @@ public class DummyOperations implements LanguageOperations {
         return word;
     }
 
+    public String number(int n) {
+        return (String.format("%s", n));
+    }
+
 }

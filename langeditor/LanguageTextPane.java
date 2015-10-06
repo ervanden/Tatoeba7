@@ -45,13 +45,6 @@ public class LanguageTextPane extends JTextPane {
         this.addCaretListener(editAreaCaretListener);
         thisTextPane = this;
         LanguageContext.set(parent,language,"LanguageTextPane constructor");
-        /*        
-         LanguageContext.get().dictionary().dictionaryFileName=LanguageContext.get().dictionaryFilename();
-         if (!dictionaryIsRead){
-         LanguageContext.get().dictionary().readDictionaryFromFile(LanguageContext.get().dictionary().dictionaryFileName);
-         dictionaryIsRead=true;        
-         }
-         */
     }
 
     class SubstitutionTask implements Runnable {
@@ -74,7 +67,11 @@ public class LanguageTextPane extends JTextPane {
             try {
                 selection = doc.getText(position, length);
 //        System.out.println("inverting "+selection);
+                if (selection.matches("[0-9]+")){
+                   selection = LanguageContext.get().number(Integer.valueOf(selection)); 
+                } else {
                 selection = LanguageContext.get().invertDiacritics(selection);
+                }
 //        System.out.println("inverted= "+selection);
                 finalInsert = true;
                 doc.remove(position, length);

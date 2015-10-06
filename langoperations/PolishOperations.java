@@ -1,11 +1,12 @@
 package langoperations;
 
+import java.util.HashMap;
 import javax.swing.JFileChooser;
 import langeditor.Dictionary;
 
 public class PolishOperations implements LanguageOperations {
 
-    Dictionary d=null;
+    Dictionary d = null;
 
     public String dictionaryFileName() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
@@ -17,9 +18,9 @@ public class PolishOperations implements LanguageOperations {
     }
 
     public void initialize() {
-        if (d==null) {
-        d = new Dictionary();
-        d.readDictionaryFromFile(dictionaryFileName());
+        if (d == null) {
+            d = new Dictionary();
+            d.readDictionaryFromFile(dictionaryFileName());
         }
     }
 
@@ -123,6 +124,77 @@ public class PolishOperations implements LanguageOperations {
         word = word.replaceAll("ż", "z");
         word = word.replaceAll("Ż", "Z");
         return word;
+    }
+
+    public String number(int n) {
+        HashMap<Integer, String> nrs = new HashMap<>();
+
+        nrs.put(0, "zero");
+        nrs.put(1, "jeden");
+        nrs.put(2, "dwa");
+        nrs.put(3, "trzy");
+        nrs.put(4, "cztery");
+        nrs.put(5, "pięć");
+        nrs.put(6, "sześć");
+        nrs.put(7, "siedem");
+        nrs.put(8, "osiem");
+        nrs.put(9, "dziewięć");
+        nrs.put(10, "dziesięć");
+        nrs.put(11, "jedenaście");
+        nrs.put(12, "dwanaście");
+        nrs.put(13, "trzynaście");
+        nrs.put(14, "czternaście");
+        nrs.put(15, "piętnaście");
+        nrs.put(16, "szesnaście");
+        nrs.put(17, "siedemnaście");
+        nrs.put(18, "osiemnaście");
+        nrs.put(19, "dziewiętnaście");
+        nrs.put(20, "dwadzieścia");
+        nrs.put(30, "trzydzieści");
+        nrs.put(40, "czterdzieści");
+        nrs.put(50, "pięćdzesiąt");
+        nrs.put(60, "sześćdzesiąt");
+        nrs.put(70, "siedemdzesiąt");
+        nrs.put(80, "osiemdzesiąt");
+        nrs.put(90, "dziewięćdzesiąt");
+        nrs.put(100, "sto");
+        nrs.put(200, "dwieście");
+        nrs.put(300, "trzysta");
+        nrs.put(400, "czterysta");
+        nrs.put(500, "pięćset");
+        nrs.put(600, "sześćset");
+        nrs.put(700, "siedemset");
+        nrs.put(800, "osiemset");
+        nrs.put(900, "dziewięćset");
+        nrs.put(1000, "tysiąc");
+        nrs.put(2000, "dwa tysiące");
+        nrs.put(3000, "trzy tysiące");
+        nrs.put(5000, "pięć tysięcy");
+
+        int nlow3 = n % 1000;
+        int n1000 = (n - nlow3) / 1000;
+        int nlow2 = nlow3 % 100;
+        int n100 = (nlow3 - nlow2) / 100;
+        int nlow1 = nlow2 % 10;
+        int n10 = (nlow2 - nlow1) / 10;
+        int n1 = nlow1;
+
+        System.out.println(" n=" + (n1000 * 1000 + n100 * 100 + n10 * 10 + n1));
+        String s = "";
+        if (n100 > 0) {
+            s = s + " " + nrs.get(n100 * 100);
+        }
+        if (n10 == 1) {
+            s = s + " " + nrs.get(10 + n1);
+        } else {
+            if (n10 > 0) {
+                s = s + " " + nrs.get(n10 * 10);
+            }
+            if (n1 > 0) {
+                s = s + " " + nrs.get(n1);
+            }
+        }
+        return s;
     }
 
 }

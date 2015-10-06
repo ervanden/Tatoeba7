@@ -12,6 +12,7 @@ public interface LanguageOperations {
         public String dictionaryFileName();
         public Dictionary dictionary();
         public void initialize();
+        public String number(int n);
 
 }  
 

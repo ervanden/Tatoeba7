@@ -26,7 +26,7 @@ public class LanguageContext {
     public static void set(LanguageEditorFrame f, String language, String origin) {
         frame=f;
         String s; if (f==null) s="null"; else s=f.editorLanguage;
-        System.out.println(" set language context to " + s+"/"+language + "  (" + origin + ")");
+//        System.out.println(" set language context to " + s+"/"+language + "  (" + origin + ")");
 
         ops = opsMap.get(language);
         if (ops == null) {

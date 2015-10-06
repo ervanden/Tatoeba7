@@ -5,8 +5,7 @@ import langeditor.Dictionary;
 
 public class TurkishOperations implements LanguageOperations {
 
-    
-    Dictionary d=null;
+    Dictionary d = null;
 
     public String dictionaryFileName() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
@@ -18,9 +17,9 @@ public class TurkishOperations implements LanguageOperations {
     }
 
     public void initialize() {
-        if (d==null){
-        d = new Dictionary();
-        d.readDictionaryFromFile(dictionaryFileName());
+        if (d == null) {
+            d = new Dictionary();
+            d.readDictionaryFromFile(dictionaryFileName());
         }
     }
 
@@ -79,8 +78,8 @@ public class TurkishOperations implements LanguageOperations {
         }
         return newword;
     }
-    
-        public String removeDiacritics(String word) {
+
+    public String removeDiacritics(String word) {
         word = word.replaceAll("ş", "s");
         word = word.replaceAll("Ş", "S");
         word = word.replaceAll("ç", "c");
@@ -93,6 +92,10 @@ public class TurkishOperations implements LanguageOperations {
         word = word.replaceAll("ü", "u");
         word = word.replaceAll("Ü", "U");
         return word;
+    }
+
+    public String number(int n) {
+        return (String.format("%s", n));
     }
 
 }
