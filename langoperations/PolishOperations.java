@@ -179,7 +179,7 @@ public class PolishOperations implements LanguageOperations {
         int n10 = (nlow2 - nlow1) / 10;
         int n1 = nlow1;
 
-        System.out.println(" n=" + (n1000 * 1000 + n100 * 100 + n10 * 10 + n1));
+ //       System.out.println(" n=" + (n1000 * 1000 + n100 * 100 + n10 * 10 + n1));
 
         String s = "";
 
