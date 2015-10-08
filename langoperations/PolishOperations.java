@@ -180,17 +180,40 @@ public class PolishOperations implements LanguageOperations {
         int n1 = nlow1;
 
         System.out.println(" n=" + (n1000 * 1000 + n100 * 100 + n10 * 10 + n1));
+
         String s = "";
+
+        //thousands
+        
+        if (n1000 > 0) {
+            if (n1000 == 1) {
+                s = "tysiąc";
+            } else if (n1000 % 10 == 2) {
+                s = number(n1000) + " tysiące";
+            } else if (n1000 % 10 == 3) {
+                s = number(n1000) + " tysiące";
+            } else if (n1000 % 10 == 4) {
+                s = number(n1000) + " tysiące";
+            } else {
+                s = number(n1000) + " tysięcy";
+            }
+        }
+
+        // hundreds
+        
         if (n100 > 0) {
             s = s + " " + nrs.get(n100 * 100);
         }
-        if (n10 == 1) {
+        
+        // 0-99
+        
+        if (n10 == 1) {  // 10 - 19
             s = s + " " + nrs.get(10 + n1);
-        } else {
-            if (n10 > 0) {
+        } else {  // 20-99
+            if (n10 > 0) { // 20-90
                 s = s + " " + nrs.get(n10 * 10);
             }
-            if (n1 > 0) {
+            if (n1 > 0) {  // 1-9
                 s = s + " " + nrs.get(n1);
             }
         }

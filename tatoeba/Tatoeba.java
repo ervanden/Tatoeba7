@@ -327,6 +327,11 @@ class TatoebaFrame extends JFrame implements ActionListener {
             LanguageEditor.initialize("pol");
             LanguageEditor.setVisible(true);
         }
+        
+        if (action.equals("Polish Numbers")) {
+            NumberTrainer n = new NumberTrainer("pol");
+            n.setVisible(true);
+        }
 
         // buttons
         if (action.equals("buttonPlus")) {
@@ -847,6 +852,10 @@ class TatoebaFrame extends JFrame implements ActionListener {
         menuBar.add(menuClusters);
         AddMenuItem(menuClusters, "Turkish");
         AddMenuItem(menuClusters, "Polish");
+        
+                menuClusters = new JMenu("Numbers");
+        menuBar.add(menuClusters);
+        AddMenuItem(menuClusters, "Polish Numbers");
 
         pack();
     }
@@ -959,10 +968,8 @@ public class Tatoeba {
     }
 
     public static void main(String[] args) {
-
         tatoebaFrame = new TatoebaFrame();
         SelectionFrame.execute();
 
-//        testStack = new TestStack();
     }
 }
