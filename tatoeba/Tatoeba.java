@@ -327,7 +327,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
             LanguageEditor.initialize("pol");
             LanguageEditor.setVisible(true);
         }
-        
+
         if (action.equals("Polish Numbers")) {
             NumberTrainer n = new NumberTrainer("pol");
             n.setVisible(true);
@@ -336,35 +336,43 @@ class TatoebaFrame extends JFrame implements ActionListener {
         // buttons
         if (action.equals("buttonPlus")) {
             AreaFont.multiply((float) 1.2);
-            SimpleAttributeSet sas = new SimpleAttributeSet();
-            StyleConstants.setFontSize(sas, AreaFont.getSize());
+            AreaFont.setFont(sourceArea);
+            AreaFont.setFont(targetArea);
+            AreaFont.setFont(infoArea);
+            /*                        
+             SimpleAttributeSet sas = new SimpleAttributeSet();
+             StyleConstants.setFontSize(sas, AreaFont.getSize());
 
-            doc = sourceArea.getStyledDocument();
-            doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-            doc = targetArea.getStyledDocument();
-            doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-            doc = infoArea.getStyledDocument();
-            doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-            sourceArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-            targetArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-            infoArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-
+             doc = sourceArea.getStyledDocument();
+             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
+             doc = targetArea.getStyledDocument();
+             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
+             doc = infoArea.getStyledDocument();
+             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
+             sourceArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+             targetArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+             infoArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+             */
         }
 
         if (action.equals("buttonMinus")) {
             AreaFont.multiply((float) 0.8);
-            SimpleAttributeSet sas = new SimpleAttributeSet();
-            StyleConstants.setFontSize(sas, AreaFont.getSize());
-            doc = sourceArea.getStyledDocument();
-            doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-            doc = targetArea.getStyledDocument();
-            doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-            doc = infoArea.getStyledDocument();
-            doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-            sourceArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-            targetArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-            infoArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-
+            AreaFont.setFont(sourceArea);
+            AreaFont.setFont(targetArea);
+            AreaFont.setFont(infoArea);
+            /*            
+             SimpleAttributeSet sas = new SimpleAttributeSet();
+             StyleConstants.setFontSize(sas, AreaFont.getSize());
+             doc = sourceArea.getStyledDocument();
+             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
+             doc = targetArea.getStyledDocument();
+             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
+             doc = infoArea.getStyledDocument();
+             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
+             sourceArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+             targetArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+             infoArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+             */
         }
 
         if (action.equals("buttonPrevious")) {
@@ -852,8 +860,8 @@ class TatoebaFrame extends JFrame implements ActionListener {
         menuBar.add(menuClusters);
         AddMenuItem(menuClusters, "Turkish");
         AddMenuItem(menuClusters, "Polish");
-        
-                menuClusters = new JMenu("Numbers");
+
+        menuClusters = new JMenu("Numbers");
         menuBar.add(menuClusters);
         AddMenuItem(menuClusters, "Polish Numbers");
 

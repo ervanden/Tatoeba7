@@ -38,19 +38,25 @@ public class NumberTrainer extends JFrame implements ActionListener {
 
         textPane = new JTextPane();
         textScrollPane = new JScrollPane(textPane);
+        textPane.setEditable(false);
 
         Dimension preferredDimension = new Dimension(1200, 300);
         textPane.setPreferredSize(preferredDimension);
         textScrollPane.setPreferredSize(preferredDimension);
 
-        JButton nextButton = new JButton("next");
-        nextButton.setActionCommand("next");
+        JButton nextButton = new JButton("random");
+        nextButton.setActionCommand("random");
         nextButton.addActionListener(thisNumberTrainer);
+        JButton incrButton = new JButton("+1");
+        incrButton.setActionCommand("increment");
+        incrButton.addActionListener(thisNumberTrainer);
+        JButton transButton = new JButton("translate");
+        transButton.setActionCommand("translate");
+        transButton.addActionListener(thisNumberTrainer);
 
         JButton plusButton = new JButton("+");
         plusButton.setActionCommand("+");
         plusButton.addActionListener(thisNumberTrainer);
-
         JButton minusButton = new JButton("-");
         minusButton.setActionCommand("-");
         minusButton.addActionListener(thisNumberTrainer);
@@ -75,7 +81,12 @@ public class NumberTrainer extends JFrame implements ActionListener {
         numberPanel.setLayout(new BoxLayout(numberPanel, BoxLayout.LINE_AXIS));
         numberPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         numberPanel.add(Box.createRigidArea(new Dimension(80, 0)));
+        numberPanel.add(incrButton);
+        numberPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         numberPanel.add(nextButton);
+        numberPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        numberPanel.add(transButton);
+        numberPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         numberPanel.add(numberField);
         numberPanel.add(Box.createRigidArea(new Dimension(80, 0)));
         numberPanel.add(plusButton);
@@ -89,36 +100,24 @@ public class NumberTrainer extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent ae) {
         String action = ae.getActionCommand();
-        if (action.equals("next")) {
-            executeAction(action);
+        if (action.equals("random")) {
+            currentNumber = randomGenerator.nextInt(1000);
+            write(String.format("%d", currentNumber));
+        }
+        if (action.equals("increment")) {
+            currentNumber++;
+            write(String.format("%d", currentNumber));
+        }
+        if (action.equals("translate")) {
+            write(LanguageContext.get().number(currentNumber));
         }
         if (action.equals("+")) {
             AreaFont.multiply((float) 1.2);
-            SimpleAttributeSet sas = new SimpleAttributeSet();
-            StyleConstants.setFontSize(sas, AreaFont.getSize());
-
-            StyledDocument doc = textPane.getStyledDocument();
-            doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-            textPane.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+            AreaFont.setFont(textPane);
         }
         if (action.equals("-")) {
             AreaFont.multiply((float) 0.8);
-            SimpleAttributeSet sas = new SimpleAttributeSet();
-            StyleConstants.setFontSize(sas, AreaFont.getSize());
-
-            StyledDocument doc = textPane.getStyledDocument();
-            doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-            textPane.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-        }
-    }
-
-    private void executeAction(String action) {
-        if (currentNumber < 1) {
-            currentNumber = randomGenerator.nextInt(999999);
-            write(String.format("%d", currentNumber));
-        } else {
-            write(LanguageContext.get().number(currentNumber));
-            currentNumber = -1;
+            AreaFont.setFont(textPane);
         }
     }
 
