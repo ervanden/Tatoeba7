@@ -1,7 +1,6 @@
 package tatoeba;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
@@ -10,15 +9,13 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import langeditor.LanguageContext;
 import utils.AreaFont;
 
@@ -30,7 +27,10 @@ public class NumberTrainer extends JFrame implements ActionListener {
     JScrollPane textScrollPane;
     JPanel content = new JPanel();
     Random randomGenerator = new Random();
-    int currentNumber = -1;
+    int randomMin = 0;
+    int randomMax = 999;
+
+    int currentNumber = 0;
 
     public NumberTrainer(String language) {
 
@@ -44,9 +44,9 @@ public class NumberTrainer extends JFrame implements ActionListener {
         textPane.setPreferredSize(preferredDimension);
         textScrollPane.setPreferredSize(preferredDimension);
 
-        JButton nextButton = new JButton("random");
-        nextButton.setActionCommand("random");
-        nextButton.addActionListener(thisNumberTrainer);
+        JButton randomButton = new JButton("random");
+        randomButton.setActionCommand("random");
+        randomButton.addActionListener(thisNumberTrainer);
         JButton incrButton = new JButton("+1");
         incrButton.setActionCommand("increment");
         incrButton.addActionListener(thisNumberTrainer);
@@ -72,6 +72,30 @@ public class NumberTrainer extends JFrame implements ActionListener {
         ;
         }
             );
+        
+                JTextField randomMinField = new JTextField(5);
+        randomMinField.setMaximumSize(new Dimension(50, 30));
+        randomMinField.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String sn = ((JTextField) e.getSource()).getText();
+                randomMin = Integer.valueOf(sn);
+                write("random between " + randomMin + " and " + randomMax);
+            }
+        ;
+        }
+            );
+        
+                JTextField randomMaxField = new JTextField(5);
+        randomMaxField.setMaximumSize(new Dimension(50, 30));
+        randomMaxField.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String sn = ((JTextField) e.getSource()).getText();
+                randomMax = Integer.valueOf(sn);
+                write("random between " + randomMin + " and " + randomMax);
+            }
+        ;
+        }
+            );
 
         content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
 
@@ -80,15 +104,21 @@ public class NumberTrainer extends JFrame implements ActionListener {
         JPanel numberPanel = new JPanel();
         numberPanel.setLayout(new BoxLayout(numberPanel, BoxLayout.LINE_AXIS));
         numberPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-        numberPanel.add(Box.createRigidArea(new Dimension(80, 0)));
-        numberPanel.add(incrButton);
-        numberPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-        numberPanel.add(nextButton);
+        numberPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        numberPanel.add(numberField);
         numberPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         numberPanel.add(transButton);
         numberPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-        numberPanel.add(numberField);
-        numberPanel.add(Box.createRigidArea(new Dimension(80, 0)));
+        numberPanel.add(incrButton);
+        numberPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        numberPanel.add(randomButton);
+        numberPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        numberPanel.add(new JLabel("between : "));
+        numberPanel.add(randomMinField);
+        numberPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        numberPanel.add(new JLabel(" and : "));
+        numberPanel.add(randomMaxField);
+        numberPanel.add(Box.createRigidArea(new Dimension(100, 0)));
         numberPanel.add(plusButton);
         numberPanel.add(minusButton);
         content.add(numberPanel);
@@ -101,7 +131,7 @@ public class NumberTrainer extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String action = ae.getActionCommand();
         if (action.equals("random")) {
-            currentNumber = randomGenerator.nextInt(1000);
+            currentNumber = randomMin + randomGenerator.nextInt(randomMax - randomMin + 1);
             write(String.format("%d", currentNumber));
         }
         if (action.equals("increment")) {

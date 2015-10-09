@@ -183,6 +183,8 @@ public class PolishOperations implements LanguageOperations {
 
         String s = "";
 
+        if (n==0) return nrs.get(0);
+        
         //thousands
         
         if (n1000 > 0) {
