@@ -332,6 +332,10 @@ class TatoebaFrame extends JFrame implements ActionListener {
             NumberTrainer n = new NumberTrainer("pol");
             n.setVisible(true);
         }
+                if (action.equals("Turkish Numbers")) {
+            NumberTrainer n = new NumberTrainer("tur");
+            n.setVisible(true);
+        }
 
         // buttons
         if (action.equals("buttonPlus")) {
@@ -863,6 +867,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
 
         menuClusters = new JMenu("Numbers");
         menuBar.add(menuClusters);
+                AddMenuItem(menuClusters, "Turkish Numbers");
         AddMenuItem(menuClusters, "Polish Numbers");
 
         pack();
