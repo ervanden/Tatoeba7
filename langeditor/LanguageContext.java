@@ -4,9 +4,8 @@ import langoperations.LanguageOperations;
 import langoperations.TurkishOperations;
 import langoperations.PolishOperations;
 import langoperations.DummyOperations;
-import java.awt.Container;
 import java.util.HashMap;
-import utils.MsgTextPane;
+
 
 public class LanguageContext {
 
@@ -18,15 +17,10 @@ public class LanguageContext {
     public static LanguageOperations get() {
         return ops;
     }
-    
-    public static LanguageEditorFrame getFrame(){
-        return frame;
-    }
 
     public static void set(LanguageEditorFrame f, String language, String origin) {
-        frame=f;
-        String s; if (f==null) s="null"; else s=f.editorLanguage;
-//        System.out.println(" set language context to " + s+"/"+language + "  (" + origin + ")");
+
+        System.out.println(" set language context to " + language + "  (" + origin + ")");
 
         ops = opsMap.get(language);
         if (ops == null) {

@@ -16,7 +16,7 @@ public class TurkishOperations implements LanguageOperations {
     public Dictionary dictionary() {
         return d;
     }
-
+    
     public void initialize() {
         if (d == null) {
             d = new Dictionary();
@@ -152,5 +152,11 @@ public class TurkishOperations implements LanguageOperations {
 
         return s;
     }
+
+    
+
+ //   private class Dictionary extends langeditor.GenericDictionary {
+ //   }
+    
 
 }

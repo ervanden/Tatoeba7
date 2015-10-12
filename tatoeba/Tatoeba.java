@@ -9,7 +9,9 @@ import javax.swing.text.*;
 import java.util.*;
 
 import langeditor.LanguageTextPane;
-import langeditor.LanguageEditor;
+import langeditor.LanguageEditorFrame;
+import langeditor.DictionaryFrame;
+
 import utils.AreaFont;
 
 //github test 1/10/2015
@@ -319,13 +321,16 @@ class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Turkish")) {
-            LanguageEditor.initialize("tur");
-            LanguageEditor.setVisible(true);
+
+            LanguageEditorFrame lf = new LanguageEditorFrame("tur");
+            lf.setVisible(true);
+ //           DictionaryFrame df = new DictionaryFrame("tur");
+ //           df.setVisible(true);
         }
 
         if (action.equals("Polish")) {
-            LanguageEditor.initialize("pol");
-            LanguageEditor.setVisible(true);
+            LanguageEditorFrame f = new LanguageEditorFrame("pol");
+            f.setVisible(true);
         }
 
         if (action.equals("Polish Numbers")) {

@@ -3,7 +3,6 @@ package langeditor;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.io.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
 import java.util.*;
@@ -11,7 +10,7 @@ import java.util.*;
 import utils.MsgTextPane;
 import utils.AreaFont;
 
-class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener {
+public class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener {
 
     private LanguageEditorFrame thisLanguageEditorFrame = this;
     private JFrame thisFrame = (JFrame) this;
@@ -68,7 +67,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         }
 
         public void run() {
-            DictUtils.manualSelectDictArea(position, length);
+
         }
     }
 
@@ -164,43 +163,17 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
             thisFrame.dispose();
         }
 
-        if (action.equals("Read another dictionary")) {
-
-            String fileName = "";
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            int retval = fileChooser.showOpenDialog(this);
-            if (retval == JFileChooser.APPROVE_OPTION) {
-                File f = fileChooser.getSelectedFile();
-                fileName = f.getAbsolutePath();
-
-                boolean confirm;
-                ConfirmDialog cd = new ConfirmDialog();
-                cd.popUp(this,
-                        "In-memory dictionary will be replaced with contents of " + fileName, "Continue", "Cancel");
-                confirm = cd.confirm;
-
-                if (confirm) {
-                    LanguageContext.get().dictionary().words.clear();
-                    LanguageContext.get().dictionary().stems.clear();
-                    LanguageContext.get().dictionary().readDictionaryFromFile(fileName);
-                }
-            }
-        }
-
         if (action.equals("Create a backup dictionary")) {
             Date dNow = new Date();
             LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionary().dictionaryFileName
                     + String.format(" %1$te%1$tb%1$ty %1$tHh%1$tM", dNow));
         }
 
-        if (action.equals(
-                "Optimize word dictionary")) {
+        if (action.equals("Optimize word dictionary")) {
             LanguageContext.get().dictionary().optimizeWords();
         }
 
-        if (action.equals(
-                "Optimize stem dictionary")) {
+        if (action.equals("Optimize stem dictionary")) {
             LanguageContext.get().dictionary().optimizeStems();
         }
 
@@ -210,30 +183,7 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
 
         }
 
-        if (action.equals(
-                "buttonAddWord")) {
-            for (String word : DictUtils.selectedWords) {
-                LanguageContext.get().dictionary().addWord(word);
-            }
-        }
 
-        if (action.equals("buttonAddStem")) {
-            for (String word : DictUtils.selectedWords) {
-                LanguageContext.get().dictionary().addStem(word);
-            }
-        }
-
-        if (action.equals("buttonRemoveWord")) {
-            for (String word : DictUtils.selectedWords) {
-                LanguageContext.get().dictionary().removeWord(word);
-            }
-        }
-
-        if (action.equals("buttonRemoveStem")) {
-            for (String word : DictUtils.selectedWords) {
-                LanguageContext.get().dictionary().removeStem(word);
-            }
-        }
 
         if (action.equals("buttonPlus")) {
             AreaFont.multiply((float) 1.2);
@@ -433,8 +383,6 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         AddMenuItem(menuDictionary, "Backup", "Create a backup dictionary");
         AddMenuItem(menuDictionary, "Optimize", "Optimize word dictionary");
         AddMenuItem(menuDictionary, "Recreate stems", "Optimize stem dictionary");
-//        AddMenuItem(menuDictionary, "Change Folder", "Change dictionary location");
-        AddMenuItem(menuDictionary, "Read", "Read another dictionary");
         AddMenuItem(menuDictionary, "Words from Web", "words from web");
         menuExpert = new JMenu("Expert Mode");
         menuBar.add(menuExpert);
@@ -553,7 +501,6 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
                         LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"textfieldpattern ");
                 LanguageContext.get().dictionary().dictionaryPattern = textFieldPattern.getText();
                 LanguageContext.get().dictionary().printAll();
-                DictUtils.scrollEnd();
                 dictArea.setCaretPosition(docDict.getLength());
             }
         ;
@@ -581,24 +528,5 @@ class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowUtils());
 
-    }
-}
-
-public class LanguageEditor {
-
-    static LanguageEditorFrame languageEditorFrame = null;
-    static String editorLanguage;
-
-    public static void initialize(String language) {
-        editorLanguage = language;
-        languageEditorFrame = new LanguageEditorFrame(editorLanguage);
-    }
-
-    public StyledDocument getDocument() {
-        return languageEditorFrame.docDict;
-    }
-
-    public static void setVisible(boolean b) {
-        languageEditorFrame.setVisible(b);
     }
 }

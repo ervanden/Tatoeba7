@@ -1,5 +1,6 @@
 package langeditor;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,7 +18,10 @@ import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
+import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import utils.MsgTextPane;
 
@@ -26,46 +30,52 @@ public class Dictionary {
     public  Hashtable<String, String> words = new Hashtable<String, String>();
     public  Hashtable<String, String> stems = new Hashtable<String, String>();
 
+    DictionaryFrame dictFrame=null;
      String dictionaryFileName = "?";
      String dictionaryPattern = "";
-
      Boolean markCorrection = false;
      Boolean matchInfo = true;
 
+     public Dictionary(){
+       dictFrame = new DictionaryFrame();
+       dictFrame.setVisible(true);
+     }
+     
+     
     public  void setMatchInfo(boolean m) {
         matchInfo = m;
     }
 
     public  void addWord(String word) {
         words.put(LanguageContext.get().removeDiacritics(word), word);
-        DictUtils.writeDictArea("Word added: ", false);
-        DictUtils.writeSelectDictArea(word);
-        DictUtils.writeDictArea("\n", false);
-        DictUtils.scrollEnd();
+        dictFrame.writeDictArea("Word added: ", false);
+        dictFrame.writeSelectDictArea(word);
+        dictFrame.writeDictArea("\n", false);
+        dictFrame.scrollEnd();
     }
 
     public  void addStem(String word) {
         stems.put(LanguageContext.get().removeDiacritics(word), word);
-        DictUtils.writeDictArea("Stem added: ", false);
-        DictUtils.writeSelectDictArea(word);
-        DictUtils.writeDictArea("\n", false);
-        DictUtils.scrollEnd();
+        dictFrame.writeDictArea("Stem added: ", false);
+        dictFrame.writeSelectDictArea(word);
+        dictFrame.writeDictArea("\n", false);
+        dictFrame.scrollEnd();
     }
 
     public  void removeWord(String word) {
         words.remove(LanguageContext.get().removeDiacritics(word));
-        DictUtils.writeDictArea("Word removed: ", false);
-        DictUtils.writeDictArea(word, false);
-        DictUtils.writeDictArea("\n", false);
-        DictUtils.scrollEnd();
+        dictFrame.writeDictArea("Word removed: ", false);
+        dictFrame.writeDictArea(word, false);
+        dictFrame.writeDictArea("\n", false);
+        dictFrame.scrollEnd();
     }
 
     public  void removeStem(String word) {
         stems.remove(LanguageContext.get().removeDiacritics(word));
-        DictUtils.writeDictArea("Stem removed: ", false);
-        DictUtils.writeSelectDictArea(word);
-        DictUtils.writeDictArea("\n", false);
-        DictUtils.scrollEnd();
+        dictFrame.writeDictArea("Stem removed: ", false);
+        dictFrame.writeSelectDictArea(word);
+        dictFrame.writeDictArea("\n", false);
+        dictFrame.scrollEnd();
         stems.remove(LanguageContext.get().removeDiacritics(word));
     }
 
@@ -172,7 +182,7 @@ public class Dictionary {
     public  String findStem(String word, boolean wordLookup, boolean stemLookup) {
         String substring;
         String stem = "";
-        int len, i;
+        int i;
 
         if (stemLookup) {
             for (i = 1; i <= word.length(); i++) {
@@ -180,10 +190,10 @@ public class Dictionary {
                 if (stems.containsKey(substring)) {
                     stem = stems.get(substring);
                     if (matchInfo) {  // no output if called from optimizer
-                        DictUtils.writeDictArea("[", false);
-                        DictUtils.writeSelectDictArea(stem);
-                        DictUtils.writeDictArea("]\n", false);
-                        DictUtils.scrollEnd();
+                        dictFrame.writeDictArea("[", false);
+                        dictFrame.writeSelectDictArea(stem);
+                        dictFrame.writeDictArea("]\n", false);
+                        dictFrame.scrollEnd();
                     }
                 }
             }
@@ -218,10 +228,10 @@ public class Dictionary {
         if (wordLookup && words.containsKey(word)) {
             String correctedWord = words.get(word);
             if (matchInfo) {
-                DictUtils.writeDictArea(word + " >> ", false);
-                DictUtils.writeSelectDictArea(correctedWord);
-                DictUtils.writeDictArea("\n", false);
-                DictUtils.scrollEnd();
+                dictFrame.writeDictArea(word + " >> ", false);
+                dictFrame.writeSelectDictArea(correctedWord);
+                dictFrame.writeDictArea("\n", false);
+                dictFrame.scrollEnd();
             }
             return correctedWord;
 
@@ -422,7 +432,7 @@ public class Dictionary {
                     doc.remove(startWordPosition, endWordPosition - startWordPosition);
                     doc.insertString(startWordPosition, wordnew, null);
                     if (markCorrection) {
-                        doc.setCharacterAttributes(startWordPosition, wordnew.length(), DictUtils.sas_red, false);
+                        doc.setCharacterAttributes(startWordPosition, wordnew.length(), dictFrame.sas_red, false);
                         nrCorrected++;
                     }
                     LanguageTextPane.finalInsert = false;
@@ -462,9 +472,9 @@ public class Dictionary {
                 failed++;
             } else {
                 if (success < 100) {
-                    DictUtils.writeDictArea("Redundant word removed : " + correctedWord + "\n", false);
+                    dictFrame.writeDictArea("Redundant word removed : " + correctedWord + "\n", false);
                 } else if (success == 100) {
-                    DictUtils.writeDictArea("...", false);
+                    dictFrame.writeDictArea("...", false);
                 }
                 words.remove(str);
                 success++;
@@ -512,9 +522,9 @@ public class Dictionary {
                 // no dictionary lookup because otherwise if stem happens to be in words it is removed
                 if (correctedWord.equals(correctStem)) {
                     if (success < 100) {
-                        DictUtils.writeDictArea("Redundant stem removed : " + correctedWord + "\n", false);
+                        dictFrame.writeDictArea("Redundant stem removed : " + correctedWord + "\n", false);
                     } else if (success == 100) {
-                        DictUtils.writeDictArea("...", false);
+                        dictFrame.writeDictArea("...", false);
                     }
                     success++;
                 } else { // put it back
@@ -540,34 +550,34 @@ public class Dictionary {
         pattern = Pattern.compile(dictionaryPattern);
         v = new ArrayList<String>(words.keySet());
         Collections.sort(v);
-        DictUtils.writeDictArea("Searching Dictionary..." + "\n", true);
+        dictFrame.writeDictArea("Searching Dictionary..." + "\n", true);
         count = 1;
         for (String str : v) {
             matcher = pattern.matcher((String) str);  // search the keys
             Boolean found = false;
             if (matcher.find()) {
-                DictUtils.writeDictArea(count + " " + (String) words.get(str) + "\n", false);
+                dictFrame.writeDictArea(count + " " + (String) words.get(str) + "\n", false);
                 count++;
             }
         }
-        DictUtils.writeDictArea(count - 1 + " entries in dictionary" + "\n", true);
+        dictFrame.writeDictArea(count - 1 + " entries in dictionary" + "\n", true);
 
         v = new ArrayList<String>(stems.keySet());
         Collections.sort(v);
-        DictUtils.writeDictArea("Searching stems..." + "\n", true);
+        dictFrame.writeDictArea("Searching stems..." + "\n", true);
         count = 1;
         for (String str : v) {
             matcher = pattern.matcher((String) str);  // search the keys
             Boolean found = false;
             if (matcher.find()) {
-                DictUtils.writeDictArea(count + " " + str + " " + (String) stems.get(str) + "\n", false);
+                dictFrame.writeDictArea(count + " " + str + " " + (String) stems.get(str) + "\n", false);
                 count++;
             }
         }
-        DictUtils.writeDictArea(count - 1 + " stems" + "\n", true);
+        dictFrame.writeDictArea(count - 1 + " stems" + "\n", true);
     }
 
 
 
-
 }
+
