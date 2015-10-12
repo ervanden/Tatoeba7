@@ -1,5 +1,7 @@
 package langeditor;
 
+import java.awt.Font;
+import javax.swing.BorderFactory;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
@@ -45,6 +47,11 @@ public class LanguageTextPane extends JTextPane {
         this.addCaretListener(editAreaCaretListener);
         thisTextPane = this;
         LanguageContext.set(parent,language,"LanguageTextPane constructor");
+    }
+    
+   public void displayParameters() {
+        setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2)); // 2 pixels around text in JTextPane    
+        setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
     }
 
     class SubstitutionTask implements Runnable {

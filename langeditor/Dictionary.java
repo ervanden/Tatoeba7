@@ -1,6 +1,5 @@
 package langeditor;
 
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,7 +37,11 @@ public class Dictionary {
 
      public Dictionary(){
        dictFrame = new DictionaryFrame();
-       dictFrame.setVisible(true);
+       dictFrame.setVisible(false);
+     }
+     
+     public void dictionaryWindowVisible(boolean b){
+         dictFrame.setVisible(b);
      }
      
      

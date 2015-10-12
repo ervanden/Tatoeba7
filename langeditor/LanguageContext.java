@@ -3,12 +3,13 @@ package langeditor;
 import langoperations.LanguageOperations;
 import langoperations.TurkishOperations;
 import langoperations.PolishOperations;
-import langoperations.DummyOperations;
+import langoperations.GenericOperations;
 import java.util.HashMap;
 
 
 public class LanguageContext {
 
+    static public String language = "not initialized";
     static LanguageOperations ops = null;
     static LanguageEditorFrame frame = null;
     
@@ -18,8 +19,10 @@ public class LanguageContext {
         return ops;
     }
 
-    public static void set(LanguageEditorFrame f, String language, String origin) {
+    public static void set(LanguageEditorFrame f, String lang, String origin) {
 
+        language = lang;
+        
         System.out.println(" set language context to " + language + "  (" + origin + ")");
 
         ops = opsMap.get(language);
@@ -34,7 +37,8 @@ public class LanguageContext {
                 ops.initialize();
                 opsMap.put(language, ops);
             } else {
-                ops = new DummyOperations();
+                language="generic";
+                ops = new GenericOperations();
                 ops.initialize();
                 opsMap.put(language, ops);              
             }

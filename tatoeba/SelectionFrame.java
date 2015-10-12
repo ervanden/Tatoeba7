@@ -104,16 +104,16 @@ public class SelectionFrame {
         sliderMin.setMajorTickSpacing(1);
         sliderMax.setMajorTickSpacing(1);
     }
-    
-    
-static class WindowCloser extends WindowAdapter {
 
-    public void windowClosing(WindowEvent e) {
-        SelectionFrame.setVisible(false);
-        if (searchResultsFrame!=null) searchResultsFrame.setVisible(false);    
+    static class WindowCloser extends WindowAdapter {
+
+        public void windowClosing(WindowEvent e) {
+            SelectionFrame.setVisible(false);
+            if (searchResultsFrame != null) {
+                searchResultsFrame.setVisible(false);
+            }
+        }
     }
-}
-
 
     public static void setVisible(boolean visible) {
         if (visible) {
@@ -708,10 +708,10 @@ static class WindowCloser extends WindowAdapter {
                     searchResultsFrame = new GenericTextFrame();
                 }
                 searchResultsFrame.setVisible(true);
-                                Graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
+                Graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
                         (float) sliderMax.getValue() / (float) sliderScale, false);
                 Graph.selectClusters();
-                Graph.displayClusters(searchResultsFrame,"selected");
+                Graph.displayClusters(searchResultsFrame, "selected");
                 WorkingSet.build();
             }
         }));
@@ -724,19 +724,17 @@ static class WindowCloser extends WindowAdapter {
                 WorkingSet.build();
 
                 // if the source or target are one single language, make the corresponding window language sensitive
-                String sourceLanguage = "";
-                String targetLanguage = "";
+                
                 if (targetLanguages.size() == 1) {
                     for (String language : targetLanguages) {
-                        targetLanguage = language;
+                        Tatoeba.tatoebaFrame.newTargetArea(language);
                     }
                 }
                 if (sourceLanguages.size() == 1) {
                     for (String language : sourceLanguages) {
-                        sourceLanguage = language;
+                        Tatoeba.tatoebaFrame.newSourceArea(language);
                     }
                 }
-                Tatoeba.changeTatoebaFrame(sourceLanguage, targetLanguage);
 
                 JOptionPane.showMessageDialog(frame, Graph.selectedClusterCount + " clusters selected");
                 if (Graph.selectedClusterCount > 0) {

@@ -10,65 +10,17 @@ import java.util.*;
 
 import langeditor.LanguageTextPane;
 import langeditor.LanguageEditorFrame;
-import langeditor.DictionaryFrame;
+import langeditor.LanguageContext;
 
 import utils.AreaFont;
 
-//github test 1/10/2015
 // If the source or target language is one single language, a language-specific text pane is used.
-// In all other cases it is a normal JTextPane.
-// The class 'LanguageTextPane remembers which kind of text pane is active and has wrapper methods so that
-// the method of the language-specific text pane can be called.
-class LanguageTextPanes {
-
-    static LanguageTextPane source = null;
-    static LanguageTextPane target = null;
-
-    private static void setParameters(JTextPane area) {
-        area.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2)); // 2 pixels around text in JTextPane    
-        area.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-    }
-
-    public static JTextPane getSourceTextPane(String language) {
-        if (!language.equals("")) {
-            source = new LanguageTextPane(language);
-            setParameters(source);
-            return (JTextPane) source;
-        } else {
-            JTextPane area = new JTextPane();
-            setParameters(area);
-            return area;
-        }
-    }
-
-    public static JTextPane getTargetTextPane(String language) {
-        if (!language.equals("")) {
-            target = new LanguageTextPane(language);
-            setParameters(target);
-            return (JTextPane) target;
-        } else {
-            JTextPane area = new JTextPane();
-            setParameters(area);
-            return area;
-        }
-    }
-
-    public static void setAutoCorrect(boolean b) {
-        if (source != null) {
-            source.setAutoCorrect(b);
-        }
-        if (target != null) {
-            target.setAutoCorrect(b);
-        }
-    }
-}
-
 class TatoebaFrame extends JFrame implements ActionListener {
 
     private JFrame thisFrame = (JFrame) this;
 
-    public JTextPane sourceArea;
-    public JTextPane targetArea;
+    public LanguageTextPane sourceArea;
+    public LanguageTextPane targetArea;
     public JTextPane infoArea;
 
     JScrollPane scrollingSourceArea;
@@ -76,7 +28,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
     JScrollPane scrollingInfoArea;
 
     JSplitPane sentencesSplitPane;   // contains source and target panes
-    JSplitPane topSplitPane;        // contains sentencesSplitPane and info are
+    JSplitPane topSplitPane;        // contains sentencesSplitPane and info area
     JPanel content = new JPanel();
 
     JButton buttonPlus = new JButton("+");
@@ -135,6 +87,25 @@ class TatoebaFrame extends JFrame implements ActionListener {
 
     public void writeInfo(String msg) {
         writePane(infoArea, msg);
+    }
+
+    public void setAutoCorrect(boolean b) {
+        if (sourceArea != null) {
+            sourceArea.setAutoCorrect(b);
+        }
+        if (targetArea != null) {
+            targetArea.setAutoCorrect(b);
+        }
+    }
+
+    public void newSourceArea(String language) {
+        sourceArea = createTextPane(language);
+        scrollingSourceArea.getViewport().setView(sourceArea);
+    }
+
+    public void newTargetArea(String language) {
+        targetArea = createTextPane(language);
+        scrollingTargetArea.getViewport().setView(targetArea);
     }
 
     public void enableStandard() {
@@ -321,11 +292,8 @@ class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Turkish")) {
-
             LanguageEditorFrame lf = new LanguageEditorFrame("tur");
             lf.setVisible(true);
- //           DictionaryFrame df = new DictionaryFrame("tur");
- //           df.setVisible(true);
         }
 
         if (action.equals("Polish")) {
@@ -337,7 +305,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
             NumberTrainer n = new NumberTrainer("pol");
             n.setVisible(true);
         }
-                if (action.equals("Turkish Numbers")) {
+        if (action.equals("Turkish Numbers")) {
             NumberTrainer n = new NumberTrainer("tur");
             n.setVisible(true);
         }
@@ -348,20 +316,6 @@ class TatoebaFrame extends JFrame implements ActionListener {
             AreaFont.setFont(sourceArea);
             AreaFont.setFont(targetArea);
             AreaFont.setFont(infoArea);
-            /*                        
-             SimpleAttributeSet sas = new SimpleAttributeSet();
-             StyleConstants.setFontSize(sas, AreaFont.getSize());
-
-             doc = sourceArea.getStyledDocument();
-             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-             doc = targetArea.getStyledDocument();
-             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-             doc = infoArea.getStyledDocument();
-             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-             sourceArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-             targetArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-             infoArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-             */
         }
 
         if (action.equals("buttonMinus")) {
@@ -369,19 +323,6 @@ class TatoebaFrame extends JFrame implements ActionListener {
             AreaFont.setFont(sourceArea);
             AreaFont.setFont(targetArea);
             AreaFont.setFont(infoArea);
-            /*            
-             SimpleAttributeSet sas = new SimpleAttributeSet();
-             StyleConstants.setFontSize(sas, AreaFont.getSize());
-             doc = sourceArea.getStyledDocument();
-             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-             doc = targetArea.getStyledDocument();
-             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-             doc = infoArea.getStyledDocument();
-             doc.setCharacterAttributes(0, doc.getLength(), sas, false);
-             sourceArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-             targetArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-             infoArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-             */
         }
 
         if (action.equals("buttonPrevious")) {
@@ -403,7 +344,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
 
         if (action.equals("buttonNext") || action.equals("buttonPrevious")) {
 
-            LanguageTextPanes.setAutoCorrect(false);
+            setAutoCorrect(false);
 
             Cluster activeCluster = null;
 
@@ -455,7 +396,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
 
         if (action.equals("buttonTranslate")) {
 
-            LanguageTextPanes.setAutoCorrect(false);
+            setAutoCorrect(false);
 
             Cluster activeCluster = null;
 
@@ -487,7 +428,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
 
         if (action.equals("buttonCommit")) {
 
-            LanguageTextPanes.setAutoCorrect(false); // because user stops editing
+            setAutoCorrect(false); // because user stops editing
 
             if (!editing) {
                 System.out.println("Commit while not editing! Ignored");
@@ -547,7 +488,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
 
         if (action.equals("buttonCancel")) {
 
-            LanguageTextPanes.setAutoCorrect(false); // because user stops editing
+            setAutoCorrect(false); // because user stops editing
 
             if (!editing) {
                 System.out.println("Cancel while not editing! Ignored");
@@ -602,7 +543,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
             erasePane(targetArea);
             erasePane(infoArea);
 
-            LanguageTextPanes.setAutoCorrect(false);
+            setAutoCorrect(false);
             writePane(sourceArea, "");
             for (String s : SelectionFrame.sourceLanguages) {
                 writePane(sourceArea, " " + s + ">  ");
@@ -616,7 +557,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
             buttonTranslate.setEnabled(false);
             buttonPrevious.setEnabled(false);
             buttonEdit.setEnabled(false);
-            LanguageTextPanes.setAutoCorrect(true);
+            setAutoCorrect(true);
             sourceDisplayed = false;
             targetDisplayed = false;
             sourceArea.setEditable(true);
@@ -646,7 +587,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
                 buttonNext.setEnabled(false);
                 buttonPrevious.setEnabled(false);
                 buttonCreate.setEnabled(false);
-                LanguageTextPanes.setAutoCorrect(true);
+                setAutoCorrect(true);
                 sourceArea.setEditable(true);
                 targetArea.setEditable(true);
                 infoArea.setEditable(true);
@@ -872,31 +813,30 @@ class TatoebaFrame extends JFrame implements ActionListener {
 
         menuClusters = new JMenu("Numbers");
         menuBar.add(menuClusters);
-                AddMenuItem(menuClusters, "Turkish Numbers");
+        AddMenuItem(menuClusters, "Turkish Numbers");
         AddMenuItem(menuClusters, "Polish Numbers");
 
         pack();
     }
 
-    public void changeSourceArea(String sourceLanguage) {
-        sourceArea = LanguageTextPanes.getSourceTextPane(sourceLanguage);
-        scrollingSourceArea.getViewport().setView(sourceArea);
-    }
-
-    public void changeTargetArea(String targetLanguage) {
-        targetArea = LanguageTextPanes.getTargetTextPane(targetLanguage);
-        scrollingTargetArea.getViewport().setView(targetArea);
+    public LanguageTextPane createTextPane(String language) {
+        LanguageTextPane pane = new LanguageTextPane(language);
+        System.out.println("createTextPane language "+LanguageContext.language);
+        if (!LanguageContext.language.equals("generic")) {
+            LanguageContext.get().dictionary().dictionaryWindowVisible(true);
+        }
+        pane.displayParameters();
+        return pane;
     }
 
     public TatoebaFrame() {
 
-        sourceArea = LanguageTextPanes.getSourceTextPane("");
-        targetArea = LanguageTextPanes.getTargetTextPane("");
-
-        infoArea = new JTextPane();
-
+        sourceArea = createTextPane("generic");
+        targetArea = createTextPane("generic");
         scrollingSourceArea = new JScrollPane(sourceArea);
         scrollingTargetArea = new JScrollPane(targetArea);
+
+        infoArea = new JTextPane();
         scrollingInfoArea = new JScrollPane(infoArea);
 
         sentencesSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollingSourceArea, scrollingTargetArea);
@@ -970,20 +910,6 @@ public class Tatoeba {
 
     static TatoebaFrame tatoebaFrame;
     static ClusterCountFrame clusterCountFrame = new ClusterCountFrame();
-    static String currentSourceLanguage = "";
-    static String currentTargetLanguage = "";
-
-    public static void changeTatoebaFrame(String sourceLanguage, String targetLanguage) {
-        // replace the language areas by a language-sensitive editor if the language is unique
-        if (!sourceLanguage.equals(currentSourceLanguage)) {
-            currentSourceLanguage = sourceLanguage;
-            tatoebaFrame.changeSourceArea(sourceLanguage);
-        }
-        if (!targetLanguage.equals(currentTargetLanguage)) {
-            currentTargetLanguage = targetLanguage;
-            tatoebaFrame.changeTargetArea(targetLanguage);
-        }
-    }
 
     public static void main(String[] args) {
         tatoebaFrame = new TatoebaFrame();

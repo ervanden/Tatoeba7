@@ -3,13 +3,13 @@ package langoperations;
 import javax.swing.JFileChooser;
 import langeditor.Dictionary;
 
-public class DummyOperations implements LanguageOperations {
+public class GenericOperations implements LanguageOperations {
 
     Dictionary d = null;
 
     public String dictionaryFileName() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        return defaultFolder + "\\Tatoeba\\DummyDictionary.txt";
+        return defaultFolder + "\\Tatoeba\\GenericDictionary.txt";
     }
 
     public Dictionary dictionary() {

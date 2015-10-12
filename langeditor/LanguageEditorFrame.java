@@ -15,7 +15,6 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
     private LanguageEditorFrame thisLanguageEditorFrame = this;
     private JFrame thisFrame = (JFrame) this;
     public String editorLanguage;
-    private boolean expertMode = false;
 
     private LanguageTextPane editArea;
     public JTextPane dictArea = null;  // public static for scrollEnd() function
@@ -74,11 +73,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
     class WindowUtils extends WindowAdapter {
 
         public void windowClosing(WindowEvent e) {
-            if (expertMode) {
                 JOptionPane.showMessageDialog(thisFrame, "Close window via Exit menu");
-            } else {
-                thisFrame.setVisible(false);
-            }
         }
     }
 
@@ -149,7 +144,6 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         if (action.equals("Save dictionary and exit")) {
             if (LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionary().dictionaryFileName)) {
-//                thisFrame.setVisible(false);
                 thisFrame.dispose();
             }
         }
@@ -159,8 +153,15 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         }
 
         if (action.equals("Exit without saving dictionary")) {
-            //                          thisFrame.setVisible(false);
             thisFrame.dispose();
+        }
+        
+        if (action.equals("Show Dictionary Window")) {
+            LanguageContext.get().dictionary().dictionaryWindowVisible(true);
+        }
+        
+                if (action.equals("Show System Messages")) {
+           MsgTextPane.setVisible(true);
         }
 
         if (action.equals("Create a backup dictionary")) {
@@ -206,20 +207,6 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
             dictArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
         }
 
-        if (action.equals("System messages on")) {
-            expertMode = true;
-            displayGUI(true);
-            MsgTextPane.write("System messages on");
-            MsgTextPane.setVisible(true);
-        }
-
-        if (action.equals("System messages off")) {
-            expertMode = false;
-            displayGUI(false);
-            MsgTextPane.write("System messages off");
-            MsgTextPane.setVisible(false);
-        }
-
     }
 
     private void AddMenuItem(JMenu menu, String name, String actionName) {
@@ -245,16 +232,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         return c;
     }
 
-    private void displayGUI(boolean on) {
-        for (Component c : content.getComponents()) {
-            content.remove(c);
-        }
-        if (on) {
-            displayGUI1();
-        } else {
-            displayGUI2();
-        }
-    }
+
 
     private void displayGUI1() {
         textFieldDictFileName.setMinimumSize(textFieldDictFileNameSize);
@@ -365,7 +343,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         JMenu menuExit;
         JMenu menuText;
         JMenu menuDictionary;
-        JMenu menuExpert;
+        JMenu menuView;
 
         menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
@@ -384,13 +362,11 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         AddMenuItem(menuDictionary, "Optimize", "Optimize word dictionary");
         AddMenuItem(menuDictionary, "Recreate stems", "Optimize stem dictionary");
         AddMenuItem(menuDictionary, "Words from Web", "words from web");
-        menuExpert = new JMenu("Expert Mode");
-        menuBar.add(menuExpert);
-        AddMenuItem(menuExpert, "Off", "System messages off");
+
         pack();
     }
 
-    private void displayGUI2() {
+    private void displayGUI() {
 
         scrollingEditArea.setMinimumSize(new Dimension(1100, 400));
         scrollingEditArea.setMaximumSize(new Dimension(1100, 400));
@@ -435,17 +411,19 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menuExit = new JMenu("Exit");
-        JMenu menuExpert = new JMenu("Expert");
+        JMenu menuView = new JMenu("View");
 
         menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
 
         menuExit = new JMenu("Exit");
         menuBar.add(menuExit);
-        AddMenuItem(menuExit, "Exit", "Exit without saving dictionary");
-        menuExpert = new JMenu("Expert Mode");
-        menuBar.add(menuExpert);
-        AddMenuItem(menuExpert, "On", "System messages on");
+        AddMenuItem(menuExit, "Save dictionary and exit", "Save dictionary and exit");
+        AddMenuItem(menuExit, "Exit without saving dictionary", "Exit without saving dictionary");
+        menuView = new JMenu("View");
+        menuBar.add(menuView);
+        AddMenuItem(menuView, "Show Dictionary Window", "Show Dictionary Window");
+        AddMenuItem(menuView, "Show System Messages", "Show System Messages");
         pack();
 
     }
@@ -509,8 +487,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
       
         textFieldPattern.setText("");
 
-        expertMode = false;
-        displayGUI(false);
+        displayGUI();
 
         setContentPane(content);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
