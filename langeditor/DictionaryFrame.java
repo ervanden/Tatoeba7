@@ -16,6 +16,7 @@ public class DictionaryFrame extends JFrame implements ActionListener {
     private JFrame thisFrame = (JFrame) this;
     public JTextPane dictArea = null;  // public static for scrollEnd() function
     public StyledDocument docDict = null;   // dictionary area, accessed from DocUtils
+    boolean isModified = false;
 
     JScrollPane scrollingDictArea;
 
@@ -232,6 +233,15 @@ public class DictionaryFrame extends JFrame implements ActionListener {
 
     }
 
+    public void isModified(boolean b) {
+        isModified = b;
+        if (isModified) {
+            textFieldDictFileName.setBackground(Color.PINK);
+        } else {
+            textFieldDictFileName.setBackground(Color.WHITE);
+        }
+    }
+
     public DictionaryFrame() {
 
         dictArea = new JTextPane();
@@ -290,9 +300,7 @@ public class DictionaryFrame extends JFrame implements ActionListener {
         this.addWindowListener(new WindowUtils());
 
     }
-    
 
-    
     static SimpleAttributeSet sas_underline = new SimpleAttributeSet();
     static SimpleAttributeSet sas_noUnderline = new SimpleAttributeSet();
     static SimpleAttributeSet sas_bold = new SimpleAttributeSet();
@@ -310,8 +318,6 @@ public class DictionaryFrame extends JFrame implements ActionListener {
     static int selectedPos = 0;     // first char of first selected word
     static int selectedLength = 0;   // gives last char of last selected word
     static ArrayList<String> selectedWords = new ArrayList<String>();
-    
-    
 
     public void writeSelectDictArea(String str) {
         docDict.setCharacterAttributes(selectedPos, selectedLength, sas_noUnderline, false);
@@ -365,9 +371,8 @@ public class DictionaryFrame extends JFrame implements ActionListener {
         }
     }
 
-
     public void writeDictArea(String s, boolean bold) {
-        
+
         try {
             if (bold) {
                 docDict.insertString(docDict.getLength(), s, sas_bold);
@@ -383,5 +388,3 @@ public class DictionaryFrame extends JFrame implements ActionListener {
     }
 
 }
-   
-   

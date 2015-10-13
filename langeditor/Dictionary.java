@@ -13,76 +13,101 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
-import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import utils.MsgTextPane;
 
 public class Dictionary {
 
-    public  Hashtable<String, String> words = new Hashtable<String, String>();
-    public  Hashtable<String, String> stems = new Hashtable<String, String>();
+    public HashMap<String, String> words = new HashMap<>();
+    public HashMap<String, String> stems = new HashMap<>();
 
-    DictionaryFrame dictFrame=null;
-     String dictionaryFileName = "?";
-     String dictionaryPattern = "";
-     Boolean markCorrection = false;
-     Boolean matchInfo = true;
+    public HashSet<String> addedwords = new HashSet<>();
+    public HashSet<String> addedstems = new HashSet<>();
+    public HashSet<String> removedwords = new HashSet<>();
+    public HashSet<String> removedstems = new HashSet<>();
 
-     public Dictionary(){
-       dictFrame = new DictionaryFrame();
-       dictFrame.setVisible(false);
-     }
-     
-     public void dictionaryWindowVisible(boolean b){
-         dictFrame.setVisible(b);
-     }
-     
-     
-    public  void setMatchInfo(boolean m) {
+    DictionaryFrame dictFrame = null;
+    String dictionaryFileName = "?";
+    String dictionaryPattern = "";
+    Boolean markCorrection = false;
+    Boolean matchInfo = true;
+
+    public Dictionary() {
+        dictFrame = new DictionaryFrame();
+        dictFrame.setVisible(false);
+    }
+
+    public void dictionaryWindowVisible(boolean b) {
+        dictFrame.setVisible(b);
+    }
+
+    public void setMatchInfo(boolean m) {
         matchInfo = m;
     }
 
-    public  void addWord(String word) {
+    public void addWord(String word) {
         words.put(LanguageContext.get().removeDiacritics(word), word);
+        if (removedwords.contains(word)) {
+            removedwords.remove(word);
+        } else {
+            addedwords.add(word);
+        }
         dictFrame.writeDictArea("Word added: ", false);
         dictFrame.writeSelectDictArea(word);
         dictFrame.writeDictArea("\n", false);
         dictFrame.scrollEnd();
+        dictFrame.isModified(!(addedwords.isEmpty() && addedstems.isEmpty() && removedwords.isEmpty() && removedstems.isEmpty()));
     }
 
-    public  void addStem(String word) {
+    public void addStem(String word) {
         stems.put(LanguageContext.get().removeDiacritics(word), word);
+        if (removedstems.contains(word)) {
+            removedstems.remove(word);
+        } else {
+            addedstems.add(word);
+        }
         dictFrame.writeDictArea("Stem added: ", false);
         dictFrame.writeSelectDictArea(word);
         dictFrame.writeDictArea("\n", false);
         dictFrame.scrollEnd();
+        dictFrame.isModified(!(addedwords.isEmpty() && addedstems.isEmpty() && removedwords.isEmpty() && removedstems.isEmpty()));
     }
 
-    public  void removeWord(String word) {
+    public void removeWord(String word) {
         words.remove(LanguageContext.get().removeDiacritics(word));
+        if (addedwords.contains(word)) {
+            addedwords.remove(word);
+        } else {
+            removedwords.add(word);
+        }
         dictFrame.writeDictArea("Word removed: ", false);
         dictFrame.writeDictArea(word, false);
         dictFrame.writeDictArea("\n", false);
         dictFrame.scrollEnd();
+        dictFrame.isModified(!(addedwords.isEmpty() && addedstems.isEmpty() && removedwords.isEmpty() && removedstems.isEmpty()));
     }
 
-    public  void removeStem(String word) {
+    public void removeStem(String word) {
         stems.remove(LanguageContext.get().removeDiacritics(word));
+        if (addedstems.contains(word)) {
+            addedstems.remove(word);
+        } else {
+            removedstems.add(word);
+        }
         dictFrame.writeDictArea("Stem removed: ", false);
         dictFrame.writeSelectDictArea(word);
         dictFrame.writeDictArea("\n", false);
         dictFrame.scrollEnd();
-        stems.remove(LanguageContext.get().removeDiacritics(word));
+        dictFrame.isModified(!(addedwords.isEmpty() && addedstems.isEmpty() && removedwords.isEmpty() && removedstems.isEmpty()));
     }
 
-    public  String readDictionaryFromFile(String fileName) {
+    public String readDictionaryFromFile(String fileName) {
 
         // returns the dictionary file name
         // if the fileName argument is a fileName , this is returned
@@ -102,8 +127,8 @@ public class Dictionary {
             }
         }
 
-        dictionaryFileName=fileName;
-        
+        dictionaryFileName = fileName;
+
         try {
 
             File initialFile = new File(fileName);
@@ -137,7 +162,7 @@ public class Dictionary {
         return fileName;
     }
 
-    public  boolean saveDictionary(String fileName) {
+    public boolean saveDictionary(String fileName) {
 
         boolean confirm;
         ConfirmDialog cd = new ConfirmDialog();
@@ -182,7 +207,7 @@ public class Dictionary {
         }
     }
 
-    public  String findStem(String word, boolean wordLookup, boolean stemLookup) {
+    public String findStem(String word, boolean wordLookup, boolean stemLookup) {
         String substring;
         String stem = "";
         int i;
@@ -216,7 +241,7 @@ public class Dictionary {
         return stem;
     }
 
-    public  String runDictionaryOnWord(String word, boolean wordLookup, boolean stemLookup) {
+    public String runDictionaryOnWord(String word, boolean wordLookup, boolean stemLookup) {
 
         int nextpos = 0;
         char nextchar;
@@ -389,7 +414,7 @@ public class Dictionary {
         return newword;
     }
 
-    public  void runDictionary(StyledDocument doc, int position, int length) {
+    public void runDictionary(StyledDocument doc, int position, int length) {
         int startWordPosition = 0;
         int endWordPosition = 0;
         String wordorig, word, wordlc, wordnew, wordnewlc;
@@ -460,7 +485,7 @@ public class Dictionary {
         }
     }
 
-    public  void optimizeWords() {
+    public void optimizeWords() {
         String correctedWord;
         java.util.List<String> v = new ArrayList<String>(words.keySet());
 //        MsgTextPane.write("Applying stem correction to Dictionary...");
@@ -487,7 +512,7 @@ public class Dictionary {
         matchInfo = true;
     }
 
-    public  void optimizeStems() {
+    public void optimizeStems() {
 
         WordTree w = new WordTree();
         for (String key : words.keySet()) {
@@ -540,7 +565,7 @@ public class Dictionary {
         }
     }
 
-    public  void printAll() {
+    public void printAll() {
 
         Pattern pattern;
         Matcher matcher;
@@ -580,7 +605,4 @@ public class Dictionary {
         dictFrame.writeDictArea(count - 1 + " stems" + "\n", true);
     }
 
-
-
 }
-
