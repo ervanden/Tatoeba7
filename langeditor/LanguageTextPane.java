@@ -15,12 +15,13 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import utils.AreaFont;
 import utils.MsgTextPane;
+import langoperations.LanguageOperations;
 
 public class LanguageTextPane extends JTextPane {
 
     LanguageTextPane thisTextPane;
-    LanguageEditorFrame parent=null;  // set when this is used as editArea in a LanguageEditorFrame
     String textPaneLanguage;
+    LanguageOperations languageOps;
 
     boolean autoCorrect = true;
     static boolean finalInsert = false; // prevents correction/insertion infinite loop
@@ -42,11 +43,13 @@ public class LanguageTextPane extends JTextPane {
     }
 
     public LanguageTextPane(String language) {
+        
+        LanguageContext.set(language, "LanguageTextPane constructor");
+        languageOps=LanguageContext.get();       
         textPaneLanguage = language;
         this.getStyledDocument().addDocumentListener(editAreaListener);
         this.addCaretListener(editAreaCaretListener);
         thisTextPane = this;
-        LanguageContext.set(parent,language,"LanguageTextPane constructor");
     }
     
    public void displayParameters() {
@@ -75,9 +78,9 @@ public class LanguageTextPane extends JTextPane {
                 selection = doc.getText(position, length);
 //        System.out.println("inverting "+selection);
                 if (selection.matches("[0-9]+")){
-                   selection = LanguageContext.get().number(Integer.valueOf(selection)); 
+                   selection = languageOps.number(Integer.valueOf(selection)); 
                 } else {
-                selection = LanguageContext.get().invertDiacritics(selection);
+                selection = languageOps.invertDiacritics(selection);
                 }
 //        System.out.println("inverted= "+selection);
                 finalInsert = true;
@@ -104,7 +107,7 @@ public class LanguageTextPane extends JTextPane {
                 for (String word : words) {
 //                MsgTextPane.write("selected word <" + word + ">");
                     if (word.length() != 0) {
-                        LanguageContext.get().dictionary().addWord(word.replaceAll("I", "ı").replaceAll("İ", "i").toLowerCase());
+                        languageOps.dictionary().addWord(word.replaceAll("I", "ı").replaceAll("İ", "i").toLowerCase());
                     }
                 }
             } catch (BadLocationException ex) {
@@ -128,7 +131,7 @@ public class LanguageTextPane extends JTextPane {
         }
 
         public void run() {
-            LanguageContext.get().dictionary().runDictionary((StyledDocument) doc, position, length);
+            languageOps.dictionary().runDictionary((StyledDocument) doc, position, length);
         }
     }
 
@@ -153,7 +156,7 @@ public class LanguageTextPane extends JTextPane {
     DocumentListener editAreaListener = new DocumentListener() {
 
         public void insertUpdate(DocumentEvent e) {
-            LanguageContext.set(parent,textPaneLanguage,"editAreaListener insertUpdate");
+            LanguageContext.set(textPaneLanguage,"editAreaListener insertUpdate");
             int position = e.getOffset();
             int length = e.getLength();
 
@@ -175,7 +178,7 @@ public class LanguageTextPane extends JTextPane {
     CaretListener editAreaCaretListener = new CaretListener() {
 
         public void caretUpdate(CaretEvent e) {
-            LanguageContext.set(parent,textPaneLanguage,"editAreaCaretListener caretUpdate");
+            LanguageContext.set(textPaneLanguage,"editAreaCaretListener caretUpdate");
             int position = e.getMark();
             int length = e.getDot() - e.getMark();
             if (length < 0) {

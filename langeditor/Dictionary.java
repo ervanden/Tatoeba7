@@ -43,8 +43,11 @@ public class Dictionary {
         dictFrame.setVisible(false);
     }
     
-    public void close(){
-        dictFrame.close();
+    public boolean isModified(){
+        return !(addedwords.isEmpty() 
+                && addedstems.isEmpty() 
+                && removedwords.isEmpty() 
+                && removedstems.isEmpty());
     }
 
     public void dictionaryWindowVisible(boolean b) {
@@ -66,7 +69,7 @@ public class Dictionary {
         dictFrame.writeSelectDictArea(word);
         dictFrame.writeDictArea("\n", false);
         dictFrame.scrollEnd();
-        dictFrame.isModified(!(addedwords.isEmpty() && addedstems.isEmpty() && removedwords.isEmpty() && removedstems.isEmpty()));
+        dictFrame.isModified(isModified());
     }
 
     public void addStem(String word) {
@@ -80,7 +83,7 @@ public class Dictionary {
         dictFrame.writeSelectDictArea(word);
         dictFrame.writeDictArea("\n", false);
         dictFrame.scrollEnd();
-        dictFrame.isModified(!(addedwords.isEmpty() && addedstems.isEmpty() && removedwords.isEmpty() && removedstems.isEmpty()));
+        dictFrame.isModified(isModified());
     }
 
     public void removeWord(String word) {
@@ -94,7 +97,7 @@ public class Dictionary {
         dictFrame.writeDictArea(word, false);
         dictFrame.writeDictArea("\n", false);
         dictFrame.scrollEnd();
-        dictFrame.isModified(!(addedwords.isEmpty() && addedstems.isEmpty() && removedwords.isEmpty() && removedstems.isEmpty()));
+        dictFrame.isModified(isModified());
     }
 
     public void removeStem(String word) {
@@ -108,7 +111,7 @@ public class Dictionary {
         dictFrame.writeSelectDictArea(word);
         dictFrame.writeDictArea("\n", false);
         dictFrame.scrollEnd();
-        dictFrame.isModified(!(addedwords.isEmpty() && addedstems.isEmpty() && removedwords.isEmpty() && removedstems.isEmpty()));
+        dictFrame.isModified(isModified());
     }
 
     public String readDictionaryFromFile(String fileName) {
@@ -586,7 +589,7 @@ public class Dictionary {
             dictionaryPattern = "^.*$";
         }
         pattern = Pattern.compile(dictionaryPattern);
-        v = new ArrayList<String>(words.keySet());
+        v = new ArrayList<>(words.keySet());
         Collections.sort(v);
         dictFrame.writeDictArea("Searching Dictionary..." + "\n", true);
         count = 1;
@@ -600,7 +603,7 @@ public class Dictionary {
         }
         dictFrame.writeDictArea(count - 1 + " entries in dictionary" + "\n", true);
 
-        v = new ArrayList<String>(stems.keySet());
+        v = new ArrayList<>(stems.keySet());
         Collections.sort(v);
         dictFrame.writeDictArea("Searching stems..." + "\n", true);
         count = 1;

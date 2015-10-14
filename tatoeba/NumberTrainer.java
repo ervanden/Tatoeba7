@@ -34,7 +34,7 @@ public class NumberTrainer extends JFrame implements ActionListener {
 
     public NumberTrainer(String language) {
 
-        LanguageContext.set(null, language, "NumberTrainer constructor");
+        LanguageContext.set(language, "NumberTrainer constructor");
 
         textPane = new JTextPane();
         textScrollPane = new JScrollPane(textPane);

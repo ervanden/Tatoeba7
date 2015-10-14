@@ -12,10 +12,9 @@ import utils.MsgTextPane;
 
 public class DictionaryFrame extends JFrame implements ActionListener {
 
-//    private DictionaryFrame thisLanguageEditorFrame = this;
     private JFrame thisFrame = (JFrame) this;
-    public JTextPane dictArea = null;  // public static for scrollEnd() function
-    public StyledDocument docDict = null;   // dictionary area, accessed from DocUtils
+    public JTextPane dictArea = null;
+    public StyledDocument docDict = null;
     boolean isModified = false;
 
     JScrollPane scrollingDictArea;
@@ -73,7 +72,6 @@ public class DictionaryFrame extends JFrame implements ActionListener {
     DocumentListener dictAreaListener = new DocumentListener() {
 
         public void insertUpdate(DocumentEvent e) {
-//            LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"dictAreaListener insertUpdate");
             int position = e.getOffset();
             int length = e.getLength();
             SwingUtilities.invokeLater(new setAttributesTask2(position, length));
@@ -90,7 +88,6 @@ public class DictionaryFrame extends JFrame implements ActionListener {
     CaretListener dictAreaCaretListener = new CaretListener() {
 
         public void caretUpdate(CaretEvent e) {
-//            LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"dictAreaCaretListener caretUpdate");
             int position = e.getMark();
             int length = e.getDot() - e.getMark();
             if (length != 0) { // called when dict area is written to > erases selection
@@ -105,17 +102,16 @@ public class DictionaryFrame extends JFrame implements ActionListener {
         }
 
     };
-    
-    private void eraseDictArea(){
 
-            Document doc = dictArea.getStyledDocument();
+    private void eraseDictArea() {
+        Document doc = dictArea.getStyledDocument();
         try {
             doc.remove(0, doc.getLength());
         } catch (BadLocationException ble) {
             System.out.println("ble");
         }
     }
-    
+
     public void actionPerformed(ActionEvent ae) {
 
         String action = ae.getActionCommand();
@@ -173,6 +169,11 @@ public class DictionaryFrame extends JFrame implements ActionListener {
             for (String word : selectedWords) {
                 LanguageContext.get().dictionary().removeStem(word);
             }
+        }
+               
+        if (action.equals("words from web")) {
+            URLChooser urlChooser = new URLChooser();
+            urlChooser.execute();
         }
 
         if (action.equals("buttonPlus")) {

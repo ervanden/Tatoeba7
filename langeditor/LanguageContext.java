@@ -19,7 +19,7 @@ public class LanguageContext {
         return ops;
     }
 
-    public static void set(LanguageEditorFrame f, String lang, String origin) {
+    public static void set(String lang, String origin) {
 
         language = lang;
         
