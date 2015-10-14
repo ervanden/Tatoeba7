@@ -42,6 +42,10 @@ public class Dictionary {
         dictFrame = new DictionaryFrame();
         dictFrame.setVisible(false);
     }
+    
+    public void close(){
+        dictFrame.close();
+    }
 
     public void dictionaryWindowVisible(boolean b) {
         dictFrame.setVisible(b);
@@ -196,6 +200,12 @@ public class Dictionary {
                 }
                 outputStream.close();
 
+                addedwords.clear();
+                addedstems.clear();
+                removedwords.clear();
+                removedstems.clear();
+                dictFrame.isModified(false);
+                
                 return true;
 
             } catch (IOException io) {

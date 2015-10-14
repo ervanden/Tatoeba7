@@ -71,16 +71,15 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
     }
 
     class WindowUtils extends WindowAdapter {
-
         public void windowClosing(WindowEvent e) {
-                JOptionPane.showMessageDialog(thisFrame, "Close window via Exit menu");
+            LanguageContext.get().dictionary().close();
         }
     }
 
     DocumentListener dictAreaListener = new DocumentListener() {
 
         public void insertUpdate(DocumentEvent e) {
-            LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"dictAreaListener insertUpdate");
+            LanguageContext.set(thisLanguageEditorFrame, editorLanguage, "dictAreaListener insertUpdate");
             int position = e.getOffset();
             int length = e.getLength();
             SwingUtilities.invokeLater(new setAttributesTask2(position, length));
@@ -97,7 +96,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
     CaretListener dictAreaCaretListener = new CaretListener() {
 
         public void caretUpdate(CaretEvent e) {
-            LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"dictAreaCaretListener caretUpdate");
+            LanguageContext.set(thisLanguageEditorFrame, editorLanguage, "dictAreaCaretListener caretUpdate");
             int position = e.getMark();
             int length = e.getDot() - e.getMark();
             if (length != 0) { // called when dict area is written to > erases selection
@@ -130,8 +129,8 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
     public void actionPerformed(ActionEvent ae) {
 
         String action = ae.getActionCommand();
-        
-        LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"actionPerformed "+action);
+
+        LanguageContext.set(thisLanguageEditorFrame, editorLanguage, "actionPerformed " + action);
 
         if (action.equals("Correct selected text")) {
             editArea.setManualCorrect(false);
@@ -155,13 +154,13 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         if (action.equals("Exit without saving dictionary")) {
             thisFrame.dispose();
         }
-        
+
         if (action.equals("Show Dictionary Window")) {
             LanguageContext.get().dictionary().dictionaryWindowVisible(true);
         }
-        
-                if (action.equals("Show System Messages")) {
-           MsgTextPane.setVisible(true);
+
+        if (action.equals("Show System Messages")) {
+            MsgTextPane.setVisible(true);
         }
 
         if (action.equals("Create a backup dictionary")) {
@@ -183,8 +182,6 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
             urlChooser.execute();
 
         }
-
-
 
         if (action.equals("buttonPlus")) {
             AreaFont.multiply((float) 1.2);
@@ -231,8 +228,6 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 //                c.insets=null;
         return c;
     }
-
-
 
     private void displayGUI1() {
         textFieldDictFileName.setMinimumSize(textFieldDictFileNameSize);
@@ -347,11 +342,12 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
-
-        menuExit = new JMenu("Exit");
-        menuBar.add(menuExit);
-        AddMenuItem(menuExit, "Save dictionary and exit", "Save dictionary and exit");
-        AddMenuItem(menuExit, "Exit without saving dictionary", "Exit without saving dictionary");
+        /*
+         menuExit = new JMenu("Exit");
+         menuBar.add(menuExit);
+         AddMenuItem(menuExit, "Save dictionary and exit", "Save dictionary and exit");
+         AddMenuItem(menuExit, "Exit without saving dictionary", "Exit without saving dictionary");
+         */
         menuText = new JMenu("Text");
         menuBar.add(menuText);
         AddMenuItem(menuText, "Correct selected text", "Correct selected text");
@@ -410,17 +406,9 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         content.add(scrollingEditArea, c);
 
         JMenuBar menuBar = new JMenuBar();
-        JMenu menuExit = new JMenu("Exit");
-        JMenu menuView = new JMenu("View");
-
-        menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
 
-        menuExit = new JMenu("Exit");
-        menuBar.add(menuExit);
-        AddMenuItem(menuExit, "Save dictionary and exit", "Save dictionary and exit");
-        AddMenuItem(menuExit, "Exit without saving dictionary", "Exit without saving dictionary");
-        menuView = new JMenu("View");
+        JMenu menuView = new JMenu("View");
         menuBar.add(menuView);
         AddMenuItem(menuView, "Show Dictionary Window", "Show Dictionary Window");
         AddMenuItem(menuView, "Show System Messages", "Show System Messages");
@@ -440,7 +428,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         scrollingDictArea = new JScrollPane(dictArea);
 
         editArea = new LanguageTextPane(editorLanguage);
-        editArea.parent=thisLanguageEditorFrame;
+        editArea.parent = thisLanguageEditorFrame;
         editArea.setAutoCorrect(true);
         editArea.setFinalInsert(false);
         editArea.setManualCorrect(true);
@@ -476,7 +464,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         textFieldPattern.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                        LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"textfieldpattern ");
+                LanguageContext.set(thisLanguageEditorFrame, editorLanguage, "textfieldpattern ");
                 LanguageContext.get().dictionary().dictionaryPattern = textFieldPattern.getText();
                 LanguageContext.get().dictionary().printAll();
                 dictArea.setCaretPosition(docDict.getLength());
@@ -502,7 +490,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         docDict = dictArea.getStyledDocument();
         docDict.addDocumentListener(dictAreaListener);
 
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.addWindowListener(new WindowUtils());
 
     }

@@ -66,7 +66,7 @@ public class DictionaryFrame extends JFrame implements ActionListener {
     class WindowUtils extends WindowAdapter {
 
         public void windowClosing(WindowEvent e) {
-            thisFrame.setVisible(false);
+            close();
         }
     }
 
@@ -105,15 +105,24 @@ public class DictionaryFrame extends JFrame implements ActionListener {
         }
 
     };
+    
+    private void eraseDictArea(){
 
+            Document doc = dictArea.getStyledDocument();
+        try {
+            doc.remove(0, doc.getLength());
+        } catch (BadLocationException ble) {
+            System.out.println("ble");
+        }
+    }
+    
     public void actionPerformed(ActionEvent ae) {
 
         String action = ae.getActionCommand();
 
-//        LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"actionPerformed "+action);
         if (action.equals("Save dictionary and exit")) {
             if (LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionary().dictionaryFileName)) {
-//                thisFrame.setVisible(false);
+                eraseDictArea();
                 thisFrame.dispose();
             }
         }
@@ -123,7 +132,8 @@ public class DictionaryFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Exit without saving dictionary")) {
-            //                          thisFrame.setVisible(false);
+            LanguageContext.get().disposeDictionary();
+            eraseDictArea();
             thisFrame.dispose();
         }
 
@@ -239,6 +249,16 @@ public class DictionaryFrame extends JFrame implements ActionListener {
             textFieldDictFileName.setBackground(Color.PINK);
         } else {
             textFieldDictFileName.setBackground(Color.WHITE);
+        }
+    }
+
+    public void close() {
+        System.out.println(" close dictionaryframe isModifed = " + isModified);
+        if (isModified) {
+            thisFrame.setVisible(true);
+            JOptionPane.showMessageDialog(thisFrame, "Dictionary was modified. Close window via Exit menu");
+        } else {
+            thisFrame.dispose();
         }
     }
 

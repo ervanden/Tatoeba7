@@ -13,14 +13,15 @@ public class GenericOperations implements LanguageOperations {
     }
 
     public Dictionary dictionary() {
-        return d;
-    }
-
-    public void initialize() {
-        if (d == null) {
+         if (d == null) {
             d = new Dictionary();
             d.readDictionaryFromFile(dictionaryFileName());
-        }
+        }       
+        return d;
+    }
+    
+    public void disposeDictionary(){
+        d=null;
     }
 
     public String invertDiacritics(String word) {

@@ -29,17 +29,14 @@ public class LanguageContext {
         if (ops == null) {
             if (language.equals("tur")) {
                 ops = new TurkishOperations();
-                ops.initialize();
                 opsMap.put(language, ops);
             } else 
             if (language.equals("pol")) {
                 ops = new PolishOperations();
-                ops.initialize();
                 opsMap.put(language, ops);
             } else {
                 language="generic";
                 ops = new GenericOperations();
-                ops.initialize();
                 opsMap.put(language, ops);              
             }
         }

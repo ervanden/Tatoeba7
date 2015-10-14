@@ -14,15 +14,17 @@ public class TurkishOperations implements LanguageOperations {
     }
 
     public Dictionary dictionary() {
+         if (d == null) {
+            d = new Dictionary();
+            d.readDictionaryFromFile(dictionaryFileName());
+        }       
         return d;
     }
     
-    public void initialize() {
-        if (d == null) {
-            d = new Dictionary();
-            d.readDictionaryFromFile(dictionaryFileName());
-        }
+    public void disposeDictionary(){
+        d=null;
     }
+    
 
     public String invertDiacritics(String word) {
         char c;
