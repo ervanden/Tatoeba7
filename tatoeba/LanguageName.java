@@ -1,13 +1,13 @@
 package tatoeba;
 
-    public class Language {
+    public class LanguageName {
 
         String shortName;
         String longName;
         int frequency;
 
  
-      public Language(String shortName, String longName) {
+      public LanguageName(String shortName, String longName) {
             this.longName = longName;
             this.shortName = shortName;
             frequency=0;

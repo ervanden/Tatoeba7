@@ -1,21 +1,20 @@
 package langeditor;
 
-import langoperations.LanguageOperations;
-import langoperations.TurkishOperations;
-import langoperations.PolishOperations;
-import langoperations.GenericOperations;
 import java.util.HashMap;
+import languages.Generic;
+import languages.Language;
+import languages.Polish;
+import languages.Turkish;
 
 
 public class LanguageContext {
 
     static public String language = "not initialized";
-    static LanguageOperations ops = null;
-    static LanguageEditorFrame frame = null;
+    static Language ops = null;
     
-    static HashMap<String, LanguageOperations> opsMap = new HashMap<>();
+    static HashMap<String, Language> opsMap = new HashMap<>();
 
-    public static LanguageOperations get() {
+    public static Language get() {
         return ops;
     }
 
@@ -28,15 +27,15 @@ public class LanguageContext {
         ops = opsMap.get(language);
         if (ops == null) {
             if (language.equals("tur")) {
-                ops = new TurkishOperations();
+                ops = new Turkish();
                 opsMap.put(language, ops);
             } else 
             if (language.equals("pol")) {
-                ops = new PolishOperations();
+                ops = new Polish();
                 opsMap.put(language, ops);
             } else {
                 language="generic";
-                ops = new GenericOperations();
+                ops = new Generic();
                 opsMap.put(language, ops);              
             }
         }

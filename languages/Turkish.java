@@ -1,21 +1,22 @@
-package langoperations;
+package languages;
 
+import dictionary.TurkishDictionary;
+import dictionary.GenericDictionary;
 import java.util.HashMap;
 import javax.swing.JFileChooser;
-import langeditor.Dictionary;
 
-public class TurkishOperations implements LanguageOperations {
+public class Turkish implements Language {
 
-    Dictionary d = null;
+    GenericDictionary d = null;
 
     public String dictionaryFileName() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
         return defaultFolder + "\\Tatoeba\\TurkishDictionary.txt";
     }
 
-    public Dictionary dictionary() {
+    public GenericDictionary dictionary() {
          if (d == null) {
-            d = new Dictionary();
+            d = new TurkishDictionary();
             d.readDictionaryFromFile(dictionaryFileName());
         }       
         return d;

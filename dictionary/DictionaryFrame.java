@@ -1,4 +1,4 @@
-package langeditor;
+package dictionary;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -6,9 +6,11 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
 import java.util.*;
+import langeditor.LanguageContext;
 
 import utils.AreaFont;
 import utils.MsgTextPane;
+import utils.Sas;
 
 public class DictionaryFrame extends JFrame implements ActionListener {
 
@@ -117,14 +119,14 @@ public class DictionaryFrame extends JFrame implements ActionListener {
         String action = ae.getActionCommand();
 
         if (action.equals("Save dictionary and exit")) {
-            if (LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionary().dictionaryFileName)) {
+            if (LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionaryFileName())) {
                 eraseDictArea();
                 thisFrame.dispose();
             }
         }
 
         if (action.equals("Save dictionary")) {
-            LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionary().dictionaryFileName);
+            LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionaryFileName());
         }
 
         if (action.equals("Exit without saving dictionary")) {
@@ -135,7 +137,7 @@ public class DictionaryFrame extends JFrame implements ActionListener {
 
         if (action.equals("Create a backup dictionary")) {
             Date dNow = new Date();
-            LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionary().dictionaryFileName
+            LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionaryFileName()
                     + String.format(" %1$te%1$tb%1$ty %1$tHh%1$tM", dNow));
         }
 
@@ -294,9 +296,7 @@ public class DictionaryFrame extends JFrame implements ActionListener {
 
         textFieldPattern.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //                       LanguageContext.set(thisLanguageEditorFrame,editorLanguage,"textfieldpattern ");
-                LanguageContext.get().dictionary().dictionaryPattern = textFieldPattern.getText();
-                LanguageContext.get().dictionary().printAll();
+                LanguageContext.get().dictionary().printAll(textFieldPattern.getText());
                 scrollEnd();
                 dictArea.setCaretPosition(docDict.getLength());
             }
@@ -322,42 +322,28 @@ public class DictionaryFrame extends JFrame implements ActionListener {
 
     }
 
-    static SimpleAttributeSet sas_underline = new SimpleAttributeSet();
-    static SimpleAttributeSet sas_noUnderline = new SimpleAttributeSet();
-    static SimpleAttributeSet sas_bold = new SimpleAttributeSet();
-    static SimpleAttributeSet sas_noBold = new SimpleAttributeSet();
-    static SimpleAttributeSet sas_red = new SimpleAttributeSet();
-
-    static {
-        StyleConstants.setUnderline(sas_underline, true);
-        StyleConstants.setUnderline(sas_noUnderline, false);
-        StyleConstants.setBold(sas_bold, true);
-        StyleConstants.setBold(sas_noBold, false);
-        StyleConstants.setForeground(sas_red, Color.RED);
-    }
-
     static int selectedPos = 0;     // first char of first selected word
     static int selectedLength = 0;   // gives last char of last selected word
     static ArrayList<String> selectedWords = new ArrayList<String>();
 
     public void writeSelectDictArea(String str) {
-        docDict.setCharacterAttributes(selectedPos, selectedLength, sas_noUnderline, false);
+        docDict.setCharacterAttributes(selectedPos, selectedLength, Sas.noUnderline, false);
 
         selectedPos = docDict.getLength();
         selectedLength = str.length();
         selectedWords.clear();
         selectedWords.add(str);
         try {
-            docDict.insertString(docDict.getLength(), str, sas_underline);
+            docDict.insertString(docDict.getLength(), str, Sas.underline);
         } catch (BadLocationException blex) {
             MsgTextPane.write(" bad location in writeSelectDictArea");
         }
-        docDict.setCharacterAttributes(selectedPos, selectedLength, sas_underline, false);
+        docDict.setCharacterAttributes(selectedPos, selectedLength, Sas.underline, false);
     }
 
     public void manualSelectDictArea(int position, int length) {
 
-        docDict.setCharacterAttributes(selectedPos, selectedLength, sas_noUnderline, false);
+        docDict.setCharacterAttributes(selectedPos, selectedLength, Sas.noUnderline, false);
 
         selectedPos = position;
         selectedLength = length;
@@ -381,7 +367,7 @@ public class DictionaryFrame extends JFrame implements ActionListener {
                     }
 
                     word = docDict.getText(startWordPosition, endWordPosition - startWordPosition);
-                    docDict.setCharacterAttributes(startWordPosition, endWordPosition - startWordPosition, sas_underline, false);
+                    docDict.setCharacterAttributes(startWordPosition, endWordPosition - startWordPosition, Sas.underline, false);
 
                     selectedWords.add(word);
                 }
@@ -396,9 +382,9 @@ public class DictionaryFrame extends JFrame implements ActionListener {
 
         try {
             if (bold) {
-                docDict.insertString(docDict.getLength(), s, sas_bold);
+                docDict.insertString(docDict.getLength(), s, Sas.bold);
             } else {
-                docDict.insertString(docDict.getLength(), s, sas_noBold);
+                docDict.insertString(docDict.getLength(), s, Sas.noBold);
             }
         } catch (BadLocationException blex) {
         }

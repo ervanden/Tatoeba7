@@ -1,5 +1,6 @@
 package langeditor;
 
+import dictionary.WordUtils;
 import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JTextPane;
@@ -15,16 +16,16 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import utils.AreaFont;
 import utils.MsgTextPane;
-import langoperations.LanguageOperations;
+import languages.Language;
 
 public class LanguageTextPane extends JTextPane {
 
     LanguageTextPane thisTextPane;
     String textPaneLanguage;
-    LanguageOperations languageOps;
+    Language languageOps;
 
     boolean autoCorrect = true;
-    static boolean finalInsert = false; // prevents correction/insertion infinite loop
+    boolean finalInsert = false; // prevents correction/insertion infinite loop
     boolean manualCorrect = true; // set during correction of selected text
     // store position of last selected text for "correct selected text" function
     public int selectedPosition = 0;
@@ -131,7 +132,7 @@ public class LanguageTextPane extends JTextPane {
         }
 
         public void run() {
-            languageOps.dictionary().runDictionary((StyledDocument) doc, position, length);
+            languageOps.dictionary().runDictionary(thisTextPane, position, length);
         }
     }
 

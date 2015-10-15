@@ -1,16 +1,16 @@
 
-package langoperations;
+package languages;
 
-import langeditor.Dictionary;
+import dictionary.GenericDictionary;
 
 
 
-public interface LanguageOperations {
+public interface Language {
 
         public String invertDiacritics(String word);
         public String removeDiacritics(String word);
         public String dictionaryFileName();
-        public Dictionary dictionary();
+        public GenericDictionary dictionary();
         public void disposeDictionary();
         public String number(int n);
 

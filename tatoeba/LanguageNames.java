@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 public class LanguageNames {
 
-    static HashMap<String, Language> languagesByShortName = new HashMap<String, Language>();
-    static HashMap<String, Language> languagesByLongName = new HashMap<String, Language>();
+    static HashMap<String, LanguageName> languagesByShortName = new HashMap<String, LanguageName>();
+    static HashMap<String, LanguageName> languagesByLongName = new HashMap<String, LanguageName>();
 
     public static ArrayList<String> languageShortNames() {
         return new ArrayList<String>(languagesByShortName.keySet());
@@ -17,14 +17,14 @@ public class LanguageNames {
         return new ArrayList<String>(languagesByLongName.keySet());
     }
 
-    public static void addLanguage(Language l) {
+    public static void addLanguage(LanguageName l) {
         languagesByShortName.put(l.shortName, l);
         languagesByLongName.put(l.longName, l);
     }
 
     public static String longToShort(String longName) {
         // if it can not be translated, assume that longName is a short name returned by shortToLong()
-        Language l;
+        LanguageName l;
         l = languagesByLongName.get(longName);
         if (l == null) {
             return longName;
@@ -37,7 +37,7 @@ public class LanguageNames {
     
         public static String shortToLong(String shortName) { 
         // if shortName can not be translated, return shortName 
-        Language l;
+        LanguageName l;
         l = languagesByShortName.get(shortName);
         if (l == null) {
             return shortName;

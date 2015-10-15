@@ -18,7 +18,7 @@ import javax.swing.JFileChooser;
 class ClustersInOut {
 
     static String clustersFileName = "?";
-    static String dictionaryPattern = "";
+//    static String dictionaryPattern = "";
 
     public static void readSentences(String dirName) {
 
@@ -136,7 +136,7 @@ class ClustersInOut {
                 ls = l.split("\u0009");
                 if (l.matches("^language.*$")) {
                     languageCount++;
-                    LanguageNames.addLanguage(new Language(ls[1], ls[2]));
+                    LanguageNames.addLanguage(new LanguageName(ls[1], ls[2]));
                     SelectionFrame.allLanguages.add(ls[1]);
                 } else if (l.matches("^source.*$")) {
                     SelectionFrame.sourceLanguages.add(ls[1]);
@@ -359,7 +359,7 @@ class ClustersInOut {
 
                     if (!shortName.equals("") && !longName.equals("")) {
                         count++;
-                        LanguageNames.addLanguage(new Language(shortName, longName));
+                        LanguageNames.addLanguage(new LanguageName(shortName, longName));
 //                        System.out.println("add language " + shortName + "|" + longName);
                     } else {
                         System.out.println("invalid line " + linecount + " |" + l + "|");

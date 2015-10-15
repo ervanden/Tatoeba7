@@ -1,20 +1,20 @@
-package langoperations;
+package languages;
 
+import dictionary.GenericDictionary;
 import javax.swing.JFileChooser;
-import langeditor.Dictionary;
 
-public class GenericOperations implements LanguageOperations {
+public class Generic implements Language {
 
-    Dictionary d = null;
+    GenericDictionary d = null;
 
     public String dictionaryFileName() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
         return defaultFolder + "\\Tatoeba\\GenericDictionary.txt";
     }
 
-    public Dictionary dictionary() {
+    public GenericDictionary dictionary() {
          if (d == null) {
-            d = new Dictionary();
+            d = new GenericDictionary();
             d.readDictionaryFromFile(dictionaryFileName());
         }       
         return d;

@@ -1,5 +1,6 @@
 package langeditor;
 
+import dictionary.GenericDictionary;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
     private LanguageEditorFrame thisLanguageEditorFrame = this;
     private JFrame thisFrame = (JFrame) this;
  //   public String editorLanguage;
-    private Dictionary dictionary;
+    private GenericDictionary dictionary;
     private LanguageTextPane editArea;
     public JTextPane dictArea = null;  // public static for scrollEnd() function
 
@@ -66,10 +67,10 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         if (action.equals("Correct selected text")) {
             editArea.setManualCorrect(false);
-            LanguageContext.get().dictionary().markCorrection = true;
-            LanguageContext.get().dictionary().runDictionary((StyledDocument) editArea.getStyledDocument(),
+            LanguageContext.get().dictionary().setMarkCorrection(true);
+            LanguageContext.get().dictionary().runDictionary(editArea,
                     editArea.selectedPosition, editArea.selectedLength);
-            LanguageContext.get().dictionary().markCorrection = false;
+            LanguageContext.get().dictionary().setMarkCorrection(false);
             editArea.setManualCorrect(true);
         }
 
@@ -229,7 +230,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         radioButtonAuto.addItemListener(this);
 
-        textFieldDictFileName.setText(LanguageContext.get().dictionary().dictionaryFileName);
+        textFieldDictFileName.setText(LanguageContext.get().dictionaryFileName());
         textFieldDictFileName.setEditable(false);
         textFieldDictFileNameSize = textFieldDictFileName.getPreferredSize();
 

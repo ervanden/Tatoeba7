@@ -1,4 +1,4 @@
-package langeditor;
+package dictionary;
 
 import javax.swing.text.*;
 import utils.MsgTextPane;

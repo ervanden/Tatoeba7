@@ -1,21 +1,22 @@
-package langoperations;
+package languages;
 
+import dictionary.PolishDictionary;
+import dictionary.GenericDictionary;
 import java.util.HashMap;
 import javax.swing.JFileChooser;
-import langeditor.Dictionary;
 
-public class PolishOperations implements LanguageOperations {
+public class Polish implements Language {
 
-    Dictionary d = null;
+    PolishDictionary d = null;
 
     public String dictionaryFileName() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
         return defaultFolder + "\\Tatoeba\\PolishDictionary.txt";
     }
 
-    public Dictionary dictionary() {
+    public GenericDictionary dictionary() {
          if (d == null) {
-            d = new Dictionary();
+            d = new PolishDictionary();
             d.readDictionaryFromFile(dictionaryFileName());
         }       
         return d;

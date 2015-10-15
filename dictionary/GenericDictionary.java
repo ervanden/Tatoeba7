@@ -1,4 +1,4 @@
-package langeditor;
+package dictionary;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,9 +20,13 @@ import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
+import langeditor.ConfirmDialog;
+import langeditor.LanguageTextPane;
+import langeditor.LanguageContext;
 import utils.MsgTextPane;
+import utils.Sas;
 
-public class Dictionary {
+public class GenericDictionary {
 
     public HashMap<String, String> words = new HashMap<>();
     public HashMap<String, String> stems = new HashMap<>();
@@ -33,12 +37,12 @@ public class Dictionary {
     public HashSet<String> removedstems = new HashSet<>();
 
     DictionaryFrame dictFrame = null;
-    String dictionaryFileName = "?";
-    String dictionaryPattern = "";
+ //   String dictionaryFileName = "?";
+ //   String dictionaryPattern = "";
     Boolean markCorrection = false;
     Boolean matchInfo = true;
 
-    public Dictionary() {
+    public GenericDictionary() {
         dictFrame = new DictionaryFrame();
         dictFrame.setVisible(false);
     }
@@ -54,10 +58,13 @@ public class Dictionary {
         dictFrame.setVisible(b);
     }
 
-    public void setMatchInfo(boolean m) {
-        matchInfo = m;
+    public void setMatchInfo(boolean b) {
+        matchInfo = b;
     }
-
+    
+    public void setMarkCorrection(boolean b) {
+        markCorrection = b;
+    }
     public void addWord(String word) {
         words.put(LanguageContext.get().removeDiacritics(word), word);
         if (removedwords.contains(word)) {
@@ -134,7 +141,7 @@ public class Dictionary {
             }
         }
 
-        dictionaryFileName = fileName;
+//        dictionaryFileName = fileName;
 
         try {
 
@@ -256,16 +263,9 @@ public class Dictionary {
 
     public String runDictionaryOnWord(String word, boolean wordLookup, boolean stemLookup) {
 
-        int nextpos = 0;
-        char nextchar;
-        boolean iMode = false;  // turkify i
-        boolean uMode = false;  // turkify u
-        String stem = "";
-        String newword = "";
-
-        boolean debug = false;
-
-        // word is expected to be lowercase and deturkified
+        // word is expected to be lowercase and diacritics removed
+        System.out.println("polish runDictionaryOnWord "+word);
+        
         if (wordLookup && words.containsKey(word)) {
             String correctedWord = words.get(word);
             if (matchInfo) {
@@ -275,159 +275,13 @@ public class Dictionary {
                 dictFrame.scrollEnd();
             }
             return correctedWord;
-
         } else {
-            // if the word is not in the dictionary try stem correction
-            // Longest match prevails
-            stem = findStem(word, wordLookup, stemLookup);
-            nextpos = stem.length();
-            newword = stem;
-
-            if (stem.equals("")) {
-                newword = word;
-            } else {
-
-                char lastVowel = ' ';
-                for (int i = 0; i <= stem.length() - 1; i++) {
-                    char c = newword.charAt(i);
-                    if (WordUtils.isVowel(c)) {
-                        lastVowel = c;
-                    }
-                }
-
-                if ((lastVowel == 'ü') || (lastVowel == 'ö')) {
-                    uMode = true;
-                } else if ((lastVowel == 'a') || (lastVowel == 'ı')) {
-                    iMode = true;
-                }
-
-                // turkify vowels according to mode
-                // cancel mode if e,i,o are encountered  (bil,yor,et,ed)
-                for (int i = nextpos; i <= word.length() - 1; i++) {
-                    nextchar = word.charAt(i);
-
-                    // do the substitutions
-                    if (nextchar == 'i') {
-                        char newchar = 'i';
-
-                        if (iMode) {
-                            newchar = 'ı';
-                        }
-
-                        newword = newword + newchar;
-
-                    } else if (uMode && (nextchar == 'u')) {
-                        newword = newword + 'ü';
-
-                    } else if (nextchar == 'g') {
-                        char newchar = 'g';
-                        if (i >= 4) {
-                            // extract the string 3 characters long, preceding the letter g
-                            String s = (word.substring(i - 3, i));
-                            Pattern pattern = Pattern.compile("^..[iuıü]|ece|aca$");
-                            Matcher matcher = pattern.matcher(s);
-                            if (matcher.find()) {
-                                newchar = 'ğ';
-                            }
-                        }
-                        newword = newword + newchar;
-
-                    } else if (nextchar == 'c') {
-                        char newchar = 'c';
-                        if (i >= 2) {
-                            // extract the string 1 character long , preceding the c
-                            String s = (word.substring(i - 1, i));
-                            Pattern pattern = Pattern.compile("^[pfkths]$");
-                            Matcher matcher = pattern.matcher(s);
-                            if (matcher.find()) {
-                                newchar = 'ç';
-                            }
-                        }
-                        newword = newword + newchar;
-
-                    } else if (nextchar == 's') {
-                        char newchar = 's';
-                        if (i >= 4) {
-                            // extract the string to match : 3 characters long, ending in s
-                            String s = (word.substring(i - 2, i + 1));
-                            // all patterns 4 characters long
-                            Pattern pattern = Pattern.compile("m[iu]s");
-                            Matcher matcher = pattern.matcher(s);
-                            if (matcher.find()) {
-                                newchar = 'ş';
-                            }
-                        }
-                        newword = newword + newchar;
-
-                    } else {
-                        newword = newword + nextchar;
-                    }
-
-                    // 'e' = end substitution  (hallederim)
-                    if (nextchar == 'e') {
-                        iMode = false;
-                        uMode = false;
-                        if (debug) {
-                            MsgTextPane.write(" 'e' ends substitution");
-                        }
-                    }
-
-                    // 'bil' = end substitution  (-bilmek)
-                    if (nextchar == 'b') {
-                        if ((i + 3) <= word.length()) {
-                            if ((word.charAt(i + 1) == 'i') && (word.charAt(i + 2) == 'l')) {
-                                iMode = false;
-                                uMode = false;
-                                if (debug) {
-                                    MsgTextPane.write(" 'bil' ends substitution");
-                                }
-                            }
-                        }
-                    }
-
-                    // 'yor' = end substitution  (-yorum)
-                    if (nextchar == 'y') {
-                        if ((i + 3) <= word.length()) {
-                            if ((word.charAt(i + 1) == 'o') && (word.charAt(i + 2) == 'r')) {
-                                iMode = false;
-                                uMode = false;
-                                if (debug) {
-                                    MsgTextPane.write(" 'yor' ends substitution");
-                                }
-                            }
-                        }
-                    }
-
-                    // 'a' = activate i-substitution
-                    // it needs be re-activated if it was cancelled by 'yor'  (yapıyorlardı)
-                    if (nextchar == 'a') {
-                        iMode = true;
-                        uMode = false;
-                        if (debug) {
-                            MsgTextPane.write(" 'a' starts i - substitution");
-                        }
-                    }
-                }
-            }
+            return word;
         }
-
-        newword = newword.replaceAll("kı$", "ki");
-        newword = newword.replaceAll("k[iı]n[iı]$", "kini");
-        newword = newword.replaceAll("k[iı]ne$", "kine");
-        newword = newword.replaceAll("k[iı]nden$", "kinden");
-        newword = newword.replaceAll("k[iı]n[iı]n$", "kinin");
-        newword = newword.replaceAll("kıler$", "kiler");
-        newword = newword.replaceAll("kıleri$", "kileri");
-        newword = newword.replaceAll("kılerin$", "kilerin");
-        newword = newword.replaceAll("kılerini$", "kilerini");
-        newword = newword.replaceAll("kılerine$", "kilerine");
-        newword = newword.replaceAll("kılerinin$", "kilerinin");
-        newword = newword.replaceAll("kılerinden$", "kilerinden");
-
-        return newword;
     }
 
-    public void runDictionary(StyledDocument doc, int position, int length) {
+    public void runDictionary(LanguageTextPane textPane, int position, int length) {
+        StyledDocument doc=textPane.getStyledDocument();
         int startWordPosition = 0;
         int endWordPosition = 0;
         String wordorig, word, wordlc, wordnew, wordnewlc;
@@ -469,14 +323,14 @@ public class Dictionary {
                 }
                 //MsgTextPane.write("wordnew = "+wordnew);               
                 if (!wordnew.equals(wordorig)) {
-                    LanguageTextPane.finalInsert = true;
+                    textPane.setFinalInsert(true);
                     doc.remove(startWordPosition, endWordPosition - startWordPosition);
                     doc.insertString(startWordPosition, wordnew, null);
                     if (markCorrection) {
-                        doc.setCharacterAttributes(startWordPosition, wordnew.length(), dictFrame.sas_red, false);
+                        doc.setCharacterAttributes(startWordPosition, wordnew.length(), Sas.red, false);
                         nrCorrected++;
                     }
-                    LanguageTextPane.finalInsert = false;
+                    textPane.setFinalInsert(false);
                 }
             } catch (BadLocationException ex) {
                 MsgTextPane.write("Bad Location in runDictionary ");
@@ -578,7 +432,7 @@ public class Dictionary {
         }
     }
 
-    public void printAll() {
+    public void printAll(String dictionaryPattern) {
 
         Pattern pattern;
         Matcher matcher;

@@ -1,5 +1,6 @@
-package langeditor;
+package dictionary;
 
+import langeditor.LanguageContext;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -35,6 +36,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import javax.swing.text.StyledDocument;
+import langeditor.LanguageContext;
 import org.jsoup.Jsoup;
 import org.jsoup.examples.HtmlToPlainText;
 

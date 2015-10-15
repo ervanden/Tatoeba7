@@ -1,4 +1,4 @@
-package langeditor;
+package dictionary;
 
 import java.util.ArrayList;
 
