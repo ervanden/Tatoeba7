@@ -1,5 +1,6 @@
 package tatoeba;
 
+import languages.LanguageNames;
 import utils.GenericTextFrame;
 import java.awt.*;
 import java.awt.event.*;
@@ -10,7 +11,7 @@ import java.util.*;
 
 import langeditor.LanguageTextPane;
 import langeditor.LanguageEditorFrame;
-import langeditor.LanguageContext;
+import languages.LanguageContext;
 
 import utils.AreaFont;
 
@@ -85,9 +86,6 @@ class TatoebaFrame extends JFrame implements ActionListener {
         pane.setCaretPosition(doc.getLength());
     }
 
-    public void writeInfo(String msg) {
-        writePane(infoArea, msg);
-    }
 
     public void setAutoCorrect(boolean b) {
         if (sourceArea != null) {
@@ -164,17 +162,10 @@ class TatoebaFrame extends JFrame implements ActionListener {
 
         public void run() {
             ClustersInOut.readSentences(dirName);
-            ClustersInOut.readLanguages();
             Graph.LanguageMatrix.generate();
             SelectionFrame.populateAreas();
             SelectionFrame.setVisible(true);
             enableStandard();
-
-            /*                       
-             for(String lan : SelectionFrame.usedLanguages){
-             System.out.println("used language code |"+lan+"|   |"+ LanguageNames.shortToLong(lan)+"|"); 
-             }
-             */
         }
     }
 
@@ -185,11 +176,11 @@ class TatoebaFrame extends JFrame implements ActionListener {
 
     private void executeAction(String action) {
 
-        StyledDocument doc;
         JFileChooser fileChooser;
         int retval;
 
         // menu items
+        
         if (action.equals("Exit without saving clusters")) {
             System.exit(0);
         }
@@ -291,26 +282,23 @@ class TatoebaFrame extends JFrame implements ActionListener {
             enableMenuItem("Horizontal", true);
         }
 
-        if (action.equals("Turkish")) {
-            LanguageEditorFrame lf = new LanguageEditorFrame("tur");
-            lf.setVisible(true);
-        }
-
-        if (action.equals("Polish")) {
-            LanguageEditorFrame f = new LanguageEditorFrame("pol");
-            f.setVisible(true);
-        }
-
-        if (action.equals("Polish Numbers")) {
-            NumberTrainer n = new NumberTrainer("pol");
-            n.setVisible(true);
-        }
-        if (action.equals("Turkish Numbers")) {
-            NumberTrainer n = new NumberTrainer("tur");
-            n.setVisible(true);
+        if (action.matches(".*[|].*")) {
+            String[] ls = action.split("\\|");
+            System.out.println(action);
+            System.out.println(ls[0]);
+            System.out.println(ls[1]);
+            if (ls[1].equals("Editor")) {
+                LanguageEditorFrame f = new LanguageEditorFrame(ls[0]);
+                f.setVisible(true);
+            }
+            if (ls[1].equals("Numbers")) {
+                NumberTrainer n = new NumberTrainer(ls[0]);
+                n.setVisible(true);
+            }
         }
 
         // buttons
+        
         if (action.equals("buttonPlus")) {
             AreaFont.multiply((float) 1.2);
             AreaFont.setFont(sourceArea);
@@ -542,7 +530,10 @@ class TatoebaFrame extends JFrame implements ActionListener {
             erasePane(sourceArea);
             erasePane(targetArea);
             erasePane(infoArea);
-
+            
+            sourceArea.getLanguage().dictionary().dictionaryWindowVisible(true);
+            targetArea.getLanguage().dictionary().dictionaryWindowVisible(true);
+            
             setAutoCorrect(false);
             writePane(sourceArea, "");
             for (String s : SelectionFrame.sourceLanguages) {
@@ -601,11 +592,17 @@ class TatoebaFrame extends JFrame implements ActionListener {
 
     HashMap<String, JMenuItem> menuItems = new HashMap<>();
 
-    private void AddMenuItem(JMenu menu, String name) {
+    private void AddMenuItem(JMenu menu, String name, String subName) {
         JMenuItem menuItem;
-        menuItem = new JMenuItem(name);
+        if (subName.equals("")) {
+            menuItem = new JMenuItem(name);
+            menuItem.setActionCommand(name);
+        } else { // name is a language, subname indicates an action for this language (Editor, Numbers,..)
+            menuItem = new JMenuItem(LanguageNames.shortToLong(name));
+            menuItem.setActionCommand(name + "|" + subName);
+
+        };
         menuItem.addActionListener(this);
-        menuItem.setActionCommand(name);
         menu.add(menuItem);
         menuItems.put(name, menuItem);
     }
@@ -787,44 +784,42 @@ class TatoebaFrame extends JFrame implements ActionListener {
 
         menuExit = new JMenu("Exit");
         menuBar.add(menuExit);
-        AddMenuItem(menuExit, "Save clusters and exit");
-        AddMenuItem(menuExit, "Exit without saving clusters");
+        AddMenuItem(menuExit, "Save clusters and exit", "");
+        AddMenuItem(menuExit, "Exit without saving clusters", "");
 
         menuClusters = new JMenu("Clusters");
         menuBar.add(menuClusters);
-        AddMenuItem(menuClusters, "Read Tatoeba Database");
-        AddMenuItem(menuClusters, "Read clusters");
-        AddMenuItem(menuClusters, "Cluster Overview");
-        AddMenuItem(menuClusters, "Select clusters");
-        AddMenuItem(menuClusters, "Display unsaved clusters");
-        AddMenuItem(menuClusters, "Save all clusters");
-        AddMenuItem(menuClusters, "Save selected clusters");
-        AddMenuItem(menuClusters, "Save special clusters");
+        AddMenuItem(menuClusters, "Read Tatoeba Database", "");
+        AddMenuItem(menuClusters, "Read clusters", "");
+        AddMenuItem(menuClusters, "Cluster Overview", "");
+        AddMenuItem(menuClusters, "Select clusters", "");
+        AddMenuItem(menuClusters, "Display unsaved clusters", "");
+        AddMenuItem(menuClusters, "Save all clusters", "");
+        AddMenuItem(menuClusters, "Save selected clusters", "");
+        AddMenuItem(menuClusters, "Save special clusters", "");
 
         menuClusters = new JMenu("View");
         menuBar.add(menuClusters);
-        AddMenuItem(menuClusters, "Horizontal");
-        AddMenuItem(menuClusters, "Vertical");
+        AddMenuItem(menuClusters, "Horizontal", "");
+        AddMenuItem(menuClusters, "Vertical", "");
 
-        menuClusters = new JMenu("Editors");
+        menuClusters = new JMenu("Editor");
         menuBar.add(menuClusters);
-        AddMenuItem(menuClusters, "Turkish");
-        AddMenuItem(menuClusters, "Polish");
+        for (String lang : LanguageContext.knownLanguages()) {
+            AddMenuItem(menuClusters, lang, "Editor");
+        }
 
         menuClusters = new JMenu("Numbers");
         menuBar.add(menuClusters);
-        AddMenuItem(menuClusters, "Turkish Numbers");
-        AddMenuItem(menuClusters, "Polish Numbers");
+        for (String lang : LanguageContext.knownLanguages()) {
+            AddMenuItem(menuClusters, lang, "Numbers");
+        }
 
         pack();
     }
 
     public LanguageTextPane createTextPane(String language) {
         LanguageTextPane pane = new LanguageTextPane(language);
-        System.out.println("createTextPane language "+LanguageContext.language);
-        if (!LanguageContext.language.equals("generic")) {
-            LanguageContext.get().dictionary().dictionaryWindowVisible(true);
-        }
         pane.displayParameters();
         return pane;
     }
@@ -912,6 +907,7 @@ public class Tatoeba {
     static ClusterCountFrame clusterCountFrame = new ClusterCountFrame();
 
     public static void main(String[] args) {
+        LanguageNames.readLanguages();
         tatoebaFrame = new TatoebaFrame();
         SelectionFrame.execute();
 

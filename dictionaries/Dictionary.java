@@ -1,5 +1,5 @@
 
-package dictionary;
+package dictionaries;
 
 
 public interface Dictionary {

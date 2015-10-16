@@ -16,13 +16,15 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import langeditor.LanguageContext;
+import languages.Language;
+import languages.LanguageContext;
 import utils.AreaFont;
 
 public class NumberTrainer extends JFrame implements ActionListener {
 
     NumberTrainer thisNumberTrainer = this;
     JFrame thisFrame = (JFrame) this;
+    Language language;
     JTextPane textPane;
     JScrollPane textScrollPane;
     JPanel content = new JPanel();
@@ -32,10 +34,9 @@ public class NumberTrainer extends JFrame implements ActionListener {
 
     int currentNumber = 0;
 
-    public NumberTrainer(String language) {
+    public NumberTrainer(String lang) {
 
-        LanguageContext.set(language, "NumberTrainer constructor");
-
+        language = LanguageContext.get(lang);
         textPane = new JTextPane();
         textScrollPane = new JScrollPane(textPane);
         textPane.setEditable(false);
@@ -85,7 +86,7 @@ public class NumberTrainer extends JFrame implements ActionListener {
         }
             );
         
-                JTextField randomMaxField = new JTextField(5);
+               JTextField randomMaxField = new JTextField(5);
         randomMaxField.setMaximumSize(new Dimension(50, 30));
         randomMaxField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -139,7 +140,7 @@ public class NumberTrainer extends JFrame implements ActionListener {
             write(String.format("%d", currentNumber));
         }
         if (action.equals("translate")) {
-            write(LanguageContext.get().number(currentNumber));
+            write(language.number(currentNumber));
         }
         if (action.equals("+")) {
             AreaFont.multiply((float) 1.2);
@@ -168,10 +169,6 @@ public class NumberTrainer extends JFrame implements ActionListener {
         } catch (BadLocationException blex) {
         }
         textPane.setCaretPosition(doc.getLength());
-    }
-
-    public JTextPane getTextPane() {
-        return textPane;
     }
 
 }

@@ -1,11 +1,11 @@
 package languages;
 
-import dictionary.PolishDictionary;
-import dictionary.GenericDictionary;
+import dictionaries.PolishDictionary;
+import dictionaries.GenericDictionary;
 import java.util.HashMap;
 import javax.swing.JFileChooser;
 
-public class Polish implements Language {
+public class Polish extends GenericLanguage implements Language {
 
     PolishDictionary d = null;
 
@@ -16,7 +16,7 @@ public class Polish implements Language {
 
     public GenericDictionary dictionary() {
          if (d == null) {
-            d = new PolishDictionary();
+            d = new PolishDictionary(this);
             d.readDictionaryFromFile(dictionaryFileName());
         }       
         return d;

@@ -1,4 +1,4 @@
-package dictionary;
+package dictionaries;
 
 import javax.swing.text.*;
 import utils.MsgTextPane;

@@ -1,18 +1,21 @@
 
-package dictionary;
+package dictionaries;
 
-import dictionary.GenericDictionary;
-import dictionary.Dictionary;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import languages.Language;
 import utils.MsgTextPane;
 
 
 public class TurkishDictionary extends GenericDictionary implements Dictionary {
+    
+    public TurkishDictionary(Language language){
+        super(language);
+    }
  
     @Override
     public String runDictionaryOnWord(String word, boolean wordLookup, boolean stemLookup) {
-
+System.out.println("runDictionaryOnWord |"+word+"|");
         int nextpos = 0;
         char nextchar;
         boolean iMode = false;  // turkify i

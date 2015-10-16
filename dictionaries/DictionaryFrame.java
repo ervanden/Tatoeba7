@@ -1,4 +1,4 @@
-package dictionary;
+package dictionaries;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -6,7 +6,8 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
 import java.util.*;
-import langeditor.LanguageContext;
+import languages.LanguageContext;
+import languages.Language;
 
 import utils.AreaFont;
 import utils.MsgTextPane;
@@ -14,6 +15,7 @@ import utils.Sas;
 
 public class DictionaryFrame extends JFrame implements ActionListener {
 
+    private Language language;
     private JFrame thisFrame = (JFrame) this;
     public JTextPane dictArea = null;
     public StyledDocument docDict = null;
@@ -33,6 +35,8 @@ public class DictionaryFrame extends JFrame implements ActionListener {
     JTextField textFieldDictFileName = new JTextField("");
     Dimension textFieldDictFileNameSize;
 
+
+    
     class setAttributesTask2 implements Runnable {
 
         private int position, length;
@@ -119,62 +123,62 @@ public class DictionaryFrame extends JFrame implements ActionListener {
         String action = ae.getActionCommand();
 
         if (action.equals("Save dictionary and exit")) {
-            if (LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionaryFileName())) {
+            if (language.dictionary().saveDictionary(language.dictionaryFileName())) {
                 eraseDictArea();
                 thisFrame.dispose();
             }
         }
 
         if (action.equals("Save dictionary")) {
-            LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionaryFileName());
+            language.dictionary().saveDictionary(language.dictionaryFileName());
         }
 
         if (action.equals("Exit without saving dictionary")) {
-            LanguageContext.get().disposeDictionary();
+            language.disposeDictionary();
             eraseDictArea();
             thisFrame.dispose();
         }
 
         if (action.equals("Create a backup dictionary")) {
             Date dNow = new Date();
-            LanguageContext.get().dictionary().saveDictionary(LanguageContext.get().dictionaryFileName()
+            language.dictionary().saveDictionary(language.dictionaryFileName()
                     + String.format(" %1$te%1$tb%1$ty %1$tHh%1$tM", dNow));
         }
 
         if (action.equals("Optimize word dictionary")) {
-            LanguageContext.get().dictionary().optimizeWords();
+            language.dictionary().optimizeWords();
         }
 
         if (action.equals("Optimize stem dictionary")) {
-            LanguageContext.get().dictionary().optimizeStems();
+            language.dictionary().optimizeStems();
         }
 
         if (action.equals("buttonAddWord")) {
             for (String word : selectedWords) {
-                LanguageContext.get().dictionary().addWord(word);
+                language.dictionary().addWord(word);
             }
         }
 
         if (action.equals("buttonAddStem")) {
             for (String word : selectedWords) {
-                LanguageContext.get().dictionary().addStem(word);
+                language.dictionary().addStem(word);
             }
         }
 
         if (action.equals("buttonRemoveWord")) {
             for (String word : selectedWords) {
-                LanguageContext.get().dictionary().removeWord(word);
+                language.dictionary().removeWord(word);
             }
         }
 
         if (action.equals("buttonRemoveStem")) {
             for (String word : selectedWords) {
-                LanguageContext.get().dictionary().removeStem(word);
+                language.dictionary().removeStem(word);
             }
         }
                
         if (action.equals("words from web")) {
-            URLChooser urlChooser = new URLChooser();
+            URLChooser urlChooser = new URLChooser(language);
             urlChooser.execute();
         }
 
@@ -265,8 +269,11 @@ public class DictionaryFrame extends JFrame implements ActionListener {
         }
     }
 
-    public DictionaryFrame() {
 
+    public DictionaryFrame(Language l){
+        
+        language=l;
+    
         dictArea = new JTextPane();
         dictArea.setMinimumSize(new Dimension(300, 300));
         dictArea.setPreferredSize(new Dimension(300, 300));
@@ -291,12 +298,12 @@ public class DictionaryFrame extends JFrame implements ActionListener {
         buttonRemoveWord.setActionCommand("buttonRemoveWord");
         buttonRemoveStem.setActionCommand("buttonRemoveStem");
 
-        textFieldDictFileName.setText(LanguageContext.get().dictionaryFileName());
+        textFieldDictFileName.setText(language.dictionaryFileName());
         textFieldDictFileName.setEditable(false);
 
         textFieldPattern.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                LanguageContext.get().dictionary().printAll(textFieldPattern.getText());
+                language.dictionary().printAll(textFieldPattern.getText());
                 scrollEnd();
                 dictArea.setCaretPosition(docDict.getLength());
             }

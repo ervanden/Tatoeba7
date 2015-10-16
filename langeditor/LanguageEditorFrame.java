@@ -1,12 +1,12 @@
 package langeditor;
 
-import dictionary.GenericDictionary;
+import languages.LanguageContext;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
 
+import dictionaries.GenericDictionary;
+import languages.Language;
 import utils.MsgTextPane;
 import utils.AreaFont;
 
@@ -14,17 +14,13 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
     private LanguageEditorFrame thisLanguageEditorFrame = this;
     private JFrame thisFrame = (JFrame) this;
- //   public String editorLanguage;
+    private Language language;
     private GenericDictionary dictionary;
     private LanguageTextPane editArea;
-    public JTextPane dictArea = null;  // public static for scrollEnd() function
+ //   public JTextPane dictArea = null;  // public static for scrollEnd() function
 
     private JFileChooser fileChooser = new JFileChooser();
-//    private StyledDocument docEdit;          // edit area
-//    public StyledDocument docDict = null;   // dictionary area, accessed from DocUtils
-
     JScrollPane scrollingEditArea;
-//    JScrollPane scrollingDictArea;
 
     JPanel content = new JPanel();
 
@@ -38,14 +34,13 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
     JTextField textFieldDictFileName = new JTextField("");
     Dimension textFieldDictFileNameSize;
 
-
     class WindowUtils extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
- if (dictionary.isModified())
-     dictionary.dictionaryWindowVisible(true); 
+            if (dictionary.isModified()) {
+                dictionary.dictionaryWindowVisible(true);
+            }
         }
     }
-
 
     public void itemStateChanged(ItemEvent e) {
 
@@ -67,21 +62,21 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         if (action.equals("Correct selected text")) {
             editArea.setManualCorrect(false);
-            LanguageContext.get().dictionary().setMarkCorrection(true);
-            LanguageContext.get().dictionary().runDictionary(editArea,
+            language.dictionary().setMarkCorrection(true);
+            language.dictionary().runDictionary(editArea,
                     editArea.selectedPosition, editArea.selectedLength);
-            LanguageContext.get().dictionary().setMarkCorrection(false);
+            language.dictionary().setMarkCorrection(false);
             editArea.setManualCorrect(true);
         }
 
         if (action.equals("Show Dictionary Window")) {
-            LanguageContext.get().dictionary().dictionaryWindowVisible(true);
+            language.dictionary().dictionaryWindowVisible(true);
         }
 
         if (action.equals("Show System Messages")) {
             MsgTextPane.setVisible(true);
         }
-        
+
         if (action.equals("buttonPlus")) {
             AreaFont.multiply((float) 1.2);
             AreaFont.setFont(editArea);
@@ -91,29 +86,29 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
             AreaFont.multiply((float) 0.8);
             AreaFont.setFont(editArea);
         }
- /*       
-        if (action.equals("buttonPlus")) {
-            AreaFont.multiply((float) 1.2);
-            SimpleAttributeSet sas = new SimpleAttributeSet();
-            StyleConstants.setFontSize(sas, AreaFont.getSize());
-            docEdit.setCharacterAttributes(0, docEdit.getLength(), sas, false);
-            docDict.setCharacterAttributes(0, docDict.getLength(), sas, false);
-            editArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-            dictArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+        /*       
+         if (action.equals("buttonPlus")) {
+         AreaFont.multiply((float) 1.2);
+         SimpleAttributeSet sas = new SimpleAttributeSet();
+         StyleConstants.setFontSize(sas, AreaFont.getSize());
+         docEdit.setCharacterAttributes(0, docEdit.getLength(), sas, false);
+         docDict.setCharacterAttributes(0, docDict.getLength(), sas, false);
+         editArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+         dictArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
 
-        }
+         }
 
-        if (action.equals("buttonMinus")) {
-            AreaFont.multiply((float) 0.8);
-            SimpleAttributeSet sas = new SimpleAttributeSet();
-            StyleConstants.setFontSize(sas, AreaFont.getSize());
-            docEdit.setCharacterAttributes(0, docEdit.getLength(), sas, false);
-            docDict.setCharacterAttributes(0, docDict.getLength(), sas, false);
-            editArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-            dictArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-        }
-*/
-        
+         if (action.equals("buttonMinus")) {
+         AreaFont.multiply((float) 0.8);
+         SimpleAttributeSet sas = new SimpleAttributeSet();
+         StyleConstants.setFontSize(sas, AreaFont.getSize());
+         docEdit.setCharacterAttributes(0, docEdit.getLength(), sas, false);
+         docDict.setCharacterAttributes(0, docDict.getLength(), sas, false);
+         editArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+         dictArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+         }
+         */
+
     }
 
     private void AddMenuItem(JMenu menu, String name, String actionName) {
@@ -138,8 +133,6 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 //                c.insets=null;
         return c;
     }
-
-
 
     private void displayGUI() {
 
@@ -195,12 +188,12 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
     }
 
-    public LanguageEditorFrame(String language) {
-        
-        LanguageContext.set(language, "LanguageEditorFrame constructor");
-        dictionary=LanguageContext.get().dictionary();
-        
-        editArea = new LanguageTextPane(language);
+    public LanguageEditorFrame(String lang) {
+
+        language=LanguageContext.get(lang);
+        dictionary = language.dictionary();
+
+        editArea = new LanguageTextPane(lang);
         editArea.setAutoCorrect(true);
         editArea.setFinalInsert(false);
         editArea.setManualCorrect(true);
@@ -230,15 +223,14 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         radioButtonAuto.addItemListener(this);
 
-        textFieldDictFileName.setText(LanguageContext.get().dictionaryFileName());
+        textFieldDictFileName.setText(language.dictionaryFileName());
         textFieldDictFileName.setEditable(false);
         textFieldDictFileNameSize = textFieldDictFileName.getPreferredSize();
 
         displayGUI();
 
         setContentPane(content);
- //       setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setTitle("TextEditor ("+language+")");
+        setTitle("TextEditor (" + lang + ")");
         pack();
         setLocationRelativeTo(null);
         setVisible(false);

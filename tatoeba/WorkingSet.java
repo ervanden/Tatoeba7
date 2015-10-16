@@ -2,6 +2,7 @@ package tatoeba;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import utils.*;
 
 public class WorkingSet {
 
@@ -24,7 +25,7 @@ public class WorkingSet {
             SelectionFrame.setVisible(true);
         }
         if (Graph.selectedClusterCount < 1) {
-            Tatoeba.tatoebaFrame.writeInfo("No clusters selected.");
+            MsgTextPane.write("No clusters selected.");
         }
 
         for (Cluster c : Graph.clusters.values()) {
@@ -41,7 +42,7 @@ public class WorkingSet {
         // circular
         
         if (workingSet.isEmpty()) {
-            Tatoeba.tatoebaFrame.writeInfo("Working Set is empty");
+            MsgTextPane.write("Working Set is empty");
             return null;
         }
 

@@ -1,5 +1,6 @@
 package tatoeba;
 
+import languages.LanguageNames;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.HashSet;
 import javax.swing.JFileChooser;
+import utils.MsgTextPane;
 
 class ClustersInOut {
 
@@ -36,7 +38,7 @@ class ClustersInOut {
             InputStreamReader isr = new InputStreamReader(is, "UTF-8");
             inputStream = new BufferedReader(isr);
 
-            Tatoeba.tatoebaFrame.writeInfo("reading sentences...");
+            MsgTextPane.write("reading sentences...");
             String l;
             count = 0;
             while ((count < Integer.MAX_VALUE) && ((l = inputStream.readLine()) != null)) {
@@ -58,9 +60,9 @@ class ClustersInOut {
                 }
             }
         } catch (FileNotFoundException fnf) {
-            Tatoeba.tatoebaFrame.writeInfo("file not found : " + fileName);
+            MsgTextPane.write("file not found : " + fileName);
         } catch (IOException io) {
-            Tatoeba.tatoebaFrame.writeInfo("io exception : " + fileName);
+            MsgTextPane.write("io exception : " + fileName);
         }
 
         try {
@@ -70,8 +72,8 @@ class ClustersInOut {
         } catch (IOException io) {
         }
 
-        Tatoeba.tatoebaFrame.writeInfo(count + " sentences read from " + fileName);
-        Tatoeba.tatoebaFrame.writeInfo("reading links...");
+        MsgTextPane.write(count + " sentences read from " + fileName);
+        MsgTextPane.write("reading links...");
 
         fileName = dirName + "/links.csv";
         count = 0;
@@ -93,9 +95,9 @@ class ClustersInOut {
                 count++;
             }
         } catch (FileNotFoundException fnf) {
-            Tatoeba.tatoebaFrame.writeInfo("file not found : " + fileName);
+            MsgTextPane.write("file not found : " + fileName);
         } catch (IOException io) {
-            Tatoeba.tatoebaFrame.writeInfo("io exception : " + fileName);
+            MsgTextPane.write("io exception : " + fileName);
         }
 
         try {
@@ -105,7 +107,7 @@ class ClustersInOut {
         } catch (IOException io) {
         }
 
-        Tatoeba.tatoebaFrame.writeInfo(count + " links read from " + fileName);
+        MsgTextPane.write(count + " links read from " + fileName);
     }
 
     public static boolean readClusters(String fileName) {
@@ -126,7 +128,7 @@ class ClustersInOut {
             clusterCount = Graph.clusters.size();
 
             clustersFileName = fileName;
-            Tatoeba.tatoebaFrame.writeInfo("reading clusters from " + fileName + "...");
+            MsgTextPane.write("reading clusters from " + fileName + "...");
 
             String l;
             String[] ls;
@@ -136,7 +138,7 @@ class ClustersInOut {
                 ls = l.split("\u0009");
                 if (l.matches("^language.*$")) {
                     languageCount++;
-                    LanguageNames.addLanguage(new LanguageName(ls[1], ls[2]));
+                    LanguageNames.addLanguage(ls[1], ls[2]);
                     SelectionFrame.allLanguages.add(ls[1]);
                 } else if (l.matches("^source.*$")) {
                     SelectionFrame.sourceLanguages.add(ls[1]);
@@ -180,9 +182,9 @@ class ClustersInOut {
                 }
             }
         } catch (FileNotFoundException fnf) {
-            Tatoeba.tatoebaFrame.writeInfo("file not found : " + fileName);
+            MsgTextPane.write("file not found : " + fileName);
         } catch (IOException io) {
-            Tatoeba.tatoebaFrame.writeInfo("io exception : " + fileName);
+            MsgTextPane.write("io exception : " + fileName);
         }
 
         try {
@@ -192,8 +194,8 @@ class ClustersInOut {
         } catch (IOException io) {
         }
 
-        Tatoeba.tatoebaFrame.writeInfo(clusterCount + " clusters read from " + fileName);
-        Tatoeba.tatoebaFrame.writeInfo(languageCount + " languages read from " + fileName);
+        MsgTextPane.write(clusterCount + " clusters read from " + fileName);
+        MsgTextPane.write(languageCount + " languages read from " + fileName);
 
         return true;
     }
@@ -270,7 +272,7 @@ class ClustersInOut {
                 outputStream.close();
 
             } catch (IOException io) {
-                Tatoeba.tatoebaFrame.writeInfo(" io exception during save clusters");
+                MsgTextPane.write(" io exception during save clusters");
             }
         }
     }
@@ -321,67 +323,9 @@ class ClustersInOut {
                 outputStream.close();
 
             } catch (IOException io) {
-                Tatoeba.tatoebaFrame.writeInfo(" io exception during save clusters");
+                MsgTextPane.write(" io exception during save clusters");
             }
         }
-    }
-
-    public static boolean readLanguages() {
-
-        BufferedReader inputStream = null;
-        String fileName;
-        int count = 0;
-        Cluster c = null;
-        Sentence s = null;
-
-        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        fileName = defaultFolder + "\\Tatoeba\\TatoebaLanguages.txt";
-
-        try {
-
-            File initialFile = new File(fileName);
-            InputStream is = new FileInputStream(initialFile);
-            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
-            inputStream = new BufferedReader(isr);
-
-            count = 0;
-
-            Tatoeba.tatoebaFrame.writeInfo("reading languages...");
-            String l;
-            int linecount = 0;
-            while ((l = inputStream.readLine()) != null) {
-                linecount++;
-                String[] ls = l.split("[|;\u0009]");
-                //               System.out.println(linecount+" "+ls.length+" "+l);
-                if (ls.length == 2) {
-                    String shortName = ls[0];
-                    String longName = ls[1];
-
-                    if (!shortName.equals("") && !longName.equals("")) {
-                        count++;
-                        LanguageNames.addLanguage(new LanguageName(shortName, longName));
-//                        System.out.println("add language " + shortName + "|" + longName);
-                    } else {
-                        System.out.println("invalid line " + linecount + " |" + l + "|");
-                    }
-                }
-            }
-        } catch (FileNotFoundException fnf) {
-            System.out.println("file not found : " + fileName);
-        } catch (IOException io) {
-            System.out.println("io exception : " + fileName);
-        }
-
-        try {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        } catch (IOException io) {
-        }
-
-        Tatoeba.tatoebaFrame.writeInfo(count + " languages read from " + fileName);
-
-        return true;
     }
 
 }

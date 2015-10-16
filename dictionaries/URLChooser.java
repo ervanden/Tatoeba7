@@ -1,6 +1,5 @@
-package dictionary;
+package dictionaries;
 
-import langeditor.LanguageContext;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -36,7 +35,8 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import javax.swing.text.StyledDocument;
-import langeditor.LanguageContext;
+import languages.Language;
+import languages.LanguageContext;
 import org.jsoup.Jsoup;
 import org.jsoup.examples.HtmlToPlainText;
 
@@ -52,6 +52,8 @@ public class URLChooser extends JFrame implements ActionListener {
     private JFrame thisFrame = (JFrame) this;
     private JTextPane editArea;
     private JTextPane msgArea;
+
+    Language language;
 
     JScrollPane scrollingEditArea;
     JScrollPane scrollingMsgArea;
@@ -87,6 +89,11 @@ public class URLChooser extends JFrame implements ActionListener {
     String outputFileName;
     int outputFileGeneration;
     int outputLinesWritten;
+    
+
+    public URLChooser(Language l) {
+        language = l;
+    }
 
     public boolean fileOpenerOut(String action) {
 
@@ -302,8 +309,6 @@ public class URLChooser extends JFrame implements ActionListener {
         }
     }
 
-    
-    
     public void extractFromURL(String url) {
 
         fileWrite("<" + url + ">");
@@ -350,8 +355,6 @@ public class URLChooser extends JFrame implements ActionListener {
 
     }
 
-    
-    
     public void extractFromString(String str) {
 
         try {
@@ -439,20 +442,20 @@ public class URLChooser extends JFrame implements ActionListener {
                             }
 
                             // calculate accuracy against current dictionary
-                            LanguageContext.get().dictionary().setMatchInfo(false);
-                            keyword = LanguageContext.get().removeDiacritics(word);
-                            dictword = LanguageContext.get().dictionary().runDictionaryOnWord(keyword, true, true);
+                            language.dictionary().setMatchInfo(false);
+                            keyword = language.removeDiacritics(word);
+                            dictword = language.dictionary().runDictionaryOnWord(keyword, true, true);
                             if (!word.equals(dictword)) {
                                 variants++;
                             }
-                            LanguageContext.get().dictionary().setMatchInfo(true);
+                            language.dictionary().setMatchInfo(true);
 
                             freq = dictCandidatesFrequency.get(word);
                             if (freq == null) {
                                 freq = 0;
                             }
                             dictCandidatesFrequency.put(word, freq + 1);
-                            String key = LanguageContext.get().removeDiacritics(word);
+                            String key = language.removeDiacritics(word);
                             xDictWords.put(key, word);
                             xDictFrequency.put(key, 0);
                         }
@@ -465,7 +468,7 @@ public class URLChooser extends JFrame implements ActionListener {
 
                 //  xDictWords and xDictFrequency contain the keys of all spelling variants, with frequency 0
                 for (String w : dictCandidatesFrequency.keySet()) {
-                    String key = LanguageContext.get().removeDiacritics(w);
+                    String key = language.removeDiacritics(w);
                     if (dictCandidatesFrequency.get(w) > xDictFrequency.get(key)) {
                         xDictWords.put(key, w);
                         xDictFrequency.put(key, dictCandidatesFrequency.get(w));
@@ -478,10 +481,10 @@ public class URLChooser extends JFrame implements ActionListener {
             }
 
             writeMsg("Resetting Dictionary");
-            LanguageContext.get().dictionary().words.clear();
+            language.dictionary().words.clear();
             writeMsg("Adding " + xDictWords.size() + " dictionary entries");
             for (String key : xDictWords.keySet()) {
-                LanguageContext.get().dictionary().words.put(key, xDictWords.get(key));
+                language.dictionary().words.put(key, xDictWords.get(key));
             }
             writeMsg("Done");
 
@@ -579,8 +582,8 @@ public class URLChooser extends JFrame implements ActionListener {
         c.gridy = 0;
         c.insets = new Insets(0, 5, 0, 5);  // top left bottom right
         content.add(buttonScan, c);
-        
-                c = newGridBagConstraints();
+
+        c = newGridBagConstraints();
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.WEST;
         c.weightx = 0;
@@ -633,8 +636,6 @@ public class URLChooser extends JFrame implements ActionListener {
         c.gridy = 0;
         c.insets = new Insets(0, 0, 0, 5);  // top left bottom right
         content.add(buttonStopProcess, c);
-
-
 
         c = newGridBagConstraints();
         c.fill = GridBagConstraints.BOTH;

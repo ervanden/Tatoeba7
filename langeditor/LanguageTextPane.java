@@ -1,6 +1,7 @@
 package langeditor;
 
-import dictionary.WordUtils;
+import languages.LanguageContext;
+import dictionaries.WordUtils;
 import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JTextPane;
@@ -21,8 +22,7 @@ import languages.Language;
 public class LanguageTextPane extends JTextPane {
 
     LanguageTextPane thisTextPane;
-    String textPaneLanguage;
-    Language languageOps;
+    Language language;
 
     boolean autoCorrect = true;
     boolean finalInsert = false; // prevents correction/insertion infinite loop
@@ -31,6 +31,10 @@ public class LanguageTextPane extends JTextPane {
     public int selectedPosition = 0;
     public int selectedLength = 0;
 
+    public Language getLanguage(){
+        return language;
+    }
+    
     public void setAutoCorrect(boolean b) {
         autoCorrect = b;
     }
@@ -43,11 +47,8 @@ public class LanguageTextPane extends JTextPane {
         manualCorrect = b;
     }
 
-    public LanguageTextPane(String language) {
-        
-        LanguageContext.set(language, "LanguageTextPane constructor");
-        languageOps=LanguageContext.get();       
-        textPaneLanguage = language;
+    public LanguageTextPane(String lang) {       
+        language=LanguageContext.get(lang);      
         this.getStyledDocument().addDocumentListener(editAreaListener);
         this.addCaretListener(editAreaCaretListener);
         thisTextPane = this;
@@ -79,9 +80,9 @@ public class LanguageTextPane extends JTextPane {
                 selection = doc.getText(position, length);
 //        System.out.println("inverting "+selection);
                 if (selection.matches("[0-9]+")){
-                   selection = languageOps.number(Integer.valueOf(selection)); 
+                   selection = language.number(Integer.valueOf(selection)); 
                 } else {
-                selection = languageOps.invertDiacritics(selection);
+                selection = language.invertDiacritics(selection);
                 }
 //        System.out.println("inverted= "+selection);
                 finalInsert = true;
@@ -108,7 +109,7 @@ public class LanguageTextPane extends JTextPane {
                 for (String word : words) {
 //                MsgTextPane.write("selected word <" + word + ">");
                     if (word.length() != 0) {
-                        languageOps.dictionary().addWord(word.replaceAll("I", "ı").replaceAll("İ", "i").toLowerCase());
+                        language.dictionary().addWord(word.replaceAll("I", "ı").replaceAll("İ", "i").toLowerCase());
                     }
                 }
             } catch (BadLocationException ex) {
@@ -132,7 +133,7 @@ public class LanguageTextPane extends JTextPane {
         }
 
         public void run() {
-            languageOps.dictionary().runDictionary(thisTextPane, position, length);
+            language.dictionary().runDictionary(thisTextPane, position, length);
         }
     }
 
@@ -157,7 +158,6 @@ public class LanguageTextPane extends JTextPane {
     DocumentListener editAreaListener = new DocumentListener() {
 
         public void insertUpdate(DocumentEvent e) {
-            LanguageContext.set(textPaneLanguage,"editAreaListener insertUpdate");
             int position = e.getOffset();
             int length = e.getLength();
 
@@ -179,7 +179,6 @@ public class LanguageTextPane extends JTextPane {
     CaretListener editAreaCaretListener = new CaretListener() {
 
         public void caretUpdate(CaretEvent e) {
-            LanguageContext.set(textPaneLanguage,"editAreaCaretListener caretUpdate");
             int position = e.getMark();
             int length = e.getDot() - e.getMark();
             if (length < 0) {

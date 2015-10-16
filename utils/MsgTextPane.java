@@ -8,6 +8,7 @@ public class MsgTextPane {
     static GenericTextFrame msgFrame = new GenericTextFrame();
 
     public static void write(String msg) {
+        msgFrame.setVisible(true);
         msgFrame.write(msg);
     }
     

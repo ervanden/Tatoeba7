@@ -1,5 +1,6 @@
 package tatoeba;
 
+import languages.LanguageNames;
 import utils.GenericTextFrame;
 import java.awt.Color;
 import java.awt.Dimension;

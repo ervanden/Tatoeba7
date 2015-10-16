@@ -1,5 +1,6 @@
 package tatoeba;
 
+import languages.LanguageNames;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;

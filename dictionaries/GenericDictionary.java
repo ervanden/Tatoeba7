@@ -1,4 +1,4 @@
-package dictionary;
+package dictionaries;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -22,7 +22,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import langeditor.ConfirmDialog;
 import langeditor.LanguageTextPane;
-import langeditor.LanguageContext;
+import languages.Language;
 import utils.MsgTextPane;
 import utils.Sas;
 
@@ -36,14 +36,15 @@ public class GenericDictionary {
     public HashSet<String> removedwords = new HashSet<>();
     public HashSet<String> removedstems = new HashSet<>();
 
+    Language language;
+    
     DictionaryFrame dictFrame = null;
- //   String dictionaryFileName = "?";
- //   String dictionaryPattern = "";
     Boolean markCorrection = false;
     Boolean matchInfo = true;
 
-    public GenericDictionary() {
-        dictFrame = new DictionaryFrame();
+    public GenericDictionary(Language l) {
+        language=l;
+        dictFrame = new DictionaryFrame(language);
         dictFrame.setVisible(false);
     }
     
@@ -66,7 +67,7 @@ public class GenericDictionary {
         markCorrection = b;
     }
     public void addWord(String word) {
-        words.put(LanguageContext.get().removeDiacritics(word), word);
+        words.put(language.removeDiacritics(word), word);
         if (removedwords.contains(word)) {
             removedwords.remove(word);
         } else {
@@ -80,7 +81,7 @@ public class GenericDictionary {
     }
 
     public void addStem(String word) {
-        stems.put(LanguageContext.get().removeDiacritics(word), word);
+        stems.put(language.removeDiacritics(word), word);
         if (removedstems.contains(word)) {
             removedstems.remove(word);
         } else {
@@ -94,7 +95,7 @@ public class GenericDictionary {
     }
 
     public void removeWord(String word) {
-        words.remove(LanguageContext.get().removeDiacritics(word));
+        words.remove(language.removeDiacritics(word));
         if (addedwords.contains(word)) {
             addedwords.remove(word);
         } else {
@@ -108,7 +109,7 @@ public class GenericDictionary {
     }
 
     public void removeStem(String word) {
-        stems.remove(LanguageContext.get().removeDiacritics(word));
+        stems.remove(language.removeDiacritics(word));
         if (addedstems.contains(word)) {
             addedstems.remove(word);
         } else {
@@ -155,10 +156,10 @@ public class GenericDictionary {
             while ((l = inputStream.readLine()) != null) {
                 if (l.charAt(0) == '[') {
                     l = l.substring(1, l.length() - 1);
-                    stems.put(LanguageContext.get().removeDiacritics(l), l);
+                    stems.put(language.removeDiacritics(l), l);
                     scount++;
                 } else {
-                    words.put(LanguageContext.get().removeDiacritics(l), l);
+                    words.put(language.removeDiacritics(l), l);
                     wcount++;
                 }
             }
@@ -264,7 +265,6 @@ public class GenericDictionary {
     public String runDictionaryOnWord(String word, boolean wordLookup, boolean stemLookup) {
 
         // word is expected to be lowercase and diacritics removed
-        System.out.println("polish runDictionaryOnWord "+word);
         
         if (wordLookup && words.containsKey(word)) {
             String correctedWord = words.get(word);
@@ -305,7 +305,7 @@ public class GenericDictionary {
                 startWordPosition = WordUtils.nextAlphabetic(doc, position);
                 endWordPosition = WordUtils.nextNonAlphabetic(doc, startWordPosition);
                 wordorig = doc.getText(startWordPosition, endWordPosition - startWordPosition);
-                word = LanguageContext.get().removeDiacritics(wordorig);
+                word = language.removeDiacritics(wordorig);
 //                MsgTextPane.write("word = "+word);
                 wordlc = word.replaceAll("[İI]", "i").toLowerCase();
 //  MsgTextPane.write("wordlc = "+wordlc);              
@@ -395,7 +395,7 @@ public class GenericDictionary {
         ArrayList<String> stemList;
         stemList = w.scanStems();
         for (String stem : stemList) {
-            stems.put(LanguageContext.get().removeDiacritics(stem), stem);
+            stems.put(language.removeDiacritics(stem), stem);
         }
         MsgTextPane.write(stemList.size() + " stems extracted");
 

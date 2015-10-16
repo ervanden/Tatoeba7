@@ -1,9 +1,9 @@
 package languages;
 
-import dictionary.GenericDictionary;
+import dictionaries.GenericDictionary;
 import javax.swing.JFileChooser;
 
-public class Generic implements Language {
+public class GenericLanguage {
 
     GenericDictionary d = null;
 
@@ -14,7 +14,7 @@ public class Generic implements Language {
 
     public GenericDictionary dictionary() {
          if (d == null) {
-            d = new GenericDictionary();
+            d = new GenericDictionary(LanguageContext.get("generic"));
             d.readDictionaryFromFile(dictionaryFileName());
         }       
         return d;
@@ -37,3 +37,4 @@ public class Generic implements Language {
     }
 
 }
+

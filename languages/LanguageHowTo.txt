@@ -1,0 +1,21 @@
+How to add a language Swahili
+
+1. In the package 'dictionaries', Create SwahiliDictionary.java from OtherDictionary.java (copy and adapt class name)
+
+   SwahiliDictionary extends GenericDictionary which contains language-independent methods.
+   Override the methods that are specific for Swahili: probably runDictionaryOnWord().
+   If nothing else is required than substitute words from the dictionary 'words' list, 
+   then runDictionaryOnWord from GenericDictionary can be used, it does exactly this.
+
+2. In the package 'languages' create Swahili.java from Other.java (copy and adapt class name)
+   Swahili extends GenericLanguage, this is the default implementation.
+   But normally all methods have to be overridden.
+
+3. Add Swahili to the static LanguageContext class. This class is used to obtain the right Language object 
+   by all code that needs functions for a specific language.
+   a. The languages in the list 'knownLanguages' will appear in the menus 'Editor', 'Numbers'
+   b. In the function 'get()' add Swahili.
+
+
+
+

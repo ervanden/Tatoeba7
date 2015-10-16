@@ -1,11 +1,11 @@
 package languages;
 
-import dictionary.TurkishDictionary;
-import dictionary.GenericDictionary;
+import dictionaries.TurkishDictionary;
+import dictionaries.GenericDictionary;
 import java.util.HashMap;
 import javax.swing.JFileChooser;
 
-public class Turkish implements Language {
+public class Turkish extends GenericLanguage implements Language {
 
     GenericDictionary d = null;
 
@@ -16,7 +16,7 @@ public class Turkish implements Language {
 
     public GenericDictionary dictionary() {
          if (d == null) {
-            d = new TurkishDictionary();
+            d = new TurkishDictionary(this);
             d.readDictionaryFromFile(dictionaryFileName());
         }       
         return d;
@@ -101,26 +101,26 @@ public class Turkish implements Language {
     public String number(int n) {
         HashMap<Integer, String> nrs = new HashMap<>();
 
-        nrs.put(0, "sifir");
+        nrs.put(0, "sıfır");
         nrs.put(1, "bir");
         nrs.put(2, "iki");
-        nrs.put(3, "uc");
-        nrs.put(4, "dort");
-        nrs.put(5, "bes");
-        nrs.put(6, "alti");
+        nrs.put(3, "üç");
+        nrs.put(4, "dört");
+        nrs.put(5, "beş");
+        nrs.put(6, "altı");
         nrs.put(7, "yedi");
         nrs.put(8, "sekiz");
         nrs.put(9, "dokuz");
         nrs.put(10, "on");
         nrs.put(20, "yirmi");
         nrs.put(30, "otuz");
-        nrs.put(40, "kirk");
+        nrs.put(40, "kırk");
         nrs.put(50, "elli");
-        nrs.put(60, "altmis");
-        nrs.put(70, "yetmis");
+        nrs.put(60, "altmış");
+        nrs.put(70, "yetmiş");
         nrs.put(80, "seksen");
         nrs.put(90, "doksan");
-        nrs.put(100, "yuz");
+        nrs.put(100, "yüz");
         nrs.put(1000, "bin");
 
         int nlow3 = n % 1000;
@@ -156,10 +156,6 @@ public class Turkish implements Language {
         return s;
     }
 
-    
-
- //   private class Dictionary extends langeditor.GenericDictionary {
- //   }
     
 
 }
