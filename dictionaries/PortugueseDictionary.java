@@ -9,7 +9,7 @@ public class PortugueseDictionary extends GenericDictionary implements Dictionar
     }
 
     @Override
-    public String runDictionaryOnWord(String word, boolean wordLookup, boolean stemLookup) {
+    public String runDictionaryOnWord(String word, boolean wordLookup) {
 
         // word is expected to be lowercase and diacritics removed
         if (wordLookup && words.containsKey(word)) {

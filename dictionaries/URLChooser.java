@@ -444,7 +444,7 @@ public class URLChooser extends JFrame implements ActionListener {
                             // calculate accuracy against current dictionary
                             language.dictionary().setMatchInfo(false);
                             keyword = language.removeDiacritics(word);
-                            dictword = language.dictionary().runDictionaryOnWord(keyword, true, true);
+                            dictword = language.dictionary().runDictionaryOnWord(keyword, true);
                             if (!word.equals(dictword)) {
                                 variants++;
                             }
@@ -481,11 +481,15 @@ public class URLChooser extends JFrame implements ActionListener {
             }
 
             writeMsg("Resetting Dictionary");
-            language.dictionary().words.clear();
+            language.dictionary().reset();
             writeMsg("Adding " + xDictWords.size() + " dictionary entries");
+/*
             for (String key : xDictWords.keySet()) {
                 language.dictionary().words.put(key, xDictWords.get(key));
             }
+*/
+            language.dictionary().addWordsBulk(xDictWords.values());
+
             writeMsg("Done");
 
         }

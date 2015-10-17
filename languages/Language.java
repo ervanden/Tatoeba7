@@ -18,7 +18,7 @@ public interface Language {
         
         public GenericDictionary dictionary();
         // the in-memory dictionary for this language
-        // this dictionary is read from the file when dictionary() is called for the first time
+        // this dictionary is read from its file when dictionary() is called for the first time
         // The dictionary that is returned for a specific language extends GenericDictionary, with some functions overwritten
         // Common functions like readDictionaryFromFile are implemented in GenericDictionary
         

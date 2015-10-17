@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,21 +38,21 @@ public class GenericDictionary {
     public HashSet<String> removedstems = new HashSet<>();
 
     Language language;
-    
+
     DictionaryFrame dictFrame = null;
     Boolean markCorrection = false;
     Boolean matchInfo = true;
 
     public GenericDictionary(Language l) {
-        language=l;
+        language = l;
         dictFrame = new DictionaryFrame(language);
         dictFrame.setVisible(false);
     }
-    
-    public boolean isModified(){
-        return !(addedwords.isEmpty() 
-                && addedstems.isEmpty() 
-                && removedwords.isEmpty() 
+
+    public boolean isModified() {
+        return !(addedwords.isEmpty()
+                && addedstems.isEmpty()
+                && removedwords.isEmpty()
                 && removedstems.isEmpty());
     }
 
@@ -62,10 +63,11 @@ public class GenericDictionary {
     public void setMatchInfo(boolean b) {
         matchInfo = b;
     }
-    
+
     public void setMarkCorrection(boolean b) {
         markCorrection = b;
     }
+
     public void addWord(String word) {
         words.put(language.removeDiacritics(word), word);
         if (removedwords.contains(word)) {
@@ -122,6 +124,16 @@ public class GenericDictionary {
         dictFrame.isModified(isModified());
     }
 
+    public void reset() {
+        words.clear();
+    }
+
+    public void addWordsBulk(Collection<String> c) {
+        for (String word : c) {
+            words.put(language.removeDiacritics(word), word);
+        }
+    }
+
     public String readDictionaryFromFile(String fileName) {
 
         // returns the dictionary file name
@@ -141,8 +153,6 @@ public class GenericDictionary {
                 fileName = f.getAbsolutePath();
             }
         }
-
-//        dictionaryFileName = fileName;
 
         try {
 
@@ -216,7 +226,7 @@ public class GenericDictionary {
                 removedwords.clear();
                 removedstems.clear();
                 dictFrame.isModified(false);
-                
+
                 return true;
 
             } catch (IOException io) {
@@ -228,44 +238,9 @@ public class GenericDictionary {
         }
     }
 
-    public String findStem(String word, boolean wordLookup, boolean stemLookup) {
-        String substring;
-        String stem = "";
-        int i;
-
-        if (stemLookup) {
-            for (i = 1; i <= word.length(); i++) {
-                substring = word.substring(0, i);
-                if (stems.containsKey(substring)) {
-                    stem = stems.get(substring);
-                    if (matchInfo) {  // no output if called from optimizer
-                        dictFrame.writeDictArea("[", false);
-                        dictFrame.writeSelectDictArea(stem);
-                        dictFrame.writeDictArea("]\n", false);
-                        dictFrame.scrollEnd();
-                    }
-                }
-            }
-        }
-
-        if (stem.equals("")) { // determine stem as all letters up to and including the first vowel
-            i = 0;
-            while ((i <= word.length() - 1) && !(WordUtils.isVowel(word.charAt(i)))) {
-                i++;
-            }
-            if (i == word.length()) {  // no vowel found
-                stem = "";
-            } else {
-                stem = word.substring(0, i + 1);
-            }
-        }
-        return stem;
-    }
-
-    public String runDictionaryOnWord(String word, boolean wordLookup, boolean stemLookup) {
+    public String runDictionaryOnWord(String word, boolean wordLookup) {
 
         // word is expected to be lowercase and diacritics removed
-        
         if (wordLookup && words.containsKey(word)) {
             String correctedWord = words.get(word);
             if (matchInfo) {
@@ -281,7 +256,7 @@ public class GenericDictionary {
     }
 
     public void runDictionary(LanguageTextPane textPane, int position, int length) {
-        StyledDocument doc=textPane.getStyledDocument();
+        StyledDocument doc = textPane.getStyledDocument();
         int startWordPosition = 0;
         int endWordPosition = 0;
         String wordorig, word, wordlc, wordnew, wordnewlc;
@@ -309,7 +284,7 @@ public class GenericDictionary {
 //                MsgTextPane.write("word = "+word);
                 wordlc = word.replaceAll("[İI]", "i").toLowerCase();
 //  MsgTextPane.write("wordlc = "+wordlc);              
-                wordnewlc = runDictionaryOnWord(wordlc, true, true);  // true = dictionary lookup for words and stems
+                wordnewlc = runDictionaryOnWord(wordlc, true);  // dictionary lookup for words and stems
 //MsgTextPane.write("wordnewlc = "+wordnewlc);
                 // make characters uppercase if they were originally
                 wordnew = "";
@@ -355,14 +330,14 @@ public class GenericDictionary {
     public void optimizeWords() {
         String correctedWord;
         java.util.List<String> v = new ArrayList<String>(words.keySet());
-//        MsgTextPane.write("Applying stem correction to Dictionary...");
+        MsgTextPane.write("Applying stem correction to Dictionary...");
         matchInfo = false;
         Collections.sort(v);
         int success = 0;
         int failed = 0;
         for (String str : v) {
             // str is lowercase and deturkified because it is in keySet
-            correctedWord = runDictionaryOnWord(str, false, true); //  only stem based correction
+            correctedWord = runDictionaryOnWord(str, false); //  only stem based correction
             if (!correctedWord.equals(words.get(str))) {
                 failed++;
             } else {
@@ -380,56 +355,7 @@ public class GenericDictionary {
     }
 
     public void optimizeStems() {
-
-        WordTree w = new WordTree();
-        for (String key : words.keySet()) {
-            String word = words.get(key);
-            if (word.replaceFirst("[^a-zşçğıöü]", " ").equals(word)) {
-                w.addWord(word, 1);
-            } else {
-                MsgTextPane.write("OptimizeStems: word contains invalid character : |" + word + "|");
-            }
-        }
-
-        stems.clear();
-        ArrayList<String> stemList;
-        stemList = w.scanStems();
-        for (String stem : stemList) {
-            stems.put(language.removeDiacritics(stem), stem);
-        }
-        MsgTextPane.write(stemList.size() + " stems extracted");
-
-        if (true) {
-            String correctedWord;
-            String correctStem;
-            java.util.List<String> v = new ArrayList<String>(stems.keySet());
-//        MsgTextPane.write("Applying stem reduction to Dictionary...");
-            matchInfo = false;
-            Collections.sort(v);
-            int success = 0;
-            int failed = 0;
-
-            for (String str : v) {
-                correctStem = stems.get(str);
-                stems.remove(str);
-
-                correctedWord = runDictionaryOnWord(str, false, true);
-                // no dictionary lookup because otherwise if stem happens to be in words it is removed
-                if (correctedWord.equals(correctStem)) {
-                    if (success < 100) {
-                        dictFrame.writeDictArea("Redundant stem removed : " + correctedWord + "\n", false);
-                    } else if (success == 100) {
-                        dictFrame.writeDictArea("...", false);
-                    }
-                    success++;
-                } else { // put it back
-                    stems.put(str, correctStem);
-                    failed++;
-                }
-            }
-            MsgTextPane.write(success + " redundant stems removed\n");
-            matchInfo = true;
-        }
+        // Applies only to turkish
     }
 
     public void printAll(String dictionaryPattern) {
