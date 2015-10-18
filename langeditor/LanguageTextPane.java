@@ -133,7 +133,7 @@ public class LanguageTextPane extends JTextPane {
         }
 
         public void run() {
-            language.dictionary().runDictionary(thisTextPane, position, length);
+            language.dictionary().correctText(thisTextPane, position, length);
         }
     }
 

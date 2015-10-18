@@ -238,10 +238,17 @@ public class GenericDictionary {
         }
     }
 
-    public String runDictionaryOnWord(String word, boolean wordLookup) {
-
+    public String correctWord(String word) {
         // word is expected to be lowercase and diacritics removed
-        if (wordLookup && words.containsKey(word)) {
+        if (words.containsKey(word)) { 
+            return correctWordByDictionary(word);
+        } else {
+            return correctWordByRules(word);
+        }
+    }
+
+    public String correctWordByDictionary(String word) {
+        if (words.containsKey(word)) {
             String correctedWord = words.get(word);
             if (matchInfo) {
                 dictFrame.writeDictArea(word + " >> ", false);
@@ -254,8 +261,12 @@ public class GenericDictionary {
             return word;
         }
     }
+    
+    public String correctWordByRules(String word){
+        return word;
+    }
 
-    public void runDictionary(LanguageTextPane textPane, int position, int length) {
+    public void correctText(LanguageTextPane textPane, int position, int length) {
         StyledDocument doc = textPane.getStyledDocument();
         int startWordPosition = 0;
         int endWordPosition = 0;
@@ -282,16 +293,16 @@ public class GenericDictionary {
                 wordorig = doc.getText(startWordPosition, endWordPosition - startWordPosition);
                 word = language.removeDiacritics(wordorig);
 //                MsgTextPane.write("word = "+word);
-                wordlc = word.replaceAll("[İI]", "i").toLowerCase();
+                wordlc = language.toLowerCase(word); 
 //  MsgTextPane.write("wordlc = "+wordlc);              
-                wordnewlc = runDictionaryOnWord(wordlc, true);  // dictionary lookup for words and stems
+                wordnewlc = correctWord(wordlc);  // dictionary lookup for words and stems
 //MsgTextPane.write("wordnewlc = "+wordnewlc);
                 // make characters uppercase if they were originally
                 wordnew = "";
                 for (int i = 0; i < word.length(); i++) {
                     char nextChar = wordnewlc.charAt(i);
                     if (Character.isUpperCase(word.charAt(i))) {
-                        wordnew = wordnew + WordUtils.toUpperCase(nextChar); // DocUtils does I correctly
+                        wordnew = wordnew + language.toUpperCase(nextChar); // DocUtils does I correctly
                     } else {
                         wordnew = wordnew + nextChar;
                     }
@@ -337,7 +348,7 @@ public class GenericDictionary {
         int failed = 0;
         for (String str : v) {
             // str is lowercase and deturkified because it is in keySet
-            correctedWord = runDictionaryOnWord(str, false); //  only stem based correction
+            correctedWord = correctWordByRules(str);
             if (!correctedWord.equals(words.get(str))) {
                 failed++;
             } else {

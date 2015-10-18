@@ -14,8 +14,8 @@ public class TurkishDictionary extends GenericDictionary implements Dictionary {
     }
 
     @Override
-    public String runDictionaryOnWord(String word, boolean wordLookup) {
-        System.out.println("runDictionaryOnWord |" + word + "|");
+    public String correctWordByRules(String word) {
+        boolean debug = false;
         int nextpos = 0;
         char nextchar;
         boolean iMode = false;  // turkify i
@@ -23,149 +23,134 @@ public class TurkishDictionary extends GenericDictionary implements Dictionary {
         String stem = "";
         String newword = "";
 
-        boolean debug = false;
-
-        // word is expected to be lowercase and deturkified
-        if (wordLookup && words.containsKey(word)) {
-            String correctedWord = words.get(word);
-            if (matchInfo) {
-                dictFrame.writeDictArea(word + " >> ", false);
-                dictFrame.writeSelectDictArea(correctedWord);
-                dictFrame.writeDictArea("\n", false);
-                dictFrame.scrollEnd();
-            }
-            return correctedWord;
-
-        } else {
             // if the word is not in the dictionary try stem correction
-            // Longest match prevails
-            stem = findStem(word);
-            nextpos = stem.length();
-            newword = stem;
+        // Longest match prevails
+        stem = findStem(word);
+        nextpos = stem.length();
+        newword = stem;
 
-            if (stem.equals("")) {
-                newword = word;
-            } else {
+        if (stem.equals("")) {
+            newword = word;
+        } else {
 
-                char lastVowel = ' ';
-                for (int i = 0; i <= stem.length() - 1; i++) {
-                    char c = newword.charAt(i);
-                    if (WordUtils.isVowel(c)) {
-                        lastVowel = c;
-                    }
+            char lastVowel = ' ';
+            for (int i = 0; i <= stem.length() - 1; i++) {
+                char c = newword.charAt(i);
+                if (isVowel(c)) {
+                    lastVowel = c;
                 }
+            }
 
-                if ((lastVowel == 'ü') || (lastVowel == 'ö')) {
-                    uMode = true;
-                } else if ((lastVowel == 'a') || (lastVowel == 'ı')) {
-                    iMode = true;
-                }
+            if ((lastVowel == 'ü') || (lastVowel == 'ö')) {
+                uMode = true;
+            } else if ((lastVowel == 'a') || (lastVowel == 'ı')) {
+                iMode = true;
+            }
 
                 // turkify vowels according to mode
-                // cancel mode if e,i,o are encountered  (bil,yor,et,ed)
-                for (int i = nextpos; i <= word.length() - 1; i++) {
-                    nextchar = word.charAt(i);
+            // cancel mode if e,i,o are encountered  (bil,yor,et,ed)
+            for (int i = nextpos; i <= word.length() - 1; i++) {
+                nextchar = word.charAt(i);
 
-                    // do the substitutions
-                    if (nextchar == 'i') {
-                        char newchar = 'i';
+                // do the substitutions
+                if (nextchar == 'i') {
+                    char newchar = 'i';
 
-                        if (iMode) {
-                            newchar = 'ı';
-                        }
-
-                        newword = newword + newchar;
-
-                    } else if (uMode && (nextchar == 'u')) {
-                        newword = newword + 'ü';
-
-                    } else if (nextchar == 'g') {
-                        char newchar = 'g';
-                        if (i >= 4) {
-                            // extract the string 3 characters long, preceding the letter g
-                            String s = (word.substring(i - 3, i));
-                            Pattern pattern = Pattern.compile("^..[iuıü]|ece|aca$");
-                            Matcher matcher = pattern.matcher(s);
-                            if (matcher.find()) {
-                                newchar = 'ğ';
-                            }
-                        }
-                        newword = newword + newchar;
-
-                    } else if (nextchar == 'c') {
-                        char newchar = 'c';
-                        if (i >= 2) {
-                            // extract the string 1 character long , preceding the c
-                            String s = (word.substring(i - 1, i));
-                            Pattern pattern = Pattern.compile("^[pfkths]$");
-                            Matcher matcher = pattern.matcher(s);
-                            if (matcher.find()) {
-                                newchar = 'ç';
-                            }
-                        }
-                        newword = newword + newchar;
-
-                    } else if (nextchar == 's') {
-                        char newchar = 's';
-                        if (i >= 4) {
-                            // extract the string to match : 3 characters long, ending in s
-                            String s = (word.substring(i - 2, i + 1));
-                            // all patterns 4 characters long
-                            Pattern pattern = Pattern.compile("m[iu]s");
-                            Matcher matcher = pattern.matcher(s);
-                            if (matcher.find()) {
-                                newchar = 'ş';
-                            }
-                        }
-                        newword = newword + newchar;
-
-                    } else {
-                        newword = newword + nextchar;
+                    if (iMode) {
+                        newchar = 'ı';
                     }
 
-                    // 'e' = end substitution  (hallederim)
-                    if (nextchar == 'e') {
-                        iMode = false;
-                        uMode = false;
-                        if (debug) {
-                            MsgTextPane.write(" 'e' ends substitution");
+                    newword = newword + newchar;
+
+                } else if (uMode && (nextchar == 'u')) {
+                    newword = newword + 'ü';
+
+                } else if (nextchar == 'g') {
+                    char newchar = 'g';
+                    if (i >= 4) {
+                        // extract the string 3 characters long, preceding the letter g
+                        String s = (word.substring(i - 3, i));
+                        Pattern pattern = Pattern.compile("^..[iuıü]|ece|aca$");
+                        Matcher matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            newchar = 'ğ';
                         }
                     }
+                    newword = newword + newchar;
 
-                    // 'bil' = end substitution  (-bilmek)
-                    if (nextchar == 'b') {
-                        if ((i + 3) <= word.length()) {
-                            if ((word.charAt(i + 1) == 'i') && (word.charAt(i + 2) == 'l')) {
-                                iMode = false;
-                                uMode = false;
-                                if (debug) {
-                                    MsgTextPane.write(" 'bil' ends substitution");
-                                }
-                            }
+                } else if (nextchar == 'c') {
+                    char newchar = 'c';
+                    if (i >= 2) {
+                        // extract the string 1 character long , preceding the c
+                        String s = (word.substring(i - 1, i));
+                        Pattern pattern = Pattern.compile("^[pfkths]$");
+                        Matcher matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            newchar = 'ç';
                         }
                     }
+                    newword = newword + newchar;
 
-                    // 'yor' = end substitution  (-yorum)
-                    if (nextchar == 'y') {
-                        if ((i + 3) <= word.length()) {
-                            if ((word.charAt(i + 1) == 'o') && (word.charAt(i + 2) == 'r')) {
-                                iMode = false;
-                                uMode = false;
-                                if (debug) {
-                                    MsgTextPane.write(" 'yor' ends substitution");
-                                }
+                } else if (nextchar == 's') {
+                    char newchar = 's';
+                    if (i >= 4) {
+                        // extract the string to match : 3 characters long, ending in s
+                        String s = (word.substring(i - 2, i + 1));
+                        // all patterns 4 characters long
+                        Pattern pattern = Pattern.compile("m[iu]s");
+                        Matcher matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            newchar = 'ş';
+                        }
+                    }
+                    newword = newword + newchar;
+
+                } else {
+                    newword = newword + nextchar;
+                }
+
+                // 'e' = end substitution  (hallederim)
+                if (nextchar == 'e') {
+                    iMode = false;
+                    uMode = false;
+                    if (debug) {
+                        MsgTextPane.write(" 'e' ends substitution");
+                    }
+                }
+
+                // 'bil' = end substitution  (-bilmek)
+                if (nextchar == 'b') {
+                    if ((i + 3) <= word.length()) {
+                        if ((word.charAt(i + 1) == 'i') && (word.charAt(i + 2) == 'l')) {
+                            iMode = false;
+                            uMode = false;
+                            if (debug) {
+                                MsgTextPane.write(" 'bil' ends substitution");
                             }
                         }
                     }
+                }
+
+                // 'yor' = end substitution  (-yorum)
+                if (nextchar == 'y') {
+                    if ((i + 3) <= word.length()) {
+                        if ((word.charAt(i + 1) == 'o') && (word.charAt(i + 2) == 'r')) {
+                            iMode = false;
+                            uMode = false;
+                            if (debug) {
+                                MsgTextPane.write(" 'yor' ends substitution");
+                            }
+                        }
+                    }
+                }
 
                     // 'a' = activate i-substitution
-                    // it needs be re-activated if it was cancelled by 'yor'  (yapıyorlardı)
-                    if (nextchar == 'a') {
-                        iMode = true;
-                        uMode = false;
-                        if (debug) {
-                            MsgTextPane.write(" 'a' starts i - substitution");
-                        }
+                // it needs be re-activated if it was cancelled by 'yor'  (yapıyorlardı)
+                if (nextchar == 'a') {
+                    iMode = true;
+                    uMode = false;
+                    if (debug) {
+                        MsgTextPane.write(" 'a' starts i - substitution");
                     }
                 }
             }
@@ -185,7 +170,30 @@ public class TurkishDictionary extends GenericDictionary implements Dictionary {
         newword = newword.replaceAll("kılerinden$", "kilerinden");
 
         return newword;
+
     }
+    
+        public static boolean isVowel(char c) {
+        if (c == 'e') {
+            return true;
+        } else if (c == 'i') {
+            return true;
+        } else if (c == 'a') {
+            return true;
+        } else if (c == 'u') {
+            return true;
+        } else if (c == 'o') {
+            return true;
+        } else if (c == 'ö') {
+            return true;
+        } else if (c == 'ü') {
+            return true;
+        } else if (c == 'ı') {
+            return true;
+        }
+        return false;
+    }
+
 
     public String findStem(String word) {
         String substring;
@@ -207,7 +215,7 @@ public class TurkishDictionary extends GenericDictionary implements Dictionary {
 
         if (stem.equals("")) { // determine stem as all letters up to and including the first vowel
             i = 0;
-            while ((i <= word.length() - 1) && !(WordUtils.isVowel(word.charAt(i)))) {
+            while ((i <= word.length() - 1) && !(isVowel(word.charAt(i)))) {
                 i++;
             }
             if (i == word.length()) {  // no vowel found
@@ -218,7 +226,6 @@ public class TurkishDictionary extends GenericDictionary implements Dictionary {
         }
         return stem;
     }
-
 
     public void optimizeStems() {
 
@@ -254,7 +261,7 @@ public class TurkishDictionary extends GenericDictionary implements Dictionary {
                 correctStem = stems.get(str);
                 stems.remove(str);
 
-                correctedWord = runDictionaryOnWord(str, false);
+                correctedWord = correctWordByRules(str);
                 // no dictionary lookup because otherwise if stem happens to be in words it is removed
                 if (correctedWord.equals(correctStem)) {
                     if (success < 100) {

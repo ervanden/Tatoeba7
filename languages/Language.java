@@ -6,7 +6,14 @@ import dictionaries.GenericDictionary;
 
 
 public interface Language {
+    
+        public char toUpperCase(char c);
+        // implemented using Character.toUpperCase in GenericLanguage but should be overwritten when 
+        // this method does not work correctly , as for Turkish
 
+        public String toLowerCase(String s);
+        // same as for toUpperCase()
+         
         public String invertDiacritics(String word);
          // swap plain latin letters to letters with accents and vice versa
         

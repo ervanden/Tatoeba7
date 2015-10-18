@@ -15,17 +15,28 @@ public class Turkish extends GenericLanguage implements Language {
     }
 
     public GenericDictionary dictionary() {
-         if (d == null) {
+        if (d == null) {
             d = new TurkishDictionary(this);
             d.readDictionaryFromFile(dictionaryFileName());
-        }       
+        }
         return d;
     }
-    
-    public void disposeDictionary(){
-        d=null;
+
+    public void disposeDictionary() {
+        d = null;
     }
-    
+
+    public char toUpperCase(char c) {
+        if (c == 'i') {   // toUpperCase does not do I correctly
+            return 'İ';
+        } else {
+            return Character.toUpperCase(c);
+        }
+    }
+
+    public String toLowerCase(String s) {
+        return s.replaceAll("[İI]", "i").toLowerCase();
+    }
 
     public String invertDiacritics(String word) {
         char c;
@@ -131,7 +142,7 @@ public class Turkish extends GenericLanguage implements Language {
         int n10 = (nlow2 - nlow1) / 10;
         int n1 = nlow1;
 
- //       System.out.println(" n=" + (n1000 * 1000 + n100 * 100 + n10 * 10 + n1));
+        //       System.out.println(" n=" + (n1000 * 1000 + n100 * 100 + n10 * 10 + n1));
         String s = "";
 
         //thousands
@@ -146,16 +157,14 @@ public class Turkish extends GenericLanguage implements Language {
         if (n100 > 0) {
             s = s + " " + nrs.get(n100) + " " + nrs.get(100);
         }
-        if (n10 > 0) { 
+        if (n10 > 0) {
             s = s + " " + nrs.get(n10 * 10);
         }
-        if (n1 > 0) {  
+        if (n1 > 0) {
             s = s + " " + nrs.get(n1);
         }
 
         return s;
     }
-
-    
 
 }

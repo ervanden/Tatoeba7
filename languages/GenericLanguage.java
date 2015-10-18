@@ -13,17 +13,26 @@ public class GenericLanguage {
     }
 
     public GenericDictionary dictionary() {
-         if (d == null) {
+        if (d == null) {
             d = new GenericDictionary(LanguageContext.get("generic"));
             d.readDictionaryFromFile(dictionaryFileName());
-        }       
+        }
         return d;
     }
-    
-    public void disposeDictionary(){
-        d=null;
+
+    public void disposeDictionary() {
+        d = null;
     }
 
+    public char toUpperCase(char c) {
+        return Character.toUpperCase(c);  // works correctly for most languages
+    }
+    
+    public String toLowerCase(String s){
+        return s.toLowerCase();  // works correctly for most languages
+    }
+    
+    
     public String invertDiacritics(String word) {
         return word;
     }
@@ -37,4 +46,3 @@ public class GenericLanguage {
     }
 
 }
-

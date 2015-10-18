@@ -36,7 +36,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import javax.swing.text.StyledDocument;
 import languages.Language;
-import languages.LanguageContext;
 import org.jsoup.Jsoup;
 import org.jsoup.examples.HtmlToPlainText;
 
@@ -256,7 +255,7 @@ public class URLChooser extends JFrame implements ActionListener {
 
     public boolean extractFromURLQueue(URL rootURL) {
         String urlString;
-        ArrayList<String> urlList = new ArrayList<String>();
+        ArrayList<String> urlList = new ArrayList<>();
         urlList.clear();
 
         urlString = todoUrls.peekFirst();
@@ -444,7 +443,7 @@ public class URLChooser extends JFrame implements ActionListener {
                             // calculate accuracy against current dictionary
                             language.dictionary().setMatchInfo(false);
                             keyword = language.removeDiacritics(word);
-                            dictword = language.dictionary().runDictionaryOnWord(keyword, true);
+                            dictword = language.dictionary().correctWord(keyword);
                             if (!word.equals(dictword)) {
                                 variants++;
                             }

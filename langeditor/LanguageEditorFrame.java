@@ -60,10 +60,10 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         String action = ae.getActionCommand();
 
-        if (action.equals("Correct selected text")) {
+        if (action.equals("Correct Selected Text")) {
             editArea.setManualCorrect(false);
             language.dictionary().setMarkCorrection(true);
-            language.dictionary().runDictionary(editArea,
+            language.dictionary().correctText(editArea,
                     editArea.selectedPosition, editArea.selectedLength);
             language.dictionary().setMarkCorrection(false);
             editArea.setManualCorrect(true);
@@ -184,6 +184,9 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         menuBar.add(menuView);
         AddMenuItem(menuView, "Show Dictionary Window", "Show Dictionary Window");
         AddMenuItem(menuView, "Show System Messages", "Show System Messages");
+                JMenu menuText = new JMenu("Text");
+        menuBar.add(menuText);
+        AddMenuItem(menuText, "Correct Selected Text", "Correct Selected Text");
         pack();
 
     }
