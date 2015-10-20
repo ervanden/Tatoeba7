@@ -122,7 +122,11 @@ public class NumberTrainer extends JFrame implements ActionListener {
         numberPanel.add(Box.createRigidArea(new Dimension(100, 0)));
         numberPanel.add(plusButton);
         numberPanel.add(minusButton);
+        transButton.setMaximumSize(new Dimension(10000, 20));
+        transButton.setAlignmentX(0.5f);
+        content.add(Box.createRigidArea(new Dimension(0, 10)));
         content.add(transButton);
+        content.add(Box.createRigidArea(new Dimension(0, 10)));
         content.add(numberPanel);
 
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
