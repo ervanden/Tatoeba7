@@ -13,6 +13,9 @@ public interface Language {
 
         public String toLowerCase(String s);
         // same as for toUpperCase()
+        
+        public String letters();
+        // returns a string with all the language-specific letters.
          
         public String invertDiacritics(String word);
          // swap plain latin letters to letters with accents and vice versa

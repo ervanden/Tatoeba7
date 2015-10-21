@@ -32,6 +32,10 @@ public class GenericLanguage {
         return s.toLowerCase();  // works correctly for most languages
     }
     
+    public String letters(){
+        return "";
+    }
+    
     
     public String invertDiacritics(String word) {
         return word;

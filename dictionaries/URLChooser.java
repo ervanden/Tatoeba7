@@ -88,7 +88,6 @@ public class URLChooser extends JFrame implements ActionListener {
     String outputFileName;
     int outputFileGeneration;
     int outputLinesWritten;
-    
 
     public URLChooser(Language l) {
         language = l;
@@ -257,6 +256,7 @@ public class URLChooser extends JFrame implements ActionListener {
         String urlString;
         ArrayList<String> urlList = new ArrayList<>();
         urlList.clear();
+        boolean subURLs = true;
 
         urlString = todoUrls.peekFirst();
         if (urlString == null) {
@@ -269,39 +269,41 @@ public class URLChooser extends JFrame implements ActionListener {
             if (showLinks) {
                 writeMsg("PROCESSED: " + urlString);
             }
-            urlList = ListLinks.run(urlString);
-            int urlcount = 0;
-            for (String suburlString : urlList) {
-                urlcount++;
-                try {
-                    URL subURL = new URL(suburlString);
-                    if (rootURL.getHost().equals(subURL.getHost())) {
+            if (subURLs) {
+                urlList = ListLinks.run(urlString);
+                int urlcount = 0;
+                for (String suburlString : urlList) {
+                    urlcount++;
+                    try {
+                        URL subURL = new URL(suburlString);
+                        if (rootURL.getHost().equals(subURL.getHost())) {
 
-                        // remove trailing #
-                        suburlString = suburlString.replaceAll("#.*$", "");
+                            // remove trailing #
+                            suburlString = suburlString.replaceAll("#.*$", "");
 
-                        boolean skip = false;
-                        if (suburlString.contains(".php")) {
-                            skip = true;
-                        }
-                        if (suburlString.contains("Dosya:")) {
-                            skip = true;
-                        }
-                        if (suburlString.contains("/%C3%96zel:")) {
-                            skip = true;
-                        }
+                            boolean skip = false;
+                            if (suburlString.contains(".php")) {
+                                skip = true;
+                            }
+                            if (suburlString.contains("Dosya:")) {
+                                skip = true;
+                            }
+                            if (suburlString.contains("/%C3%96zel:")) {
+                                skip = true;
+                            }
 
-                        if (!skip) {
-                            if (!doneUrls.contains(suburlString) && !todoUrls.contains(suburlString)) {
-                                todoUrls.addLast(suburlString);
-                                if (showLinks) {
-                                    writeMsg("ADDED: " + suburlString + " todo= " + todoUrls.size() + " done= " + doneUrls.size());
+                            if (!skip) {
+                                if (!doneUrls.contains(suburlString) && !todoUrls.contains(suburlString)) {
+                                    todoUrls.addLast(suburlString);
+                                    if (showLinks) {
+                                        writeMsg("ADDED: " + suburlString + " todo= " + todoUrls.size() + " done= " + doneUrls.size());
+                                    }
                                 }
                             }
                         }
+                    } catch (MalformedURLException mfu) {
+                        //                                 no msg for invalid sub url's
                     }
-                } catch (MalformedURLException mfu) {
-                    //                                 no msg for invalid sub url's
                 }
             }
             return true;
@@ -321,7 +323,7 @@ public class URLChooser extends JFrame implements ActionListener {
             Document doc = Jsoup.connect(url).get();
             HtmlToPlainText formatter = new HtmlToPlainText();
             String plainText = formatter.getPlainText(doc);
-            //System.out.println(plainText);
+            System.out.println(plainText);
             downloadedBytes = downloadedBytes + plainText.length();
             if (downloadedBytes > downloadedBytesLimit) {
                 stop = true;
@@ -376,8 +378,9 @@ public class URLChooser extends JFrame implements ActionListener {
                 wordorig = doc.getText(startWordPosition, endWordPosition - startWordPosition);
 
 //                if (wordorig.matches("^[a-zA-ZşŞçÇğıİöÖüÜ]*$")) {
-                if (wordorig.matches("^[a-zşçğıöü]*$")) { // no capitals to avoid proper names, misspelled headers, ...
-                    wordlc = wordorig.replaceAll("I", "ı").toLowerCase();
+                if (wordorig.matches("^[a-z" + language.letters() + "]*$")) { // no capitals to avoid proper names, misspelled headers, ...
+                    //                   wordlc = wordorig.replaceAll("I", "ı").toLowerCase();
+                    wordlc = language.toLowerCase(wordorig);
                     if (wordlc.length() > 2) {
                         urlWords.add(wordlc);
                     }
@@ -416,7 +419,7 @@ public class URLChooser extends JFrame implements ActionListener {
                     } else {
                         // sanitize if from unknown source
                         // words containing capital letters or punctuation are ignored
-                        if (!word.replaceAll("[^a-zşçğıöü]", " ").contains(" ")) {
+                        if (!word.replaceAll("[^a-z" + language.letters() + "]", " ").contains(" ")) {
 
                             words++;
 
@@ -482,11 +485,11 @@ public class URLChooser extends JFrame implements ActionListener {
             writeMsg("Resetting Dictionary");
             language.dictionary().reset();
             writeMsg("Adding " + xDictWords.size() + " dictionary entries");
-/*
-            for (String key : xDictWords.keySet()) {
-                language.dictionary().words.put(key, xDictWords.get(key));
-            }
-*/
+            /*
+             for (String key : xDictWords.keySet()) {
+             language.dictionary().words.put(key, xDictWords.get(key));
+             }
+             */
             language.dictionary().addWordsBulk(xDictWords.values());
 
             writeMsg("Done");

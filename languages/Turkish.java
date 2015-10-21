@@ -37,6 +37,10 @@ public class Turkish extends GenericLanguage implements Language {
     public String toLowerCase(String s) {
         return s.replaceAll("[İI]", "i").toLowerCase();
     }
+    
+    public String letters(){
+        return "şçğıöü";
+    }
 
     public String invertDiacritics(String word) {
         char c;

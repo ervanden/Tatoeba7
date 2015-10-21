@@ -15,15 +15,19 @@ public class Polish extends GenericLanguage implements Language {
     }
 
     public GenericDictionary dictionary() {
-         if (d == null) {
+        if (d == null) {
             d = new PolishDictionary(this);
             d.readDictionaryFromFile(dictionaryFileName());
-        }       
+        }
         return d;
     }
-    
-    public void disposeDictionary(){
-        d=null;
+
+    public void disposeDictionary() {
+        d = null;
+    }
+
+    public String letters() {
+        return "ąćęłńóśżź";    
     }
 
     public String invertDiacritics(String word) {
@@ -182,13 +186,13 @@ public class Polish extends GenericLanguage implements Language {
         int n1 = nlow1;
 
  //       System.out.println(" n=" + (n1000 * 1000 + n100 * 100 + n10 * 10 + n1));
-
         String s = "";
 
-        if (n==0) return nrs.get(0);
-        
+        if (n == 0) {
+            return nrs.get(0);
+        }
+
         //thousands
-        
         if (n1000 > 0) {
             if (n1000 == 1) {
                 s = "tysiąc";
@@ -204,13 +208,11 @@ public class Polish extends GenericLanguage implements Language {
         }
 
         // hundreds
-        
         if (n100 > 0) {
             s = s + " " + nrs.get(n100 * 100);
         }
-        
+
         // 0-99
-        
         if (n10 == 1) {  // 10 - 19
             s = s + " " + nrs.get(10 + n1);
         } else {  // 20-99
