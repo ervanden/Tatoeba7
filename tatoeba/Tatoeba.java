@@ -237,12 +237,8 @@ class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Cluster Overview")) {
-            ClusterCountFrame cc = Tatoeba.clusterCountFrame;
-            if (!cc.isInitialized()) {
-                cc.execute();
-            } else {
-                cc.setVisible(true);
-            }
+            ClusterCountFrame cc = new ClusterCountFrame();
+                cc.display();
         }
 
         if (action.equals("Select clusters")) {
@@ -437,10 +433,12 @@ class TatoebaFrame extends JFrame implements ActionListener {
                 }
 
                 c.sentences.clear();
-                c.readSentencesFromDocument(Tatoeba.tatoebaFrame.sourceArea.getStyledDocument());
-                c.readSentencesFromDocument(Tatoeba.tatoebaFrame.targetArea.getStyledDocument());
+//                c.readSentencesFromDocument(Tatoeba.tatoebaFrame.sourceArea.getStyledDocument());
+//                c.readSentencesFromDocument(Tatoeba.tatoebaFrame.targetArea.getStyledDocument());
+c.readSentencesFromDocument(sourceArea.getStyledDocument());
+c.readSentencesFromDocument(targetArea.getStyledDocument());
                 c.tags.clear();
-                c.readTagsFromDocument(Tatoeba.tatoebaFrame.infoArea.getStyledDocument());
+                c.readTagsFromDocument(infoArea.getStyledDocument());
                 c.unsaved = true;
 
                 editing = false;
@@ -904,12 +902,12 @@ class TatoebaFrame extends JFrame implements ActionListener {
 public class Tatoeba {
 
     static TatoebaFrame tatoebaFrame;
-    static ClusterCountFrame clusterCountFrame = new ClusterCountFrame();
+
 
     public static void main(String[] args) {
         LanguageNames.readLanguages();
         tatoebaFrame = new TatoebaFrame();
-        SelectionFrame.execute();
+        SelectionFrame.create();
 
     }
 }

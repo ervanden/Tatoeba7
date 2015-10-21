@@ -207,7 +207,7 @@ class ClustersInOut {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setSelectedFile(new File(fileName));
-        int retval = fileChooser.showSaveDialog(Tatoeba.tatoebaFrame);
+        int retval = fileChooser.showSaveDialog(null);
         if (retval == JFileChooser.APPROVE_OPTION) {
             File f = fileChooser.getSelectedFile();
             fileName = f.getAbsolutePath();
@@ -283,7 +283,7 @@ class ClustersInOut {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setSelectedFile(new File(fileName));
-        int retval = fileChooser.showSaveDialog(Tatoeba.tatoebaFrame);
+        int retval = fileChooser.showSaveDialog(null);
         if (retval == JFileChooser.APPROVE_OPTION) {
             File f = fileChooser.getSelectedFile();
             fileName = f.getAbsolutePath();

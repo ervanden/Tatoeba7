@@ -563,7 +563,7 @@ public class SelectionFrame {
         }
     }
 
-    public static void execute() {
+    public static void create() {
 
         setAreaParameters(allLanguagesArea, "Languages");
         setAreaParameters(sourceLanguagesArea, "Source");
