@@ -37,6 +37,7 @@ public class LanguageNames {
     public static String longToShort(String longName) {
         // if it can not be translated, assume that longName is a short name returned by shortToLong()
         String shortName = languagesByLongName.get(longName);
+//                      MsgTextPane.write("longToShort "+longName+" > "+shortName);
         if (shortName == null) {
             return longName;
         } else {
@@ -47,7 +48,7 @@ public class LanguageNames {
     public static String shortToLong(String shortName) {
         // if shortName can not be translated, return shortName 
         String longName = languagesByShortName.get(shortName);
-                System.out.println("shortToLong "+shortName+" > "+longName);
+//              MsgTextPane.write("shortToLong "+shortName+" > "+longName);
         if (longName == null) {
             return shortName;
         } else {

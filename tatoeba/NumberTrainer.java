@@ -3,6 +3,7 @@ package tatoeba;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -18,13 +19,15 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import languages.Language;
 import languages.LanguageContext;
+import languages.LanguageNames;
 import utils.AreaFont;
 
 public class NumberTrainer extends JFrame implements ActionListener {
 
     NumberTrainer thisNumberTrainer = this;
     JFrame thisFrame = (JFrame) this;
-    Language language;
+
+    ArrayList<String> languages;
     JTextPane textPane;
     JScrollPane textScrollPane;
     JPanel content = new JPanel();
@@ -34,9 +37,8 @@ public class NumberTrainer extends JFrame implements ActionListener {
 
     int currentNumber = 0;
 
-    public NumberTrainer(String lang) {
-
-        language = LanguageContext.get(lang);
+    public NumberTrainer() {
+        languages = languagetrainer.LanguageTrainer.userLanguages;
         textPane = new JTextPane();
         textScrollPane = new JScrollPane(textPane);
         textPane.setEditable(false);
@@ -145,7 +147,10 @@ public class NumberTrainer extends JFrame implements ActionListener {
             write(String.format("%d", currentNumber));
         }
         if (action.equals("translate")) {
-            write(language.number(currentNumber));
+            for (String lang : languages) {
+                Language language = LanguageContext.get(lang);
+                write(LanguageNames.shortToLong(lang) + " : " + language.number(currentNumber));
+            }
         }
         if (action.equals("+")) {
             AreaFont.multiply((float) 1.2);

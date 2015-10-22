@@ -16,7 +16,7 @@ import languages.LanguageContext;
 import utils.AreaFont;
 
 // If the source or target language is one single language, a language-specific text pane is used.
-class TatoebaFrame extends JFrame implements ActionListener {
+public class TatoebaFrame extends JFrame implements ActionListener {
 
     private JFrame thisFrame = (JFrame) this;
 
@@ -206,7 +206,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
             String dirName;
             fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            retval = fileChooser.showOpenDialog(Tatoeba.tatoebaFrame);
+            retval = fileChooser.showOpenDialog(null);
             if (retval == JFileChooser.APPROVE_OPTION) {
                 File f = fileChooser.getSelectedFile();
                 dirName = f.getAbsolutePath();
@@ -224,7 +224,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
             fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fileChooser.setDialogTitle("Select a cluster database file");
-            retval = fileChooser.showOpenDialog(Tatoeba.tatoebaFrame);
+            retval = fileChooser.showOpenDialog(null);
             if (retval == JFileChooser.APPROVE_OPTION) {
                 File f = fileChooser.getSelectedFile();
                 fileName = f.getAbsolutePath();
@@ -288,7 +288,7 @@ class TatoebaFrame extends JFrame implements ActionListener {
                 f.setVisible(true);
             }
             if (ls[1].equals("Numbers")) {
-                NumberTrainer n = new NumberTrainer(ls[0]);
+                NumberTrainer n = new NumberTrainer();
                 n.setVisible(true);
             }
         }
@@ -895,19 +895,7 @@ c.readSentencesFromDocument(targetArea.getStyledDocument());
         setVisible(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowUtils());
-
     }
 }
 
-public class Tatoeba {
 
-    static TatoebaFrame tatoebaFrame;
-
-
-    public static void main(String[] args) {
-        LanguageNames.readLanguages();
-        tatoebaFrame = new TatoebaFrame();
-        SelectionFrame.create();
-
-    }
-}

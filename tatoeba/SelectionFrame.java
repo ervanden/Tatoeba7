@@ -1,5 +1,6 @@
 package tatoeba;
 
+import languagetrainer.LanguageTrainer;
 import languages.LanguageNames;
 import utils.GenericTextFrame;
 import java.awt.Color;
@@ -39,6 +40,7 @@ public class SelectionFrame {
 
     private static JFrame frame = new JFrame();
     static GenericTextFrame searchResultsFrame = null;
+    static tatoeba.TatoebaFrame tatoebaFrame = null;
 
     public static final JTextPane allLanguagesArea = new JTextPane();
     public static final JTextPane sourceLanguagesArea = new JTextPane();
@@ -106,6 +108,12 @@ public class SelectionFrame {
         sliderMax.setMajorTickSpacing(1);
     }
 
+    
+    public static void setTatoebaFrame(TatoebaFrame t){
+     tatoebaFrame=t;   
+    }
+    
+    
     static class WindowCloser extends WindowAdapter {
 
         public void windowClosing(WindowEvent e) {
@@ -728,12 +736,12 @@ public class SelectionFrame {
                 
                 if (targetLanguages.size() == 1) {
                     for (String language : targetLanguages) {
-                        Tatoeba.tatoebaFrame.newTargetArea(language);
+                        tatoebaFrame.newTargetArea(language);
                     }
                 }
                 if (sourceLanguages.size() == 1) {
                     for (String language : sourceLanguages) {
-                        Tatoeba.tatoebaFrame.newSourceArea(language);
+                        tatoebaFrame.newSourceArea(language);
                     }
                 }
 
