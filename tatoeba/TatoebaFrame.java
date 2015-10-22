@@ -62,7 +62,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             if (Graph.unsavedClusters() > 0) {
                 JOptionPane.showMessageDialog(thisFrame, "There are unsaved clusters! Close window via Exit menu");
             } else {
-                System.exit(0);
+                setVisible(false);
             }
         }
     }
@@ -182,12 +182,12 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         // menu items
         
         if (action.equals("Exit without saving clusters")) {
-            System.exit(0);
+            setVisible(false);
         }
 
         if (action.equals("Save clusters and exit")) {
             ClustersInOut.saveClusters("all");
-            System.exit(0);
+            setVisible(false);
         }
 
         if (action.equals("Save all clusters")) {
@@ -893,7 +893,7 @@ c.readSentencesFromDocument(targetArea.getStyledDocument());
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         addWindowListener(new WindowUtils());
     }
 }

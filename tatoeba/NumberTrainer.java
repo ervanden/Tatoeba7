@@ -26,8 +26,6 @@ public class NumberTrainer extends JFrame implements ActionListener {
 
     NumberTrainer thisNumberTrainer = this;
     JFrame thisFrame = (JFrame) this;
-
-    ArrayList<String> languages;
     JTextPane textPane;
     JScrollPane textScrollPane;
     JPanel content = new JPanel();
@@ -38,7 +36,6 @@ public class NumberTrainer extends JFrame implements ActionListener {
     int currentNumber = 0;
 
     public NumberTrainer() {
-        languages = languagetrainer.LanguageTrainer.userLanguages;
         textPane = new JTextPane();
         textScrollPane = new JScrollPane(textPane);
         textPane.setEditable(false);
@@ -147,10 +144,9 @@ public class NumberTrainer extends JFrame implements ActionListener {
             write(String.format("%d", currentNumber));
         }
         if (action.equals("translate")) {
-            for (String lang : languages) {
-                Language language = LanguageContext.get(lang);
-                write(LanguageNames.shortToLong(lang) + " : " + language.number(currentNumber));
-            }
+            String lang = languagetrainer.LanguageTrainer.targetLanguage;
+            Language language = LanguageContext.get(lang);
+            write(language.number(currentNumber));
         }
         if (action.equals("+")) {
             AreaFont.multiply((float) 1.2);

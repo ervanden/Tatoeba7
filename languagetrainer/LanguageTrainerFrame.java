@@ -8,12 +8,15 @@ import java.util.HashMap;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import langeditor.LanguageEditorFrame;
+import languages.LanguageNames;
 import tatoeba.NumberTrainer;
 import tatoeba.SelectionFrame;
 import tatoeba.TatoebaFrame;
+import utils.*;
 
 public class LanguageTrainerFrame extends JFrame implements ActionListener {
 
@@ -32,15 +35,30 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
             button.addActionListener(thisLanguageTrainer);
         }
 
-        content.setLayout(new FlowLayout());
+        JPanel toolsPanel = new JPanel();
+
+        String[] languageArray = new String[LanguageTrainer.userLanguages.size()];
+        for (int i = 0; i < languageArray.length; i++) {
+            languageArray[i] = LanguageNames.shortToLong(LanguageTrainer.userLanguages.get(i));
+        }
+        JComboBox languageBox = new JComboBox(languageArray);
+        languageBox.addActionListener(this);
+        languageBox.setActionCommand("languageBox");
+        toolsPanel.add(languageBox);
 
         JPanel numberPanel = new JPanel();
         numberPanel.setLayout(new BoxLayout(numberPanel, BoxLayout.LINE_AXIS));
 
         for (String tool : tools) {
-            content.add(Box.createRigidArea(new Dimension(0, 10)));
-            content.add(buttons.get(tool));
+            toolsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            toolsPanel.add(buttons.get(tool));
         }
+        
+      content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));  
+        content.add(toolsPanel);
+        GenericTextPanel textPanel = new GenericTextPanel();
+        LanguageTrainer.messageTextPanel=textPanel;
+        content.add(textPanel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(content);
@@ -49,6 +67,7 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent ae) {
         String action = ae.getActionCommand();
+        System.out.println(action);
         if (action.equals("numbers")) {
             NumberTrainer n = new NumberTrainer();
             n.setVisible(true);
@@ -61,6 +80,12 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
             TatoebaFrame t = new TatoebaFrame();
             SelectionFrame.create();
             SelectionFrame.setTatoebaFrame(t);
+        }
+        if (action.equals("languageBox")) {
+            JComboBox box = (JComboBox) ae.getSource();
+            String longName = (String) box.getSelectedItem();
+            LanguageTrainer.targetLanguage = LanguageNames.longToShort(longName);
+            MsgTextPane.write("target language is "+LanguageTrainer.targetLanguage);
         }
     }
 

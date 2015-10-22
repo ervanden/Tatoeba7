@@ -1,18 +1,22 @@
-
 package utils;
 
-// Common text frame for system messages
+import languagetrainer.LanguageTrainer;
 
+// Common text frame for system messages
 public class MsgTextPane {
 
-    static GenericTextFrame msgFrame = new GenericTextFrame();
+    static GenericTextPanel panel;
 
     public static void write(String msg) {
-        msgFrame.setVisible(true);
-        msgFrame.write(msg);
+        panel = LanguageTrainer.messageTextPanel;
+        if (panel == null) {
+            System.out.println(msg);
+        } else {
+            panel.write(msg);
+        }
     }
-    
-    public static void setVisible(boolean b){
-        msgFrame.setVisible(b);
+
+    public static void setVisible(boolean b) {
+
     }
 }

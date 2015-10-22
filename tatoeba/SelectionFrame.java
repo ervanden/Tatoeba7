@@ -1,6 +1,5 @@
 package tatoeba;
 
-import languagetrainer.LanguageTrainer;
 import languages.LanguageNames;
 import utils.GenericTextFrame;
 import java.awt.Color;
@@ -38,6 +37,7 @@ import javax.swing.text.StyledDocument;
 
 public class SelectionFrame {
 
+    static boolean isCreated = false;
     private static JFrame frame = new JFrame();
     static GenericTextFrame searchResultsFrame = null;
     static tatoeba.TatoebaFrame tatoebaFrame = null;
@@ -572,7 +572,9 @@ public class SelectionFrame {
     }
 
     public static void create() {
-
+        if (isCreated) return;
+        isCreated=true;
+        
         setAreaParameters(allLanguagesArea, "Languages");
         setAreaParameters(sourceLanguagesArea, "Source");
         setAreaParameters(targetLanguagesArea, "Target");
