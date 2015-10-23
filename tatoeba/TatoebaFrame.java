@@ -514,8 +514,6 @@ c.readSentencesFromDocument(targetArea.getStyledDocument());
             buttonEdit.setEnabled(true);
             buttonCommit.setEnabled(false);
             buttonCancel.setEnabled(false);
-
-            //           spacer2.setText(" " + Graph.unsavedClusters());
         }
 
         if (action.equals("buttonCreate")) {

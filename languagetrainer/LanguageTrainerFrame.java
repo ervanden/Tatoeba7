@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import langeditor.LanguageEditorFrame;
 import languages.LanguageNames;
-import tatoeba.NumberTrainer;
+import tatoeba.*;
 import tatoeba.SelectionFrame;
 import tatoeba.TatoebaFrame;
 import utils.*;
@@ -23,7 +23,7 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
     JFrame thisFrame = this;
     LanguageTrainerFrame thisLanguageTrainer = this;
     JPanel content = new JPanel();
-    String[] tools = {"sentences", "numbers", "editors"};
+    String[] tools = {"sentences", "numbers", "colors","editors"};
     HashMap<String, JButton> buttons = new HashMap<>();
 
     public LanguageTrainerFrame() {
@@ -54,11 +54,9 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
             toolsPanel.add(buttons.get(tool));
         }
         
-      content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));  
+        content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));  
         content.add(toolsPanel);
-        GenericTextPanel textPanel = new GenericTextPanel();
-        LanguageTrainer.messageTextPanel=textPanel;
-        content.add(textPanel);
+        content.add(LanguageTrainer.messageTextPanel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(content);
@@ -70,6 +68,10 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
         System.out.println(action);
         if (action.equals("numbers")) {
             NumberTrainer n = new NumberTrainer();
+            n.setVisible(true);
+        }
+                if (action.equals("colors")) {
+            ColorTrainer n = new ColorTrainer();
             n.setVisible(true);
         }
         if (action.equals("editors")) {
