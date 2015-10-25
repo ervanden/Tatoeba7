@@ -38,6 +38,8 @@ public interface Language {
         
         public String number(int n);
         // Convert an integer number to its translation in this language
-
+        
+        public String color(String color);
+        // Convert the english name of a color to the name in this language
 }  
 

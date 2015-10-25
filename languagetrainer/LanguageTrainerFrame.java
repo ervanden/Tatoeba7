@@ -44,6 +44,7 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
         JComboBox languageBox = new JComboBox(languageArray);
         languageBox.addActionListener(this);
         languageBox.setActionCommand("languageBox");
+        languageBox.setSelectedItem(LanguageNames.shortToLong(LanguageTrainer.targetLanguage));
         toolsPanel.add(languageBox);
 
         JPanel numberPanel = new JPanel();

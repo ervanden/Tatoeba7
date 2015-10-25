@@ -12,11 +12,8 @@ import javax.swing.JTextPane;
 import static languages.LanguageNames.longToShort;
 import utils.*;
 
-
-
-
 public class LanguageTrainer {
-    
+
     static LanguageTrainerFrame languageTrainerFrame;
     public static GenericTextPanel messageTextPanel;
     public static ArrayList<Entry> userParameters = new ArrayList<>();
@@ -61,13 +58,16 @@ public class LanguageTrainer {
     }
 
     public static void main(String[] args) {
-        messageTextPanel= new GenericTextPanel();       
+        messageTextPanel = new GenericTextPanel();
         readParameters();
         languages.LanguageNames.readLanguages();
 
         for (Entry e : userParameters) {
-            if (e.key.equals("language")){
-            userLanguages.add(longToShort(e.value));
+            if (e.key.equals("language")) {
+                userLanguages.add(longToShort(e.value));
+            }
+            if (e.key.equals("target")) {
+                targetLanguage = e.value;
             }
         }
 

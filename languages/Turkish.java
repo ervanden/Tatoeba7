@@ -22,10 +22,6 @@ public class Turkish extends GenericLanguage implements Language {
         return d;
     }
 
-    public void disposeDictionary() {
-        d = null;
-    }
-
     public char toUpperCase(char c) {
         if (c == 'i') {   // toUpperCase does not do I correctly
             return 'İ';
@@ -169,6 +165,33 @@ public class Turkish extends GenericLanguage implements Language {
         }
 
         return s;
+    }
+    
+    public String color(String color){
+        String tcolor=""; // translated color
+if (color.equals("white")) tcolor="beyaz";
+if (color.equals("black")) tcolor="siyah";
+if (color.equals("brown")) tcolor="kahverengi";
+if (color.equals("red")) tcolor="kırmızı";
+if (color.equals("salmon")) tcolor="?";
+if (color.equals("orange")) tcolor="turuncu";
+if (color.equals("yellow")) tcolor="sarı";
+if (color.equals("olive")) tcolor="zeytin rengi";
+if (color.equals("green")) tcolor="yeşil";
+if (color.equals("ivory")) tcolor="?";
+if (color.equals("light blue")) tcolor="açık mavi";
+if (color.equals("turquoise")) tcolor="turkuvaz";
+if (color.equals("dark blue")) tcolor="koyu mavi";
+if (color.equals("blue")) tcolor="mavi";
+if (color.equals("purple")) tcolor="mor";
+if (color.equals("violet")) tcolor="menekşe rengi";
+if (color.equals("magenta / fuchsia")) tcolor="galibarda";
+if (color.equals("beige")) tcolor="bej";
+if (color.equals("pink")) tcolor="pembe";
+if (color.equals("black")) tcolor="siyah";
+if (color.equals("grey")) tcolor="gri";
+if (color.equals("silver")) tcolor="gümüş renkli";
+        return tcolor;
     }
 
 }

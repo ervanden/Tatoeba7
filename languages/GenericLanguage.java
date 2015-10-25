@@ -46,7 +46,35 @@ public class GenericLanguage {
     }
 
     public String number(int n) {
-        return (String.format("%s", n));
+        return "number translation in this language is not implemented";
+    }
+    
+    public String color(String color){
+        String 	tcolor="?"; // translated color
+if (color.equals("white")) 		tcolor="?";
+if (color.equals("black")) 		tcolor="?";
+if (color.equals("brown")) 		tcolor="?";
+if (color.equals("red")) 		tcolor="?";
+if (color.equals("salmon")) 		tcolor="?";
+if (color.equals("orange")) 		tcolor="?";
+if (color.equals("gold")) 		tcolor="?";
+if (color.equals("yellow")) 		tcolor="?";
+if (color.equals("olive")) 		tcolor="?";
+if (color.equals("green")) 		tcolor="?";
+if (color.equals("light blue")) 	tcolor="?";
+if (color.equals("turquoise")) 		tcolor="?";
+if (color.equals("dark blue")) 		tcolor="?";
+if (color.equals("blue")) 		tcolor="?";
+if (color.equals("purple")) 		tcolor="?";
+if (color.equals("violet")) 		tcolor="?";
+if (color.equals("magenta / fuchsia")) 	tcolor="?";
+if (color.equals("beige")) 		tcolor="?";
+if (color.equals("pink")) 		tcolor="?";
+if (color.equals("ivory")) 		tcolor="?";
+if (color.equals("black")) 		tcolor="?";
+if (color.equals("grey")) 		tcolor="?";
+if (color.equals("silver")) 		tcolor="?";
+return 	tcolor;
     }
 
 }

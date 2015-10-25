@@ -22,10 +22,6 @@ public class Polish extends GenericLanguage implements Language {
         return d;
     }
 
-    public void disposeDictionary() {
-        d = null;
-    }
-
     public String letters() {
         return "ąćęłńóśżź";    
     }
@@ -224,6 +220,33 @@ public class Polish extends GenericLanguage implements Language {
             }
         }
         return s;
+    }
+    
+        public String color(String color){
+        String 	tcolor=""; // translated color
+if (color.equals("white")) 		tcolor="biały";
+if (color.equals("brown")) 		tcolor="brązowy";
+if (color.equals("red")) 		tcolor="czerwony";
+if (color.equals("salmon")) 		tcolor="łososiowy";
+if (color.equals("orange")) 		tcolor="pomarańczowy";
+if (color.equals("gold")) 		tcolor="złoty";
+if (color.equals("yellow")) 		tcolor="żółty";
+if (color.equals("olive")) 		tcolor="oliwkowy";
+if (color.equals("green")) 		tcolor="zielony";
+if (color.equals("light blue")) 	tcolor="jasny niebieski";
+if (color.equals("turquoise")) 		tcolor="?";
+if (color.equals("dark blue")) 		tcolor="ciemny niebieski";
+if (color.equals("blue")) 		tcolor="niebieski";
+if (color.equals("purple")) 		tcolor="purpurowy";
+if (color.equals("violet")) 		tcolor="fioletowy";
+if (color.equals("magenta / fuchsia")) 	tcolor="fuksja";
+if (color.equals("beige")) 		tcolor=" beżowy";
+if (color.equals("pink")) 		tcolor="różowy";
+if (color.equals("ivory")) 		tcolor="?";
+if (color.equals("black")) 		tcolor="czarny";
+if (color.equals("grey")) 		tcolor="szary";
+if (color.equals("silver")) 		tcolor="srebrny";
+return 	tcolor;
     }
 
 }
