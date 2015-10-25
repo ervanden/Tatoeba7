@@ -891,7 +891,7 @@ c.readSentencesFromDocument(targetArea.getStyledDocument());
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowUtils());
     }
 }
