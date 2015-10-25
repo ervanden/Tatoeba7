@@ -1,7 +1,6 @@
 package languages;
 
 import dictionaries.ItalianDictionary;
-import dictionaries.GenericDictionary;
 import javax.swing.JFileChooser;
 
 public class Italian extends GenericLanguage implements Language {
@@ -13,7 +12,7 @@ public class Italian extends GenericLanguage implements Language {
         return defaultFolder + "\\Tatoeba\\ItalianDictionary.txt";
     }
 
-    public GenericDictionary dictionary() {
+    public ItalianDictionary dictionary() {
         if (d == null) {
             d = new ItalianDictionary(this);
             d.readDictionaryFromFile(dictionaryFileName());
@@ -34,7 +33,7 @@ public class Italian extends GenericLanguage implements Language {
     }
     
         public String color(String color){
-        String 		tcolor=""; // translated color
+        String 		tcolor="?"; // translated color
 if (color.equals("white")) 		tcolor="bianco";
 if (color.equals("brown")) 		tcolor="marrone";
 if (color.equals("red")) 		tcolor="rosso";

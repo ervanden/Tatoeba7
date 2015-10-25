@@ -6,7 +6,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
 import java.util.*;
-import languages.LanguageContext;
 import languages.Language;
 
 import utils.AreaFont;

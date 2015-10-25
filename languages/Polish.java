@@ -1,7 +1,6 @@
 package languages;
 
 import dictionaries.PolishDictionary;
-import dictionaries.GenericDictionary;
 import java.util.HashMap;
 import javax.swing.JFileChooser;
 
@@ -14,7 +13,7 @@ public class Polish extends GenericLanguage implements Language {
         return defaultFolder + "\\Tatoeba\\PolishDictionary.txt";
     }
 
-    public GenericDictionary dictionary() {
+    public PolishDictionary dictionary() {
         if (d == null) {
             d = new PolishDictionary(this);
             d.readDictionaryFromFile(dictionaryFileName());
@@ -223,7 +222,7 @@ public class Polish extends GenericLanguage implements Language {
     }
     
         public String color(String color){
-        String 	tcolor=""; // translated color
+        String 	tcolor="?"; // translated color
 if (color.equals("white")) 		tcolor="biały";
 if (color.equals("brown")) 		tcolor="brązowy";
 if (color.equals("red")) 		tcolor="czerwony";
@@ -234,7 +233,7 @@ if (color.equals("yellow")) 		tcolor="żółty";
 if (color.equals("olive")) 		tcolor="oliwkowy";
 if (color.equals("green")) 		tcolor="zielony";
 if (color.equals("light blue")) 	tcolor="jasny niebieski";
-if (color.equals("turquoise")) 		tcolor="?";
+if (color.equals("turquoise")) 		tcolor="turkusowy";
 if (color.equals("dark blue")) 		tcolor="ciemny niebieski";
 if (color.equals("blue")) 		tcolor="niebieski";
 if (color.equals("purple")) 		tcolor="purpurowy";
@@ -242,7 +241,7 @@ if (color.equals("violet")) 		tcolor="fioletowy";
 if (color.equals("magenta / fuchsia")) 	tcolor="fuksja";
 if (color.equals("beige")) 		tcolor=" beżowy";
 if (color.equals("pink")) 		tcolor="różowy";
-if (color.equals("ivory")) 		tcolor="?";
+if (color.equals("ivory")) 		tcolor="koloru kości słoniowej";
 if (color.equals("black")) 		tcolor="czarny";
 if (color.equals("grey")) 		tcolor="szary";
 if (color.equals("silver")) 		tcolor="srebrny";

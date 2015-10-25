@@ -1,20 +1,19 @@
 package languages;
 
 import dictionaries.TurkishDictionary;
-import dictionaries.GenericDictionary;
 import java.util.HashMap;
 import javax.swing.JFileChooser;
 
 public class Turkish extends GenericLanguage implements Language {
 
-    GenericDictionary d = null;
+    TurkishDictionary d = null;
 
     public String dictionaryFileName() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
         return defaultFolder + "\\Tatoeba\\TurkishDictionary.txt";
     }
 
-    public GenericDictionary dictionary() {
+    public TurkishDictionary dictionary() {
         if (d == null) {
             d = new TurkishDictionary(this);
             d.readDictionaryFromFile(dictionaryFileName());
@@ -168,7 +167,7 @@ public class Turkish extends GenericLanguage implements Language {
     }
     
     public String color(String color){
-        String tcolor=""; // translated color
+        String tcolor="?"; // translated color
 if (color.equals("white")) tcolor="beyaz";
 if (color.equals("black")) tcolor="siyah";
 if (color.equals("brown")) tcolor="kahverengi";

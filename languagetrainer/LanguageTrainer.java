@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
-import javax.swing.JTextPane;
 import static languages.LanguageNames.longToShort;
 import utils.*;
 
@@ -18,7 +17,8 @@ public class LanguageTrainer {
     public static GenericTextPanel messageTextPanel;
     public static ArrayList<Entry> userParameters = new ArrayList<>();
     public static ArrayList<String> userLanguages = new ArrayList<>();
-    public static String targetLanguage;
+    public static String targetLanguage="eng";
+    public static String sourceLanguage="eng";
 
     private static void readParameters() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
@@ -68,6 +68,9 @@ public class LanguageTrainer {
             }
             if (e.key.equals("target")) {
                 targetLanguage = e.value;
+            }
+            if (e.key.equals("source")) {
+                sourceLanguage = e.value;
             }
         }
 

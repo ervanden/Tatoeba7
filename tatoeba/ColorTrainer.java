@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tatoeba;
 
 import java.awt.Color;
@@ -23,6 +18,21 @@ import javax.swing.event.ChangeListener;
 import languages.Language;
 import languages.LanguageContext;
 
+class NoFocusButton extends JButton {
+
+    public NoFocusButton(String s) {
+        super(s);
+    }
+
+    public boolean isRequestFocusEnabled() {
+        return false;
+    }
+
+    public boolean isFocusTraversable() {
+        return false;
+    }
+}
+
 public class ColorTrainer extends JFrame implements ActionListener, ChangeListener {
 
     ColorTrainer thisColorTrainer = this;
@@ -31,7 +41,7 @@ public class ColorTrainer extends JFrame implements ActionListener, ChangeListen
 
     JPanel content = new JPanel();
     Random randomGenerator = new Random();
-    JButton colorButton;
+    NoFocusButton colorButton;
     JColorChooser tcc = new JColorChooser();
     JLabel name;
     int currentIndex;
@@ -198,7 +208,7 @@ public class ColorTrainer extends JFrame implements ActionListener, ChangeListen
 //        allColors.add(new NamedColor("light gray / light grey", 211, 211, 211));
 //        allColors.add(new NamedColor("gainsboro", 220, 220, 220));
 //        allColors.add(new NamedColor("white smoke", 245, 245, 245));
-        colorButton = new JButton("");
+        colorButton = new NoFocusButton("");
         colorButton.setActionCommand("next");
         colorButton.addActionListener(thisColorTrainer);
         name = new JLabel("click on the button");
@@ -228,7 +238,7 @@ public class ColorTrainer extends JFrame implements ActionListener, ChangeListen
     public void actionPerformed(ActionEvent ae) {
         String action = ae.getActionCommand();
         if (action.equals("next")) {
-            if (nameIsDisplayed) {
+            if (nameIsDisplayed) {  // pick a new color and paint the button in this color
                 int index, r, g, b;
                 do {
                     index = randomGenerator.nextInt(allColors.size());
@@ -247,13 +257,18 @@ public class ColorTrainer extends JFrame implements ActionListener, ChangeListen
                 colorButton.setText(newColorName);
                 if ((r + g + b) < 256) {
                     colorButton.setForeground(Color.white);
-                       
+
                 } else {
                     colorButton.setForeground(Color.black);
                 }
                 name.setText("");
                 nameIsDisplayed = false;
             } else {
+                // translate the name again in case the target language has changed
+                String lang = languagetrainer.LanguageTrainer.targetLanguage;
+                Language language = LanguageContext.get(lang);
+                newColorTranslatedName = language.color(newColorName);
+
                 name.setText(newColorTranslatedName);
                 nameIsDisplayed = true;
             }

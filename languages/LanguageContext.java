@@ -15,6 +15,8 @@ public class LanguageContext {
         knownLanguages.add("pol");
         knownLanguages.add("por");
         knownLanguages.add("ita");
+        knownLanguages.add("eng");
+        knownLanguages.add("fra");
 
     }
 
@@ -30,6 +32,10 @@ public class LanguageContext {
                 language = new Portuguese();
             } else if (lang.equals("ita")) {
                 language = new Italian();
+            } else if (lang.equals("eng")) {
+                language = new English();
+            } else if (lang.equals("fra")) {
+                language = new French();
             } else {
                 language = new Other();
             }
