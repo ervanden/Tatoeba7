@@ -86,7 +86,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         pane.setCaretPosition(doc.getLength());
     }
 
-
     public void setAutoCorrect(boolean b) {
         if (sourceArea != null) {
             sourceArea.setAutoCorrect(b);
@@ -116,7 +115,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         enableMenuItem("Select clusters", true);
         enableMenuItem("Save all clusters", true);
         enableMenuItem("Save selected clusters", true);
-        enableMenuItem("Save special clusters", true);
         buttonNext.setEnabled(true);
         buttonTranslate.setEnabled(false);
         buttonPrevious.setEnabled(false);
@@ -180,7 +178,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         int retval;
 
         // menu items
-        
         if (action.equals("Exit without saving clusters")) {
             setVisible(false);
         }
@@ -192,10 +189,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         if (action.equals("Save all clusters")) {
             ClustersInOut.saveClusters("all");
-        }
-
-        if (action.equals("Save special clusters")) {
-            ClustersInOut.saveClustersToDo("");
         }
 
         if (action.equals("Save selected clusters")) {
@@ -238,7 +231,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         if (action.equals("Cluster Overview")) {
             ClusterCountFrame cc = new ClusterCountFrame();
-                cc.display();
+            cc.display();
         }
 
         if (action.equals("Select clusters")) {
@@ -294,7 +287,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         // buttons
-        
         if (action.equals("buttonPlus")) {
             AreaFont.multiply((float) 1.2);
             AreaFont.setFont(sourceArea);
@@ -433,10 +425,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 }
 
                 c.sentences.clear();
-//                c.readSentencesFromDocument(Tatoeba.tatoebaFrame.sourceArea.getStyledDocument());
-//                c.readSentencesFromDocument(Tatoeba.tatoebaFrame.targetArea.getStyledDocument());
-c.readSentencesFromDocument(sourceArea.getStyledDocument());
-c.readSentencesFromDocument(targetArea.getStyledDocument());
+                c.readSentencesFromDocument(sourceArea.getStyledDocument());
+                c.readSentencesFromDocument(targetArea.getStyledDocument());
                 c.tags.clear();
                 c.readTagsFromDocument(infoArea.getStyledDocument());
                 c.unsaved = true;
@@ -526,10 +516,10 @@ c.readSentencesFromDocument(targetArea.getStyledDocument());
             erasePane(sourceArea);
             erasePane(targetArea);
             erasePane(infoArea);
-            
+
             sourceArea.getLanguage().dictionary().dictionaryWindowVisible(true);
             targetArea.getLanguage().dictionary().dictionaryWindowVisible(true);
-            
+
             setAutoCorrect(false);
             writePane(sourceArea, "");
             for (String s : SelectionFrame.sourceLanguages) {
@@ -895,5 +885,3 @@ c.readSentencesFromDocument(targetArea.getStyledDocument());
         addWindowListener(new WindowUtils());
     }
 }
-
-

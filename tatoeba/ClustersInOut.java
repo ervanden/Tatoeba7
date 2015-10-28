@@ -189,7 +189,6 @@ class ClustersInOut {
 
     public static void saveClusters(String mode) {
 
-        Date now = new Date();
         String fileName = clustersFileName;
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -233,29 +232,6 @@ class ClustersInOut {
                     }
                 }
 
-                for (String l : usedLanguages) {
-                    outputStream.write("language");
-                    outputStream.write("\u0009");
-                    outputStream.write(l);
-                    outputStream.write("\u0009");
-                    outputStream.write(LanguageNames.shortToLong(l));
-                    outputStream.newLine();
-                }
-
-                for (String l : SelectionFrame.sourceLanguages) {
-                    outputStream.write("source");
-                    outputStream.write("\u0009");
-                    outputStream.write(l);
-                    outputStream.newLine();
-                }
-
-                for (String l : SelectionFrame.targetLanguages) {
-                    outputStream.write("target");
-                    outputStream.write("\u0009");
-                    outputStream.write(l);
-                    outputStream.newLine();
-                }
-
                 outputStream.close();
 
             } catch (IOException io) {
@@ -263,56 +239,4 @@ class ClustersInOut {
             }
         }
     }
-
-    public static void saveClustersToDo(String mode) {
-
-        String fileName = clustersFileName;
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setSelectedFile(new File(fileName));
-        int retval = fileChooser.showSaveDialog(null);
-        if (retval == JFileChooser.APPROVE_OPTION) {
-            File f = fileChooser.getSelectedFile();
-            fileName = f.getAbsolutePath();
-
-            try {
-                File initialFile = new File(fileName);
-                OutputStream is = new FileOutputStream(initialFile);
-                OutputStreamWriter isr = new OutputStreamWriter(is, "UTF-8");
-                BufferedWriter outputStream = new BufferedWriter(isr);
-
-                for (Cluster c : Graph.clusters.values()) {
-                    boolean english = false;
-                    boolean turkish = false;
-                    for (Sentence s : c.sentences) {
-                        if (s.language.equals("tur")) {
-                            turkish = true;
-                        };
-                        if (s.language.equals("eng")) {
-                            english = true;
-                        };
-
-                    }
-                    if (english && !turkish) {
-                        for (Sentence s : c.sentences) {
-                            if (s.language.equals("eng")) {
-                                outputStream.write(s.nr + "");
-                                outputStream.write("\u0009");
-                                outputStream.write(s.sentence);
-                                outputStream.newLine();
-                            };
-
-                        }
-                    }
-
-                }
-
-                outputStream.close();
-
-            } catch (IOException io) {
-                MsgTextPane.write(" io exception during save clusters");
-            }
-        }
-    }
-
 }

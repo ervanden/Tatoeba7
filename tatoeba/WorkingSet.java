@@ -12,13 +12,7 @@ public class WorkingSet {
     public static int size() {
         return workingSet.size();
     }
-
-    /*
-    public static void clear() {
-        workingSet.clear();
-    }
-*/
-    
+ 
     public static void build() { 
         workingSet.clear();
         if (Graph.selectedClusterCount < 1) {
@@ -47,7 +41,7 @@ public class WorkingSet {
         }
 
         nextInWorkingSet++;
-        if (nextInWorkingSet >= WorkingSet.size()) {
+        if (nextInWorkingSet >= size()) {
             nextInWorkingSet = 0;
         }
         return workingSet.get(nextInWorkingSet);

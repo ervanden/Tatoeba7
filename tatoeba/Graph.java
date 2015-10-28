@@ -7,7 +7,8 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class ClusterHashMap extends HashMap<Integer, Cluster> {
+
+    class ClusterHashMap extends HashMap<Integer, Cluster> {
 
     /* ClusterHashMap stores a number that is equal to (or higher then, if clusters are removed) the largest
      assigned cluster number. This is needed to create a unique cluster number when the user creates a new cluster
@@ -28,14 +29,12 @@ class ClusterHashMap extends HashMap<Integer, Cluster> {
     public int maximumClusterNumber() {
         return maxKey;
     }
-
 }
+
 
 public class Graph {
 
     static HashMap<Integer, Sentence> sentences = new HashMap<Integer, Sentence>();
-//    static HashMap<Integer, Cluster> clusters = new HashMap<Integer, Cluster>();
-
     static ClusterHashMap clusters = new ClusterHashMap();
 
     public static int clusterCount = 0;
@@ -46,6 +45,7 @@ public class Graph {
 
     static ArrayList<Integer> complexityFreq = new ArrayList<>();
     static final int MAX_COMPLEXITY = 1000;
+   
 
     public static int maximumClusterNumber() {
         return clusters.maximumClusterNumber();
@@ -104,12 +104,6 @@ public class Graph {
         return false;
     }
 
-    /*
-     public static Cluster getCluster(int index) { // index is the index in the array, not Cluster.nr !!!
-     return clusters.get(index);
-     }
-     */
-
     /* when any of the parameters in the selection Frame are changed (i.e. source/target language, tags, pattern)
      'selectClustersByParameters' sets 'selectedByParameters' but also
      calculates the complexity of these selected clusters and creates a cumulative frequency in the array 'complexityFreq'.
@@ -126,7 +120,7 @@ public class Graph {
 
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
-        for (Cluster c : Graph.clusters.values()) {
+        for (Cluster c : clusters.values()) {
             if (c.selectedByParameters) {
                 int complexity = 0;
                 for (Sentence s : c.sentences) {
@@ -146,8 +140,8 @@ public class Graph {
                 }
             }
         }
-        Graph.minComplexity = min;
-        Graph.maxComplexity = max;
+        minComplexity = min;
+        maxComplexity = max;
 
         // change frequency to cumulative frequency
         int count = 0;
@@ -273,7 +267,6 @@ public class Graph {
         for (Cluster c : clusters.values()) {
             c.selected = c.selectedByParameters && c.selectedByComplexity;
         }
-        //       WorkingSet.clear();
     }
 
     public static void displayClusters(GenericTextFrame frame, String which) {
