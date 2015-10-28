@@ -113,7 +113,6 @@ class ClustersInOut {
 
         BufferedReader inputStream = null;
         int clusterCount = 0;
-        int languageCount = 0;
         Cluster c = null;
         Sentence s = null;
 
@@ -184,7 +183,6 @@ class ClustersInOut {
         }
 
         MsgTextPane.write(clusterCount + " clusters read from " + fileName);
-        MsgTextPane.write(languageCount + " languages read from " + fileName);
 
         return true;
     }

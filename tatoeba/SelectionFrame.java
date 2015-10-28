@@ -107,12 +107,10 @@ public class SelectionFrame {
         sliderMax.setMajorTickSpacing(1);
     }
 
-    
-    public static void setTatoebaFrame(TatoebaFrame t){
-     tatoebaFrame=t;   
+    public static void setTatoebaFrame(TatoebaFrame t) {
+        tatoebaFrame = t;
     }
-    
-    
+
     static class WindowCloser extends WindowAdapter {
 
         public void windowClosing(WindowEvent e) {
@@ -232,13 +230,17 @@ public class SelectionFrame {
     static areaCaretListener allTagsCaretListener = new areaCaretListener(allTagsArea);
     static areaCaretListener selectedTagsCaretListener = new areaCaretListener(selectedTagsArea);
 
-    private static void populateArea(JTextPane pane, HashSet<String> names) {
-        ArrayList<String> longNames = new ArrayList<String>();
-        StyledDocument doc;
 
-        for (String s : names) {
+    static ArrayList<String> listShortToLong(HashSet<String> shortNames) {
+        ArrayList<String> longNames = new ArrayList<String>();
+        for (String s : shortNames) {
             longNames.add(LanguageNames.shortToLong(s));
         }
+        return longNames;
+    }
+
+    private static void populateArea(JTextPane pane, ArrayList<String> longNames) {        
+        StyledDocument doc;
         Collections.sort(longNames);
         doc = pane.getStyledDocument();
         eraseDocument(doc);
@@ -247,19 +249,18 @@ public class SelectionFrame {
                 doc.insertString(doc.getLength(), language + "\n", null);
             } catch (BadLocationException blex) {
             }
-        };
-
+        }
     }
 
     public static void populateAreas() {
 
         enableCaretListener = false; // prevent that caretlistener fires and selects everything
 
-        populateArea(allLanguagesArea, usedLanguages);
-        populateArea(sourceLanguagesArea, sourceLanguages);
-        populateArea(targetLanguagesArea, targetLanguages);
-        populateArea(allTagsArea, allTags);
-        populateArea(selectedTagsArea, selectedTags);
+        populateArea(allLanguagesArea, listShortToLong(usedLanguages));
+        populateArea(sourceLanguagesArea, listShortToLong(sourceLanguages));
+        populateArea(targetLanguagesArea, listShortToLong(targetLanguages));
+        populateArea(allTagsArea, new ArrayList<String>(allTags));
+        populateArea(selectedTagsArea, new ArrayList<String>(selectedTags));
 
         allLanguagesSelected.clear();
         sourceLanguagesSelected.clear();
@@ -571,12 +572,14 @@ public class SelectionFrame {
     }
 
     public static void create() {
-        if (isCreated) return;
-        isCreated=true;
-        
+        if (isCreated) {
+            return;
+        }
+        isCreated = true;
+
         sourceLanguages.add(languagetrainer.LanguageTrainer.sourceLanguage);
         targetLanguages.add(languagetrainer.LanguageTrainer.targetLanguage);
-                
+
         setAreaParameters(allLanguagesArea, "Languages");
         setAreaParameters(sourceLanguagesArea, "Source");
         setAreaParameters(targetLanguagesArea, "Target");
@@ -629,8 +632,8 @@ public class SelectionFrame {
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
                 sourceLanguages.addAll(allLanguagesSelected);
-                populateArea(allLanguagesArea, usedLanguages);
-                populateArea(sourceLanguagesArea, sourceLanguages);
+                populateArea(allLanguagesArea, listShortToLong(usedLanguages));
+                populateArea(sourceLanguagesArea, listShortToLong(sourceLanguages));
                 allLanguagesSelected.clear();
                 sourceLanguagesSelected.clear();
                 statusMessage(false);
@@ -644,8 +647,8 @@ public class SelectionFrame {
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
                 sourceLanguages.removeAll(sourceLanguagesSelected);
-                populateArea(allLanguagesArea, usedLanguages);
-                populateArea(sourceLanguagesArea, sourceLanguages);
+                populateArea(allLanguagesArea, listShortToLong(usedLanguages));
+                populateArea(sourceLanguagesArea, listShortToLong(sourceLanguages));
                 allLanguagesSelected.clear();
                 sourceLanguagesSelected.clear();
                 statusMessage(false);
@@ -659,8 +662,8 @@ public class SelectionFrame {
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
                 targetLanguages.addAll(allLanguagesSelected);
-                populateArea(allLanguagesArea, usedLanguages);
-                populateArea(targetLanguagesArea, targetLanguages);
+                populateArea(allLanguagesArea, listShortToLong(usedLanguages));
+                populateArea(targetLanguagesArea, listShortToLong(targetLanguages));
                 allLanguagesSelected.clear();
                 targetLanguagesSelected.clear();
                 statusMessage(false);
@@ -674,8 +677,8 @@ public class SelectionFrame {
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
                 targetLanguages.removeAll(targetLanguagesSelected);
-                populateArea(allLanguagesArea, usedLanguages);
-                populateArea(targetLanguagesArea, targetLanguages);
+                populateArea(allLanguagesArea, listShortToLong(usedLanguages));
+                populateArea(targetLanguagesArea, listShortToLong(targetLanguages));
                 allLanguagesSelected.clear();
                 targetLanguagesSelected.clear();
                 statusMessage(false);
@@ -689,8 +692,8 @@ public class SelectionFrame {
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
                 selectedTags.addAll(allTagsSelected);
-                populateArea(allTagsArea, allTags);
-                populateArea(selectedTagsArea, selectedTags);
+                populateArea(allTagsArea, new ArrayList<String>(allTags));
+                populateArea(selectedTagsArea, new ArrayList<String>(selectedTags));
                 allTagsSelected.clear();
                 selectedTagsSelected.clear();
                 statusMessage(false);
@@ -704,8 +707,8 @@ public class SelectionFrame {
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
                 selectedTags.removeAll(selectedTagsSelected);
-                populateArea(allTagsArea, allTags);
-                populateArea(selectedTagsArea, selectedTags);
+                populateArea(allTagsArea, new ArrayList<String>(allTags));
+                populateArea(selectedTagsArea, new ArrayList<String>(selectedTags));
                 allTagsSelected.clear();
                 selectedTagsSelected.clear();
                 statusMessage(false);
@@ -737,7 +740,6 @@ public class SelectionFrame {
                 WorkingSet.build();
 
                 // if the source or target are one single language, make the corresponding window language sensitive
-                
                 if (targetLanguages.size() == 1) {
                     for (String language : targetLanguages) {
                         tatoebaFrame.newTargetArea(language);
