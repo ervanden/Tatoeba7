@@ -17,6 +17,7 @@ public class LanguageContext {
         knownLanguages.add("ita");
         knownLanguages.add("eng");
         knownLanguages.add("fra");
+        knownLanguages.add("nld");
 
     }
 
@@ -36,6 +37,8 @@ public class LanguageContext {
                 language = new English();
             } else if (lang.equals("fra")) {
                 language = new French();
+            } else if (lang.equals("nld")) {
+                language = new Dutch();
             } else {
                 language = new Other();
             }

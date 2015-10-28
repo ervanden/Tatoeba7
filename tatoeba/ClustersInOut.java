@@ -55,7 +55,6 @@ class ClustersInOut {
                     // when reading the tatoeba files, there are no source, target or language
                     // keywords like in a cluster database, so 'allLanguages' is populated here
                     SelectionFrame.usedLanguages.add(s.language);
-                    SelectionFrame.allLanguages.add(s.language);
                     count++;
                 }
             }
@@ -136,15 +135,7 @@ class ClustersInOut {
             while ((l = inputStream.readLine()) != null) {
                 lineCount++;
                 ls = l.split("\u0009");
-                if (l.matches("^language.*$")) {
-                    languageCount++;
-                    LanguageNames.addLanguage(ls[1], ls[2]);
-                    SelectionFrame.allLanguages.add(ls[1]);
-                } else if (l.matches("^source.*$")) {
-                    SelectionFrame.sourceLanguages.add(ls[1]);
-                } else if (l.matches("^target.*$")) {
-                    SelectionFrame.targetLanguages.add(ls[1]);
-                } else if (l.matches("^.*cluster.*$")) {
+                if (l.matches("^.*cluster.*$")) {
                     clusterCount++;
                     c = new Cluster();
                     c.nr = clusterCount;
@@ -153,9 +144,7 @@ class ClustersInOut {
                     String tag;
                     for (int i = 1; i <= ls.length - 1; i++) {
                         tag = ls[i];
-                        //                           System.out.println("tag = |" + tag + "|");
                         tag = tag.replaceAll(" *", "");
-                        //                           System.out.println("tag = |" + tag + "|");
                         c.tags.add(tag);
                         SelectionFrame.allTags.add(tag);
                     }
@@ -220,7 +209,7 @@ class ClustersInOut {
 
                 HashSet<String> usedLanguages;
                 if (mode.equals("all")) {
-                    usedLanguages = new HashSet<String>(SelectionFrame.allLanguages);
+                    usedLanguages = new HashSet<String>(SelectionFrame.usedLanguages);
                 } else {
                     usedLanguages = new HashSet<String>(SelectionFrame.sourceLanguages);
                     usedLanguages.addAll(SelectionFrame.targetLanguages);

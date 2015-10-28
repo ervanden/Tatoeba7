@@ -45,8 +45,9 @@ public class ColorTrainer extends JFrame implements ActionListener, ChangeListen
     JColorChooser tcc = new JColorChooser();
     JLabel name;
     int currentIndex;
-    String newColorName;
-    String newColorTranslatedName;
+    String newColorEnglish;
+    String newColorSource;
+    String newColorTarget;
     boolean nameIsDisplayed = true;
 
     class NamedColor {
@@ -247,15 +248,16 @@ public class ColorTrainer extends JFrame implements ActionListener, ChangeListen
                     g = allColors.get(index).g;
                     b = allColors.get(index).b;
                     colorButton.setBackground(new Color(r, g, b));
-                    newColorName = allColors.get(index).name;
-                    String lang = languagetrainer.LanguageTrainer.targetLanguage;
-                    Language language = LanguageContext.get(lang);
-                    newColorTranslatedName = language.color(newColorName);
+                    newColorEnglish = allColors.get(index).name;
                 } while (index == currentIndex);  // skip if the same as the previous color
                 System.out.println("selected new color = " + index + " [" + (r + g + b) + "]");
                 currentIndex = index;
-                colorButton.setText(newColorName);
-                if ((r + g + b) < 256) {
+
+                String lang = languagetrainer.LanguageTrainer.sourceLanguage;
+                Language language = LanguageContext.get(lang);
+                newColorSource = language.color(newColorEnglish);
+                colorButton.setText(newColorSource);
+                if ((r + g + b) < 300) {
                     colorButton.setForeground(Color.white);
 
                 } else {
@@ -264,12 +266,12 @@ public class ColorTrainer extends JFrame implements ActionListener, ChangeListen
                 name.setText("");
                 nameIsDisplayed = false;
             } else {
-                // translate the name again in case the target language has changed
+                // translate the name here in case the target language has changed
                 String lang = languagetrainer.LanguageTrainer.targetLanguage;
                 Language language = LanguageContext.get(lang);
-                newColorTranslatedName = language.color(newColorName);
-
-                name.setText(newColorTranslatedName);
+                newColorTarget = language.color(newColorEnglish);
+                
+                name.setText(newColorTarget);
                 nameIsDisplayed = true;
             }
 

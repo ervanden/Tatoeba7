@@ -20,9 +20,9 @@ the type GenericDictionary is used throughout.
 3. Add Swahili to the static LanguageContext class. This class is used to obtain the right Language object 
    by all code that needs functions for a specific language.
    a. Add the language code to the list 'knownLanguages'.
-      It will then appear in the menu of LanguageTrainerFrame.
    b. In the function 'get()' add Swahili.
 
-
+4. Add Swahili in the file LanguageTrainer.txt. 
+   It will then appear in the menu of LanguageTrainerFrame 
 
 

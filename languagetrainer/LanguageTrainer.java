@@ -17,8 +17,8 @@ public class LanguageTrainer {
     public static GenericTextPanel messageTextPanel;
     public static ArrayList<Entry> userParameters = new ArrayList<>();
     public static ArrayList<String> userLanguages = new ArrayList<>();
-    public static String targetLanguage="eng";
-    public static String sourceLanguage="eng";
+    public static String targetLanguage = "eng";
+    public static String sourceLanguage = "eng";
 
     private static void readParameters() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
@@ -31,10 +31,12 @@ public class LanguageTrainer {
             BufferedReader in = new BufferedReader(isr);
             String l;
             String[] ls;
+            int lineNr = 0;
             while ((l = in.readLine()) != null) {
+                lineNr++;
                 ls = l.split("\\=");
                 if (ls.length < 2) {
-                    MsgTextPane.write("invalid line : " + l);
+                    MsgTextPane.write("invalid line [" + lineNr + "] : " + l);
                 } else {
                     String key = ls[0];
                     key = key.replaceAll("^ *", "");
@@ -65,12 +67,12 @@ public class LanguageTrainer {
         for (Entry e : userParameters) {
             if (e.key.equals("language")) {
                 userLanguages.add(longToShort(e.value));
-            }
-            if (e.key.equals("target")) {
+            } else if (e.key.equals("target")) {
                 targetLanguage = e.value;
-            }
-            if (e.key.equals("source")) {
+            } else if (e.key.equals("source")) {
                 sourceLanguage = e.value;
+            } else {
+                MsgTextPane.write("invalid parameter : " + e.key);
             }
         }
 

@@ -1,7 +1,6 @@
 package languagetrainer;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -10,6 +9,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import langeditor.LanguageEditorFrame;
 import languages.LanguageNames;
@@ -23,7 +23,7 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
     JFrame thisFrame = this;
     LanguageTrainerFrame thisLanguageTrainer = this;
     JPanel content = new JPanel();
-    String[] tools = {"sentences", "numbers", "colors","editors"};
+    String[] tools = {"sentences", "numbers", "colors", "editors"};
     HashMap<String, JButton> buttons = new HashMap<>();
 
     public LanguageTrainerFrame() {
@@ -41,11 +41,23 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
         for (int i = 0; i < languageArray.length; i++) {
             languageArray[i] = LanguageNames.shortToLong(LanguageTrainer.userLanguages.get(i));
         }
-        JComboBox languageBox = new JComboBox(languageArray);
-        languageBox.addActionListener(this);
-        languageBox.setActionCommand("languageBox");
-        languageBox.setSelectedItem(LanguageNames.shortToLong(LanguageTrainer.targetLanguage));
-        toolsPanel.add(languageBox);
+
+        JLabel sourceLabel = new JLabel("source");
+        JComboBox sourceLanguageBox = new JComboBox(languageArray);
+        sourceLanguageBox.addActionListener(this);
+        sourceLanguageBox.setActionCommand("sourceLanguageBox");
+        sourceLanguageBox.setSelectedItem(LanguageNames.shortToLong(LanguageTrainer.sourceLanguage));
+
+        JLabel targetLabel = new JLabel("target");
+        JComboBox targetLanguageBox = new JComboBox(languageArray);
+        targetLanguageBox.addActionListener(this);
+        targetLanguageBox.setActionCommand("targetLanguageBox");
+        targetLanguageBox.setSelectedItem(LanguageNames.shortToLong(LanguageTrainer.targetLanguage));
+
+        toolsPanel.add(sourceLabel);
+        toolsPanel.add(sourceLanguageBox);
+        toolsPanel.add(targetLabel);
+        toolsPanel.add(targetLanguageBox);
 
         JPanel numberPanel = new JPanel();
         numberPanel.setLayout(new BoxLayout(numberPanel, BoxLayout.LINE_AXIS));
@@ -54,8 +66,8 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
             toolsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
             toolsPanel.add(buttons.get(tool));
         }
-        
-        content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));  
+
+        content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
         content.add(toolsPanel);
         content.add(LanguageTrainer.messageTextPanel);
 
@@ -70,25 +82,26 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
         if (action.equals("numbers")) {
             NumberTrainer n = new NumberTrainer();
             n.setVisible(true);
-        }
-                if (action.equals("colors")) {
+        } else if (action.equals("colors")) {
             ColorTrainer n = new ColorTrainer();
             n.setVisible(true);
-        }
-        if (action.equals("editors")) {
+        } else if (action.equals("editors")) {
             LanguageEditorFrame f = new LanguageEditorFrame("pol");
             f.setVisible(true);
-        }
-        if (action.equals("sentences")) {
+        } else if (action.equals("sentences")) {
             TatoebaFrame t = new TatoebaFrame();
             SelectionFrame.create();
             SelectionFrame.setTatoebaFrame(t);
-        }
-        if (action.equals("languageBox")) {
+        } else if (action.equals("targetLanguageBox")) {
             JComboBox box = (JComboBox) ae.getSource();
             String longName = (String) box.getSelectedItem();
             LanguageTrainer.targetLanguage = LanguageNames.longToShort(longName);
-            MsgTextPane.write("target language is "+LanguageTrainer.targetLanguage);
+            MsgTextPane.write("target language is " + LanguageTrainer.targetLanguage);
+        } else if (action.equals("sourceLanguageBox")) {
+            JComboBox box = (JComboBox) ae.getSource();
+            String longName = (String) box.getSelectedItem();
+            LanguageTrainer.sourceLanguage = LanguageNames.longToShort(longName);
+            MsgTextPane.write("source language is " + LanguageTrainer.sourceLanguage);
         }
     }
 

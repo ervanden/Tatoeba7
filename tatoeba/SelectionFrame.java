@@ -55,7 +55,6 @@ public class SelectionFrame {
     public static JScrollPane selectedTagsScroll = new JScrollPane(selectedTagsArea);
 
     public static HashSet<String> usedLanguages = new HashSet<>();
-    public static HashSet<String> allLanguages = new HashSet<>();
     public static HashSet<String> allTags = new HashSet<>();
     public static HashSet<String> sourceLanguages = new HashSet<>();
     public static HashSet<String> targetLanguages = new HashSet<>();
@@ -256,7 +255,7 @@ public class SelectionFrame {
 
         enableCaretListener = false; // prevent that caretlistener fires and selects everything
 
-        populateArea(allLanguagesArea, allLanguages);
+        populateArea(allLanguagesArea, usedLanguages);
         populateArea(sourceLanguagesArea, sourceLanguages);
         populateArea(targetLanguagesArea, targetLanguages);
         populateArea(allTagsArea, allTags);
@@ -575,6 +574,9 @@ public class SelectionFrame {
         if (isCreated) return;
         isCreated=true;
         
+        sourceLanguages.add(languagetrainer.LanguageTrainer.sourceLanguage);
+        targetLanguages.add(languagetrainer.LanguageTrainer.targetLanguage);
+                
         setAreaParameters(allLanguagesArea, "Languages");
         setAreaParameters(sourceLanguagesArea, "Source");
         setAreaParameters(targetLanguagesArea, "Target");
@@ -627,7 +629,7 @@ public class SelectionFrame {
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
                 sourceLanguages.addAll(allLanguagesSelected);
-                populateArea(allLanguagesArea, allLanguages);
+                populateArea(allLanguagesArea, usedLanguages);
                 populateArea(sourceLanguagesArea, sourceLanguages);
                 allLanguagesSelected.clear();
                 sourceLanguagesSelected.clear();
@@ -642,7 +644,7 @@ public class SelectionFrame {
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
                 sourceLanguages.removeAll(sourceLanguagesSelected);
-                populateArea(allLanguagesArea, allLanguages);
+                populateArea(allLanguagesArea, usedLanguages);
                 populateArea(sourceLanguagesArea, sourceLanguages);
                 allLanguagesSelected.clear();
                 sourceLanguagesSelected.clear();
@@ -657,7 +659,7 @@ public class SelectionFrame {
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
                 targetLanguages.addAll(allLanguagesSelected);
-                populateArea(allLanguagesArea, allLanguages);
+                populateArea(allLanguagesArea, usedLanguages);
                 populateArea(targetLanguagesArea, targetLanguages);
                 allLanguagesSelected.clear();
                 targetLanguagesSelected.clear();
@@ -672,7 +674,7 @@ public class SelectionFrame {
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
                 targetLanguages.removeAll(targetLanguagesSelected);
-                populateArea(allLanguagesArea, allLanguages);
+                populateArea(allLanguagesArea, usedLanguages);
                 populateArea(targetLanguagesArea, targetLanguages);
                 allLanguagesSelected.clear();
                 targetLanguagesSelected.clear();
