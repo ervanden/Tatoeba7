@@ -25,27 +25,6 @@ import languages.LanguageContext;
 import utils.GenericTextPanel;
 
 
-        class ImagePanel extends JPanel{ 
-    BufferedImage image;
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        System.out.println("paintcomponent");
-        if(image != null){
-                    System.out.println("drawimage");
-            g.drawImage(image, 0, 0, this);
-        }
-    }
-    
-    public ImagePanel(String imageFile){
-                String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        String fileName = defaultFolder + "\\Tatoeba\\Images\\"+imageFile;
-       try {
-    image = ImageIO.read(new File(fileName));
-} catch (IOException e) {
-    System.out.println("io exception : "+fileName);
-}
-    }
-}
 
 public class NumberTrainer extends JFrame implements ActionListener {
 
@@ -130,9 +109,6 @@ public class NumberTrainer extends JFrame implements ActionListener {
         content.add(transButton);
         content.add(Box.createRigidArea(new Dimension(0, 10)));
         content.add(numberPanel);
-
-        ImagePanel imagePanel = new ImagePanel("kijkeens.jpg");
-                content.add(imagePanel);
                 
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setContentPane(content);

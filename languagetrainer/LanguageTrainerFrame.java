@@ -21,7 +21,7 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
     JFrame thisFrame = this;
     LanguageTrainerFrame thisLanguageTrainer = this;
     JPanel content = new JPanel();
-    String[] tools = {"sentences", "numbers", "colors", "editors"};
+    String[] tools = {"sentences", "numbers", "colors", "editors", "words"};
     HashMap<String, JButton> buttons = new HashMap<>();
 
     public LanguageTrainerFrame() {
@@ -77,6 +77,10 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String action = ae.getActionCommand();
         System.out.println(action);
+                if (action.equals("words")) {
+            PictureTrainer p = new PictureTrainer();
+            p.setVisible(true);
+        } else 
         if (action.equals("numbers")) {
             NumberTrainer n = new NumberTrainer();
             n.setVisible(true);
