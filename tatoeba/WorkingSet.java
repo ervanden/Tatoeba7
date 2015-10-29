@@ -6,17 +6,24 @@ import utils.*;
 
 public class WorkingSet {
 
-    static ArrayList<Cluster> workingSet = new ArrayList<Cluster>();
-    static int nextInWorkingSet = -1;
+     ArrayList<Cluster> workingSet;
+     int nextInWorkingSet;
+    SelectionFrame selectionFrame;
 
-    public static int size() {
+    public WorkingSet(SelectionFrame s){
+      workingSet = new ArrayList<Cluster>();
+      nextInWorkingSet = -1;
+      selectionFrame=s;
+    }
+    
+    public  int size() {
         return workingSet.size();
     }
  
-    public static void build() { 
+    public  void build() { 
         workingSet.clear();
         if (Graph.selectedClusterCount < 1) {
-            SelectionFrame.setVisible(true);
+            selectionFrame.setVisible(true);
         }
         if (Graph.selectedClusterCount < 1) {
             MsgTextPane.write("No clusters selected.");
@@ -31,7 +38,7 @@ public class WorkingSet {
     }
 
 
-    public static Cluster pickCluster() {
+    public  Cluster pickCluster() {
 
         // circular
         
@@ -48,7 +55,7 @@ public class WorkingSet {
 
     }
     
-    public static String pickedClusterToString(){
+    public  String pickedClusterToString(){
         return (nextInWorkingSet+1) + "/" + size();
     }
 

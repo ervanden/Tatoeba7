@@ -32,9 +32,9 @@ class lunchCanvas extends Canvas {
     int xorig = 0;
     int yorig = 0;
     
-    public lunchCanvas(){
-        System.out.println("used languages : "+SelectionFrame.usedLanguages.size());
-          shortLanguageNames = new ArrayList<>(SelectionFrame.usedLanguages);
+    public lunchCanvas(SelectionFrame selectionFrame){
+        System.out.println("used languages : "+selectionFrame.usedLanguages.size());
+          shortLanguageNames = new ArrayList<>(selectionFrame.usedLanguages);
         longLanguageNames = new ArrayList<>();
 
         for (String s : shortLanguageNames) {
@@ -261,7 +261,7 @@ class ClusterCountFrame extends ComponentAdapter implements MouseMotionListener,
 
         Rectangle bounds = gc.getBounds(); // device coordinates of the screen (0,0) = upper left (w,h) = lo right
         
-lunchPlane = new lunchCanvas();
+//lunchPlane = new lunchCanvas();
 
         lunchFrame.setLocation(bounds.width / 2, bounds.height / 3);
         lunchFrame.setSize(bounds.width / 2 - 22, bounds.width / 2);

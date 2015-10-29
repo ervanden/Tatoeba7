@@ -24,7 +24,7 @@ public class Cluster {
         selectedByComplexity = true;
     }
 
-    public void readSentencesFromDocument(StyledDocument document) {
+    public void readSentencesFromDocument(StyledDocument document, SelectionFrame selectionFrame) {
         // read sentences from edited source and target text panes
         javax.swing.text.Element root = document.getDefaultRootElement();
         int lineNr;
@@ -49,8 +49,8 @@ public class Cluster {
 
                     // sanity check
                     
-                    if (!SelectionFrame.sourceLanguages.contains(s.language)
-                            && !SelectionFrame.targetLanguages.contains(s.language)) {
+                    if (!selectionFrame.sourceLanguages.contains(s.language)
+                            && !selectionFrame.targetLanguages.contains(s.language)) {
                         System.out.println("unrecognized language <" + s.language + ">");
                     } else {
                         sentences.add(s);

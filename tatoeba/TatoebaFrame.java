@@ -4,7 +4,17 @@ import languages.LanguageNames;
 import utils.GenericTextFrame;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.util.*;
@@ -14,11 +24,14 @@ import langeditor.LanguageEditorFrame;
 import languages.LanguageContext;
 
 import utils.AreaFont;
+import utils.MsgTextPane;
 
 // If the source or target language is one single language, a language-specific text pane is used.
 public class TatoebaFrame extends JFrame implements ActionListener {
 
     private JFrame thisFrame = (JFrame) this;
+    public SelectionFrame selectionFrame;
+    public WorkingSet workingSet;
 
     public LanguageTextPane sourceArea;
     public LanguageTextPane targetArea;
@@ -142,10 +155,10 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         public void run() {
-            ClustersInOut.readClusters(fileName);
+            readClusters(fileName);
             Graph.LanguageMatrix.generate();
-            SelectionFrame.populateAreas();
-            SelectionFrame.setVisible(true);
+            selectionFrame.populateAreas();
+            selectionFrame.setVisible(true);
             enableStandard();
         }
     }
@@ -159,10 +172,10 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         public void run() {
-            ClustersInOut.readSentences(dirName);
+            readSentences(dirName);
             Graph.LanguageMatrix.generate();
-            SelectionFrame.populateAreas();
-            SelectionFrame.setVisible(true);
+            selectionFrame.populateAreas();
+            selectionFrame.setVisible(true);
             enableStandard();
         }
     }
@@ -183,16 +196,16 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Save clusters and exit")) {
-            ClustersInOut.saveClusters("all");
+            saveClusters("all");
             setVisible(false);
         }
 
         if (action.equals("Save all clusters")) {
-            ClustersInOut.saveClusters("all");
+            saveClusters("all");
         }
 
         if (action.equals("Save selected clusters")) {
-            ClustersInOut.saveClusters("selected");
+            saveClusters("selected");
         }
 
         if (action.equals("Read Tatoeba Database")) {
@@ -235,7 +248,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Select clusters")) {
-            SelectionFrame.setVisible(true);
+            selectionFrame.setVisible(true);
             clusterFifo.reset();
             spacer1.setText("");
             erasePane(sourceArea);
@@ -256,7 +269,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 unsavedClustersFrame = new GenericTextFrame();
             }
             unsavedClustersFrame.setVisible(true);
-            Graph.displayClusters(unsavedClustersFrame, "unsaved");
+            Graph.displayClusters(unsavedClustersFrame, "unsaved", selectionFrame);
         }
 
         if (action.equals("Horizontal")) {
@@ -324,8 +337,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
             Cluster activeCluster = null;
 
-            if (WorkingSet.size() == 0) {
-                WorkingSet.build();
+            if (workingSet.size() == 0) {
+                workingSet.build();
             }
 
             if (action.equals("buttonNext")) {
@@ -336,9 +349,9 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                     activeCluster = clusterFifo.peekFirst();
                     spacer1.setText("-");
                 } else {
-                    activeCluster = WorkingSet.pickCluster();
+                    activeCluster = workingSet.pickCluster();
                     clusterFifo.push(activeCluster);
-                    spacer1.setText(WorkingSet.pickedClusterToString());
+                    spacer1.setText(workingSet.pickedClusterToString());
                 }
 
             } else {
@@ -354,7 +367,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
                 writePane(sourceArea, "");
                 for (Sentence s : activeCluster.sentences) {
-                    if (SelectionFrame.sourceLanguages.contains(s.language)) {
+                    if (selectionFrame.sourceLanguages.contains(s.language)) {
                         writePane(sourceArea, " " + s.language + ">  " + s.sentence);
                     }
                 }
@@ -376,8 +389,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
             Cluster activeCluster = null;
 
-            if (WorkingSet.size() == 0) {
-                WorkingSet.build();
+            if (workingSet.size() == 0) {
+                workingSet.build();
             }
 
             if (sourceDisplayed) {
@@ -387,7 +400,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
                     writePane(targetArea, "");
                     for (Sentence s : activeCluster.sentences) {
-                        if (SelectionFrame.targetLanguages.contains(s.language)) {
+                        if (selectionFrame.targetLanguages.contains(s.language)) {
                             writePane(targetArea, " " + s.language + ">  " + s.sentence);
                         }
                     }
@@ -425,8 +438,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 }
 
                 c.sentences.clear();
-                c.readSentencesFromDocument(sourceArea.getStyledDocument());
-                c.readSentencesFromDocument(targetArea.getStyledDocument());
+                c.readSentencesFromDocument(sourceArea.getStyledDocument(), selectionFrame);
+                c.readSentencesFromDocument(targetArea.getStyledDocument(), selectionFrame);
                 c.tags.clear();
                 c.readTagsFromDocument(infoArea.getStyledDocument());
                 c.unsaved = true;
@@ -522,11 +535,11 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
             setAutoCorrect(false);
             writePane(sourceArea, "");
-            for (String s : SelectionFrame.sourceLanguages) {
+            for (String s : selectionFrame.sourceLanguages) {
                 writePane(sourceArea, " " + s + ">  ");
             }
             writePane(targetArea, "");
-            for (String s : SelectionFrame.targetLanguages) {
+            for (String s : selectionFrame.targetLanguages) {
                 writePane(targetArea, " " + s + ">  ");
             }
             buttonCreate.setEnabled(false);
@@ -883,5 +896,228 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         setVisible(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowUtils());
+
+        workingSet = new WorkingSet(selectionFrame);
+        selectionFrame = new SelectionFrame(this);
+    }
+
+    String clustersFileName = "?";
+
+    public void readSentences(String dirName) {
+
+        BufferedReader inputStream = null;
+        String fileName;
+        int count = 0;
+        int validLinks = 0;
+
+        fileName = dirName + "/sentences.csv";
+
+        try {
+
+            File initialFile = new File(fileName);
+            InputStream is = new FileInputStream(initialFile);
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+            inputStream = new BufferedReader(isr);
+
+            MsgTextPane.write("reading sentences...");
+            String l;
+            count = 0;
+            while ((count < Integer.MAX_VALUE) && ((l = inputStream.readLine()) != null)) {
+                String[] ls = l.split("\u0009");
+                Sentence s = new Sentence();
+                s.nr = Integer.parseInt(ls[0]);
+                s.sentence = ls[2];
+                s.language = ls[1];
+
+                if (s.language.matches("[a-z]+")) {
+
+                    Graph.addSentence(s);
+
+                    // when reading the tatoeba files, there are no source, target or language
+                    // keywords like in a cluster database, so 'allLanguages' is populated here
+                    selectionFrame.usedLanguages.add(s.language);
+                    count++;
+                }
+            }
+        } catch (FileNotFoundException fnf) {
+            MsgTextPane.write("file not found : " + fileName);
+        } catch (IOException io) {
+            MsgTextPane.write("io exception : " + fileName);
+        }
+
+        try {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        } catch (IOException io) {
+        }
+
+        MsgTextPane.write(count + " sentences read from " + fileName);
+        MsgTextPane.write("reading links...");
+
+        fileName = dirName + "/links.csv";
+        count = 0;
+        try {
+
+            File initialFile = new File(fileName);
+            InputStream is = new FileInputStream(initialFile);
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+            inputStream = new BufferedReader(isr);
+
+            String l;
+            while ((l = inputStream.readLine()) != null) {
+                String[] ls = l.split("\u0009");
+                int nr1 = Integer.parseInt(ls[0]);
+                int nr2 = Integer.parseInt(ls[1]);
+                if (Graph.addLink(nr1, nr2)) {
+                    validLinks++;
+                }
+                count++;
+            }
+        } catch (FileNotFoundException fnf) {
+            MsgTextPane.write("file not found : " + fileName);
+        } catch (IOException io) {
+            MsgTextPane.write("io exception : " + fileName);
+        }
+
+        try {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        } catch (IOException io) {
+        }
+
+        MsgTextPane.write(count + " links read from " + fileName);
+    }
+
+    public boolean readClusters(String fileName) {
+
+        BufferedReader inputStream = null;
+        int clusterCount = 0;
+        Cluster c = null;
+        Sentence s = null;
+
+        try {
+
+            File initialFile = new File(fileName);
+            InputStream is = new FileInputStream(initialFile);
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+            inputStream = new BufferedReader(isr);
+
+            clusterCount = Graph.clusters.size();
+
+            clustersFileName = fileName;
+            MsgTextPane.write("reading clusters from " + fileName + "...");
+
+            String l;
+            String[] ls;
+            int lineCount = 0;
+            while ((l = inputStream.readLine()) != null) {
+                lineCount++;
+                ls = l.split("\u0009");
+                if (l.matches("^.*cluster.*$")) {
+                    clusterCount++;
+                    c = new Cluster();
+                    c.nr = clusterCount;
+                    Graph.clusters.put(c.nr, c);
+                    // the remaining strings are cluster tags
+                    String tag;
+                    for (int i = 1; i <= ls.length - 1; i++) {
+                        tag = ls[i];
+                        tag = tag.replaceAll(" *", "");
+                        c.tags.add(tag);
+                        selectionFrame.allTags.add(tag);
+                    }
+
+                } else {
+                    int lslength = 0;
+                    for (String z : ls) {
+                        lslength++;
+                    }
+
+                    if ((lslength == 2) && (ls[0].length() == 3) && (ls[1].length() > 3)) {
+                        s = new Sentence();
+                        s.language = ls[0];
+                        s.sentence = ls[1];
+                        s.sentence = s.sentence.replaceAll("^ *", "");
+                        s.sentence = s.sentence.replaceAll(" *$", "");
+                        c.sentences.add(s);
+
+                        selectionFrame.usedLanguages.add(s.language);
+
+                    } else {
+                        System.out.println("invalid line " + lineCount + " |" + l + "|");
+                    }
+                }
+            }
+        } catch (FileNotFoundException fnf) {
+            MsgTextPane.write("file not found : " + fileName);
+        } catch (IOException io) {
+            MsgTextPane.write("io exception : " + fileName);
+        }
+
+        try {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        } catch (IOException io) {
+        }
+
+        MsgTextPane.write(clusterCount + " clusters read from " + fileName);
+
+        return true;
+    }
+
+    public void saveClusters(String mode) {
+
+        String fileName = clustersFileName;
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setSelectedFile(new File(fileName));
+        int retval = fileChooser.showSaveDialog(null);
+        if (retval == JFileChooser.APPROVE_OPTION) {
+            File f = fileChooser.getSelectedFile();
+            fileName = f.getAbsolutePath();
+
+            try {
+                File initialFile = new File(fileName);
+                OutputStream is = new FileOutputStream(initialFile);
+                OutputStreamWriter isr = new OutputStreamWriter(is, "UTF-8");
+                BufferedWriter outputStream = new BufferedWriter(isr);
+
+                HashSet<String> usedLanguages;
+                if (mode.equals("all")) {
+                    usedLanguages = new HashSet<String>(selectionFrame.usedLanguages);
+                } else {
+                    usedLanguages = new HashSet<String>(selectionFrame.sourceLanguages);
+                    usedLanguages.addAll(selectionFrame.targetLanguages);
+                }
+
+                for (Cluster c : Graph.clusters.values()) {
+                    if (mode.equals("all") || c.selected) {
+                        outputStream.write("cluster");
+                        for (String tag : c.tags) {
+                            outputStream.write("\u0009");
+                            outputStream.write(tag);
+                        }
+                        outputStream.newLine();
+                        for (Sentence s : c.sentences) {
+                            if (usedLanguages.contains(s.language)) {
+                                outputStream.write(s.language);
+                                outputStream.write("\u0009");
+                                outputStream.write(s.sentence);
+                                outputStream.newLine();
+                            }
+                        }
+                        c.unsaved = false;
+                    }
+                }
+
+                outputStream.close();
+
+            } catch (IOException io) {
+                MsgTextPane.write(" io exception during save clusters");
+            }
+        }
     }
 }

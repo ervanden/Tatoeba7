@@ -269,18 +269,18 @@ public class Graph {
         }
     }
 
-    public static void displayClusters(GenericTextFrame frame, String which) {
+    public static void displayClusters(GenericTextFrame frame, String which,SelectionFrame selectionFrame) {
         frame.erase();
         for (Cluster c : clusters.values()) {
             if ((which.equals("selected") && c.selected)
                     || (which.equals("unsaved") && c.unsaved)) {
                 for (Sentence s : c.sentences) {
-                    if (SelectionFrame.sourceLanguages.contains(s.language)) {
+                    if (selectionFrame.sourceLanguages.contains(s.language)) {
                         frame.write(s.language + ">  " + s.sentence);
                     }
                 }
                 for (Sentence s : c.sentences) {
-                    if (SelectionFrame.targetLanguages.contains(s.language)) {
+                    if (selectionFrame.targetLanguages.contains(s.language)) {
                         frame.write(s.language + ">  " + s.sentence);
                     }
                 }

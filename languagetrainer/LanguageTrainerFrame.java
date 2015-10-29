@@ -90,8 +90,7 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
             f.setVisible(true);
         } else if (action.equals("sentences")) {
             TatoebaFrame t = new TatoebaFrame();
-            SelectionFrame.create();
-            SelectionFrame.setTatoebaFrame(t);
+
         } else if (action.equals("targetLanguageBox")) {
             JComboBox box = (JComboBox) ae.getSource();
             String longName = (String) box.getSelectedItem();

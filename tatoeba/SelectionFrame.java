@@ -35,93 +35,88 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-public class SelectionFrame {
+public class SelectionFrame implements ActionListener {
 
-    static boolean isCreated = false;
-    private static JFrame frame = new JFrame();
-    static GenericTextFrame searchResultsFrame = null;
-    static tatoeba.TatoebaFrame tatoebaFrame = null;
+    boolean isCreated = false;
+    private JFrame frame = new JFrame();
+    GenericTextFrame searchResultsFrame = null;
+    TatoebaFrame tatoebaFrame = null;
 
-    public static final JTextPane allLanguagesArea = new JTextPane();
-    public static final JTextPane sourceLanguagesArea = new JTextPane();
-    public static final JTextPane targetLanguagesArea = new JTextPane();
-    public static final JTextPane allTagsArea = new JTextPane();
-    public static final JTextPane selectedTagsArea = new JTextPane();
+    public final JTextPane allLanguagesArea = new JTextPane();
+    public final JTextPane sourceLanguagesArea = new JTextPane();
+    public final JTextPane targetLanguagesArea = new JTextPane();
+    public final JTextPane allTagsArea = new JTextPane();
+    public final JTextPane selectedTagsArea = new JTextPane();
 
-    public static JScrollPane allLanguagesScroll = new JScrollPane(allLanguagesArea);
-    public static JScrollPane sourceLanguagesScroll = new JScrollPane(sourceLanguagesArea);
-    public static JScrollPane targetLanguagesScroll = new JScrollPane(targetLanguagesArea);
-    public static JScrollPane allTagsScroll = new JScrollPane(allTagsArea);
-    public static JScrollPane selectedTagsScroll = new JScrollPane(selectedTagsArea);
+    public JScrollPane allLanguagesScroll = new JScrollPane(allLanguagesArea);
+    public JScrollPane sourceLanguagesScroll = new JScrollPane(sourceLanguagesArea);
+    public JScrollPane targetLanguagesScroll = new JScrollPane(targetLanguagesArea);
+    public JScrollPane allTagsScroll = new JScrollPane(allTagsArea);
+    public JScrollPane selectedTagsScroll = new JScrollPane(selectedTagsArea);
 
-    public static HashSet<String> usedLanguages = new HashSet<>();
-    public static HashSet<String> allTags = new HashSet<>();
-    public static HashSet<String> sourceLanguages = new HashSet<>();
-    public static HashSet<String> targetLanguages = new HashSet<>();
-    public static HashSet<String> selectedTags = new HashSet<>();
+    public HashSet<String> usedLanguages = new HashSet<>();
+    public HashSet<String> allTags = new HashSet<>();
+    public HashSet<String> sourceLanguages = new HashSet<>();
+    public HashSet<String> targetLanguages = new HashSet<>();
+    public HashSet<String> selectedTags = new HashSet<>();
 
-    public static HashSet<String> allLanguagesSelected = new HashSet<>();
-    public static HashSet<String> allTagsSelected = new HashSet<>();
-    public static HashSet<String> sourceLanguagesSelected = new HashSet<>();
-    public static HashSet<String> targetLanguagesSelected = new HashSet<>();
-    public static HashSet<String> selectedTagsSelected = new HashSet<>();
+    public HashSet<String> allLanguagesSelected = new HashSet<>();
+    public HashSet<String> allTagsSelected = new HashSet<>();
+    public HashSet<String> sourceLanguagesSelected = new HashSet<>();
+    public HashSet<String> targetLanguagesSelected = new HashSet<>();
+    public HashSet<String> selectedTagsSelected = new HashSet<>();
 
-    public static String sourcePattern = "";
-    public static String targetPattern = "";
+    public String sourcePattern = "";
+    public String targetPattern = "";
 
-//    public static int currentFontSize = 14;
-    static Font areaFont = new Font("monospaced", Font.PLAIN, 14);
+//    public int currentFontSize = 14;
+    Font areaFont = new Font("monospaced", Font.PLAIN, 14);
 
-    static JPanel content = new JPanel();
+    JPanel content = new JPanel();
 
-    static JButton buttonSelect = new JButton("Select");
-    static JButton buttonDisplay = new JButton("Select and Display");
+    JButton buttonSelect = new JButton("Select");
+    JButton buttonDisplay = new JButton("Select and Display");
 
-    static JButton buttonRight1 = new JButton(">");
-    static JButton buttonRight2 = new JButton(">");
-    static JButton buttonRight3 = new JButton(">");
-    static JButton buttonLeft1 = new JButton("<");
-    static JButton buttonLeft2 = new JButton("<");
-    static JButton buttonLeft3 = new JButton("<");
+    JButton buttonRight1 = new JButton(">");
+    JButton buttonRight2 = new JButton(">");
+    JButton buttonRight3 = new JButton(">");
+    JButton buttonLeft1 = new JButton("<");
+    JButton buttonLeft2 = new JButton("<");
+    JButton buttonLeft3 = new JButton("<");
 
-    static int sliderScale = 100;
-    static JSlider sliderMin = new JSlider(0, sliderScale, 0);
-    static JSlider sliderMax = new JSlider(0, sliderScale, sliderScale);
+    int sliderScale = 100;
+    JSlider sliderMin = new JSlider(0, sliderScale, 0);
+    JSlider sliderMax = new JSlider(0, sliderScale, sliderScale);
 
-    static JLabel statusLabel = new JLabel("...");
-    static JLabel minComplexityLabel = new JLabel("Minimum complexity");
-    static JLabel maxComplexityLabel = new JLabel("Maximum complexity");
-    static JLabel sourcePatternLabel = new JLabel("Source contains : ");
-    static JLabel targetPatternLabel = new JLabel("Target contains : ");
-    static JTextField sourcePatternField = new JTextField("");
-    static JTextField targetPatternField = new JTextField("");
+    JLabel statusLabel = new JLabel("...");
+    JLabel minComplexityLabel = new JLabel("Minimum complexity");
+    JLabel maxComplexityLabel = new JLabel("Maximum complexity");
+    JLabel sourcePatternLabel = new JLabel("Source contains : ");
+    JLabel targetPatternLabel = new JLabel("Target contains : ");
+    JTextField sourcePatternField = new JTextField("");
+    JTextField targetPatternField = new JTextField("");
 
-    static boolean enableCaretListener = false;
+    boolean enableCaretListener = false;
 
-    static final SimpleAttributeSet sas_selected = new SimpleAttributeSet();
+    final SimpleAttributeSet sas_selected = new SimpleAttributeSet();
 
-    static {
+    {
         StyleConstants.setBold(sas_selected, true);
         StyleConstants.setForeground(sas_selected, Color.BLUE);
         sliderMin.setMajorTickSpacing(1);
         sliderMax.setMajorTickSpacing(1);
     }
 
-    public static void setTatoebaFrame(TatoebaFrame t) {
-        tatoebaFrame = t;
-    }
-
-    static class WindowCloser extends WindowAdapter {
-
+    class WindowCloser extends WindowAdapter {
         public void windowClosing(WindowEvent e) {
-            SelectionFrame.setVisible(false);
+            setVisible(false);
             if (searchResultsFrame != null) {
                 searchResultsFrame.setVisible(false);
             }
         }
     }
 
-    public static void setVisible(boolean visible) {
+    public void setVisible(boolean visible) {
         if (visible) {
             Graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
             Graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
@@ -132,15 +127,51 @@ public class SelectionFrame {
         enableCaretListener = true;  // now we are sure that boxes are populated
     }
 
-    private static void eraseDocument(StyledDocument doc) {
+    private void eraseDocument(StyledDocument doc) {
         try {
             doc.remove(0, doc.getLength());
         } catch (BadLocationException ble) {
             System.out.println("ble");
         }
     }
+    
+     public void actionPerformed(ActionEvent e) {
+         if (e.getSource()== buttonSelect){
+                Graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
+                        (float) sliderMax.getValue() / (float) sliderScale, false);
+                Graph.selectClusters();
+                tatoebaFrame.workingSet.build();
 
-    static class selectLinesTask implements Runnable {
+                // if the source or target are one single language, make the corresponding window language sensitive
+                if (targetLanguages.size() == 1) {
+                    for (String language : targetLanguages) {
+                        tatoebaFrame.newTargetArea(language);
+                    }
+                }
+                if (sourceLanguages.size() == 1) {
+                    for (String language : sourceLanguages) {
+                        tatoebaFrame.newSourceArea(language);
+                    }
+                }
+
+                JOptionPane.showMessageDialog(frame, Graph.selectedClusterCount + " clusters selected");
+                if (Graph.selectedClusterCount > 0) {
+                    setVisible(false);
+                }
+            } else if (e.getSource() == buttonDisplay){
+                if (searchResultsFrame == null) {
+                    searchResultsFrame = new GenericTextFrame();
+                }
+                searchResultsFrame.setVisible(true);
+                Graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
+                        (float) sliderMax.getValue() / (float) sliderScale, false);
+                Graph.selectClusters();
+                Graph.displayClusters(searchResultsFrame, "selected",this);
+                tatoebaFrame.workingSet.build();
+            }
+     }
+
+    class selectLinesTask implements Runnable {
 
         private int line1, line2;
         private JTextPane area;
@@ -156,7 +187,7 @@ public class SelectionFrame {
         }
     }
 
-    private static void selectLines(JTextPane area, int line1, int line2) {
+    private void selectLines(JTextPane area, int line1, int line2) {
         StyledDocument document = area.getStyledDocument();
         javax.swing.text.Element root = document.getDefaultRootElement();
         for (int i = line1; i <= line2; i++) {
@@ -192,7 +223,7 @@ public class SelectionFrame {
         }
     }
 
-    static class areaCaretListener implements CaretListener {
+    class areaCaretListener implements CaretListener {
 
         JTextPane area;
 
@@ -224,14 +255,14 @@ public class SelectionFrame {
 
     }
 
-    static areaCaretListener allLanguagesCaretListener = new areaCaretListener(allLanguagesArea);
-    static areaCaretListener sourceLanguagesCaretListener = new areaCaretListener(sourceLanguagesArea);
-    static areaCaretListener targetLanguagesCaretListener = new areaCaretListener(targetLanguagesArea);
-    static areaCaretListener allTagsCaretListener = new areaCaretListener(allTagsArea);
-    static areaCaretListener selectedTagsCaretListener = new areaCaretListener(selectedTagsArea);
+    areaCaretListener allLanguagesCaretListener = new areaCaretListener(allLanguagesArea);
+    areaCaretListener sourceLanguagesCaretListener = new areaCaretListener(sourceLanguagesArea);
+    areaCaretListener targetLanguagesCaretListener = new areaCaretListener(targetLanguagesArea);
+    areaCaretListener allTagsCaretListener = new areaCaretListener(allTagsArea);
+    areaCaretListener selectedTagsCaretListener = new areaCaretListener(selectedTagsArea);
 
 
-    static ArrayList<String> listShortToLong(HashSet<String> shortNames) {
+    ArrayList<String> listShortToLong(HashSet<String> shortNames) {
         ArrayList<String> longNames = new ArrayList<String>();
         for (String s : shortNames) {
             longNames.add(LanguageNames.shortToLong(s));
@@ -239,7 +270,7 @@ public class SelectionFrame {
         return longNames;
     }
 
-    private static void populateArea(JTextPane pane, ArrayList<String> longNames) {        
+    private void populateArea(JTextPane pane, ArrayList<String> longNames) {        
         StyledDocument doc;
         Collections.sort(longNames);
         doc = pane.getStyledDocument();
@@ -252,7 +283,7 @@ public class SelectionFrame {
         }
     }
 
-    public static void populateAreas() {
+    public void populateAreas() {
 
         enableCaretListener = false; // prevent that caretlistener fires and selects everything
 
@@ -272,7 +303,7 @@ public class SelectionFrame {
 
     }
 
-    private static void resetGridBagConstraints(GridBagConstraints c) {
+    private void resetGridBagConstraints(GridBagConstraints c) {
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
         c.weightx = 0.0;
@@ -285,7 +316,7 @@ public class SelectionFrame {
         c.ipady = 0;
     }
 
-    private static void displayGUI() {
+    private void displayGUI() {
 
         int position = 0;
         int y0 = 1;
@@ -533,7 +564,7 @@ public class SelectionFrame {
         frame.pack();
     }
 
-    private static void setAreaParameters(JTextPane area, String title) {
+    private void setAreaParameters(JTextPane area, String title) {
         area.setName(title);
         area.setMinimumSize(new Dimension(100, 300));
         area.setPreferredSize(new Dimension(100, 300));
@@ -543,7 +574,7 @@ public class SelectionFrame {
         area.setFont(areaFont);
     }
 
-    private static void setScrollParameters(JScrollPane area) {
+    private void setScrollParameters(JScrollPane area) {
         area.setMinimumSize(new Dimension(200, 300));
         area.setPreferredSize(new Dimension(200, 300));
         //       area.setMaximumSize(new Dimension(100, 300));
@@ -551,14 +582,14 @@ public class SelectionFrame {
         //       area.setFont(areaFont);
     }
 
-    private static void setButtonParameters(JButton button) {
+    private void setButtonParameters(JButton button) {
         button.setFont(new Font("Arial", Font.BOLD, 20));
         button.setOpaque(false);
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
     }
 
-    private static void statusMessage(boolean printCount) {
+    private void statusMessage(boolean printCount) {
         if (!printCount) {
             statusLabel.setText(Graph.clusters.size() + " clusters available, ...");
 
@@ -571,12 +602,8 @@ public class SelectionFrame {
         }
     }
 
-    public static void create() {
-        if (isCreated) {
-            return;
-        }
-        isCreated = true;
-
+    public SelectionFrame(TatoebaFrame t) {
+        tatoebaFrame=t;
         sourceLanguages.add(languagetrainer.LanguageTrainer.sourceLanguage);
         targetLanguages.add(languagetrainer.LanguageTrainer.targetLanguage);
 
@@ -718,45 +745,8 @@ public class SelectionFrame {
             }
         }));
 
-        buttonDisplay.addActionListener((new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (searchResultsFrame == null) {
-                    searchResultsFrame = new GenericTextFrame();
-                }
-                searchResultsFrame.setVisible(true);
-                Graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
-                        (float) sliderMax.getValue() / (float) sliderScale, false);
-                Graph.selectClusters();
-                Graph.displayClusters(searchResultsFrame, "selected");
-                WorkingSet.build();
-            }
-        }));
-
-        buttonSelect.addActionListener((new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
-                        (float) sliderMax.getValue() / (float) sliderScale, false);
-                Graph.selectClusters();
-                WorkingSet.build();
-
-                // if the source or target are one single language, make the corresponding window language sensitive
-                if (targetLanguages.size() == 1) {
-                    for (String language : targetLanguages) {
-                        tatoebaFrame.newTargetArea(language);
-                    }
-                }
-                if (sourceLanguages.size() == 1) {
-                    for (String language : sourceLanguages) {
-                        tatoebaFrame.newSourceArea(language);
-                    }
-                }
-
-                JOptionPane.showMessageDialog(frame, Graph.selectedClusterCount + " clusters selected");
-                if (Graph.selectedClusterCount > 0) {
-                    setVisible(false);
-                }
-            }
-        }));
+        buttonDisplay.addActionListener(this);
+        buttonSelect.addActionListener(this);
 
         sliderMin.addChangeListener((new ChangeListener() {
 
