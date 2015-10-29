@@ -8,12 +8,12 @@ public class WorkingSet {
 
      ArrayList<Cluster> workingSet;
      int nextInWorkingSet;
-    SelectionFrame selectionFrame;
+     TatoebaFrame tatoebaFrame;
 
-    public WorkingSet(SelectionFrame s){
+    public WorkingSet(TatoebaFrame t){
       workingSet = new ArrayList<Cluster>();
       nextInWorkingSet = -1;
-      selectionFrame=s;
+      tatoebaFrame=t;
     }
     
     public  int size() {
@@ -22,14 +22,14 @@ public class WorkingSet {
  
     public  void build() { 
         workingSet.clear();
-        if (Graph.selectedClusterCount < 1) {
-            selectionFrame.setVisible(true);
+        if (tatoebaFrame.graph.selectedClusterCount < 1) {
+            tatoebaFrame.selectionFrame.setVisible(true);
         }
-        if (Graph.selectedClusterCount < 1) {
+        if (tatoebaFrame.graph.selectedClusterCount < 1) {
             MsgTextPane.write("No clusters selected.");
         }
 
-        for (Cluster c : Graph.clusters.values()) {
+        for (Cluster c : tatoebaFrame.graph.clusters.values()) {
             if (c.selected) workingSet.add(c);
         }
         

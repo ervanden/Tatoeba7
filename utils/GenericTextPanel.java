@@ -18,19 +18,22 @@ public class GenericTextPanel extends JPanel implements ActionListener {
     JTextPane textPane;
     JScrollPane textScrollPane;
 
-    public GenericTextPanel() {
+    public GenericTextPanel(int width, int height) {
         thisGenericTextPanel=this;
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         textPane = new JTextPane();
         textScrollPane = new JScrollPane(textPane);
 
-        Dimension minimumDimension = new Dimension(780, 50);
-        Dimension preferredDimension = new Dimension(780, 800);
+        Dimension minimumDimension = new Dimension(width, 50);
+       Dimension preferredDimension = new Dimension(width,height);
+         Dimension maximumDimension = new Dimension(10000,10000);
         textPane.setMinimumSize(minimumDimension);
-        textPane.setPreferredSize(preferredDimension);
+       textPane.setPreferredSize(preferredDimension);
+        textPane.setMaximumSize(maximumDimension);
         textScrollPane.setMinimumSize(minimumDimension);
         textScrollPane.setPreferredSize(preferredDimension);
+        textScrollPane.setMaximumSize(maximumDimension);
 
         JPanel buttonPanel = new JPanel();
         JButton plusButton = new JButton("+");

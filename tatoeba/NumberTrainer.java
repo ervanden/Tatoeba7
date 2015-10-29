@@ -1,5 +1,6 @@
 package tatoeba;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +34,7 @@ public class NumberTrainer extends JFrame implements ActionListener {
 
     public NumberTrainer() {
 
-        textPanel = new GenericTextPanel();
+        textPanel = new GenericTextPanel(780,600);
         textPanel.getTextPane().setEditable(false);
 
         JButton randomButton = new JButton("random");
@@ -65,11 +66,22 @@ public class NumberTrainer extends JFrame implements ActionListener {
 
         content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
 
+        textPanel.setBorder(BorderFactory.createCompoundBorder(
+                   BorderFactory.createLineBorder(Color.red),
+                   textPanel.getBorder()));
+        textPanel.setMaximumSize(new Dimension(10000,10000));
+        
         content.add(textPanel);
 
         JPanel numberPanel = new JPanel();
+        
+                numberPanel.setBorder(BorderFactory.createCompoundBorder(
+                   BorderFactory.createLineBorder(Color.blue),
+                   numberPanel.getBorder()));
+        numberPanel.setMaximumSize(new Dimension(780,200));
+        
         numberPanel.setLayout(new BoxLayout(numberPanel, BoxLayout.LINE_AXIS));
-        numberPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+ //       numberPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         numberPanel.add(Box.createRigidArea(new Dimension(20, 0)));
         numberPanel.add(numberField);
         numberPanel.add(Box.createRigidArea(new Dimension(10, 0)));

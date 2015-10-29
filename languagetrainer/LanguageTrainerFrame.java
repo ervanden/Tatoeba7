@@ -14,8 +14,6 @@ import javax.swing.JPanel;
 import langeditor.LanguageEditorFrame;
 import languages.LanguageNames;
 import tatoeba.*;
-import tatoeba.SelectionFrame;
-import tatoeba.TatoebaFrame;
 import utils.*;
 
 public class LanguageTrainerFrame extends JFrame implements ActionListener {
@@ -59,8 +57,8 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
         toolsPanel.add(targetLabel);
         toolsPanel.add(targetLanguageBox);
 
-        JPanel numberPanel = new JPanel();
-        numberPanel.setLayout(new BoxLayout(numberPanel, BoxLayout.LINE_AXIS));
+ //       JPanel numberPanel = new JPanel();
+ //       numberPanel.setLayout(new BoxLayout(numberPanel, BoxLayout.LINE_AXIS));
 
         for (String tool : tools) {
             toolsPanel.add(Box.createRigidArea(new Dimension(0, 10)));

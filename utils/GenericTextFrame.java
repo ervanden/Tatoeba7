@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 public class GenericTextFrame extends JFrame {
 
     private JFrame thisFrame = (JFrame) this;
-    GenericTextPanel textPanel = new GenericTextPanel();
+    GenericTextPanel textPanel = new GenericTextPanel(800,600);
 
     public GenericTextFrame() {
         JPanel content = new JPanel();

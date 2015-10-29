@@ -26,15 +26,17 @@ import javax.swing.JFrame;
 
 class lunchCanvas extends Canvas {
 
+    TatoebaFrame tatoebaFrame;
     ArrayList<String> shortLanguageNames;
     ArrayList<String> longLanguageNames;
 
     int xorig = 0;
     int yorig = 0;
     
-    public lunchCanvas(SelectionFrame selectionFrame){
-        System.out.println("used languages : "+selectionFrame.usedLanguages.size());
-          shortLanguageNames = new ArrayList<>(selectionFrame.usedLanguages);
+    public lunchCanvas(TatoebaFrame t){
+        tatoebaFrame=t;
+        System.out.println("used languages : "+tatoebaFrame.selectionFrame.usedLanguages.size());
+          shortLanguageNames = new ArrayList<>(tatoebaFrame.selectionFrame.usedLanguages);
         longLanguageNames = new ArrayList<>();
 
         for (String s : shortLanguageNames) {
@@ -133,7 +135,7 @@ class lunchCanvas extends Canvas {
                 lang1 = LanguageNames.longToShort(lang1);
                 lang2 = LanguageNames.longToShort(lang2);
 
-                int value = Graph.LanguageMatrix.value(lang1, lang2);
+                int value = tatoebaFrame.graph.languageMatrix.value(lang1, lang2);
                 if ((i >= horizontalFirst) && (j >= verticalFirst)) {
                     g.drawString(value + "", x, y);
                 }
@@ -152,6 +154,7 @@ class ClusterCountFrame extends ComponentAdapter implements MouseMotionListener,
     static GraphicsDevice gd = ge.getDefaultScreenDevice();
     static GraphicsConfiguration gc = gd.getDefaultConfiguration();
 
+    TatoebaFrame tatoebaFrame;
     static JFrame lunchFrame = new JFrame();
     lunchCanvas lunchPlane=null;
 
@@ -261,7 +264,7 @@ class ClusterCountFrame extends ComponentAdapter implements MouseMotionListener,
 
         Rectangle bounds = gc.getBounds(); // device coordinates of the screen (0,0) = upper left (w,h) = lo right
         
-//lunchPlane = new lunchCanvas();
+        lunchPlane = new lunchCanvas(tatoebaFrame);
 
         lunchFrame.setLocation(bounds.width / 2, bounds.height / 3);
         lunchFrame.setSize(bounds.width / 2 - 22, bounds.width / 2);
@@ -282,9 +285,8 @@ class ClusterCountFrame extends ComponentAdapter implements MouseMotionListener,
         isInitialized = true;
     }
 
-    public void display() {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
+    public ClusterCountFrame(TatoebaFrame t) {
+        tatoebaFrame=t;
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 initialize();

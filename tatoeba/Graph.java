@@ -34,28 +34,29 @@ import java.util.regex.Pattern;
 
 public class Graph {
 
-    static HashMap<Integer, Sentence> sentences = new HashMap<Integer, Sentence>();
-    static ClusterHashMap clusters = new ClusterHashMap();
+     HashMap<Integer, Sentence> sentences = new HashMap<Integer, Sentence>();
+     ClusterHashMap clusters = new ClusterHashMap();
+     LanguageMatrix languageMatrix;
 
-    public static int clusterCount = 0;
-    public static int selectedClusterCount = 0;
+    public  int clusterCount = 0;
+    public  int selectedClusterCount = 0;
 
-    public static int minComplexity;
-    public static int maxComplexity;
+    public  int minComplexity;
+    public  int maxComplexity;
 
-    static ArrayList<Integer> complexityFreq = new ArrayList<>();
-    static final int MAX_COMPLEXITY = 1000;
+     ArrayList<Integer> complexityFreq = new ArrayList<>();
+     final int MAX_COMPLEXITY = 1000;
    
 
-    public static int maximumClusterNumber() {
+    public  int maximumClusterNumber() {
         return clusters.maximumClusterNumber();
     }
 
-    public static void addSentence(Sentence s) {
+    public  void addSentence(Sentence s) {
         sentences.put(s.nr, s);
     }
 
-    public static boolean addLink(int nr1, int nr2) {
+    public  boolean addLink(int nr1, int nr2) {
         Sentence v1 = sentences.get(nr1);
         Sentence v2 = sentences.get(nr2);
 
@@ -110,7 +111,7 @@ public class Graph {
      countSelectedClusters() can then very quickly return the number of selected clusters when the complexity sliders are moved.
      To actually select the clusters (upon 'Apply'), selectClusters must be called.
      */
-    private static void calculateComplexity() {
+    private  void calculateComplexity() {
         // complexity is the average length of the sentences in the cluster
         // only calculated for clusters already selected by language!!
         complexityFreq.clear();
@@ -151,7 +152,7 @@ public class Graph {
         }
     }
 
-    public static void selectClustersByParameters(
+    public  void selectClustersByParameters(
             HashSet<String> sourceLanguages,
             HashSet<String> targetLanguages,
             HashSet<String> selectedTags,
@@ -237,7 +238,7 @@ public class Graph {
         calculateComplexity();
     }
 
-    public static void selectClustersByComplexity(float minFraction, float maxFraction, boolean countOnly) {
+    public  void selectClustersByComplexity(float minFraction, float maxFraction, boolean countOnly) {
 
         // cumulative frequency of complexity is only counting the clusters selected by language
         int cmin = Math.max(0, Math.round(maxComplexity * minFraction));
@@ -261,7 +262,7 @@ public class Graph {
         }
     }
 
-    public static void selectClusters() {
+    public  void selectClusters() {
 
         // selectClustersByLanguage and selectClustersByComplexity are supposed to be called already
         for (Cluster c : clusters.values()) {
@@ -269,7 +270,7 @@ public class Graph {
         }
     }
 
-    public static void displayClusters(GenericTextFrame frame, String which,SelectionFrame selectionFrame) {
+    public  void displayClusters(GenericTextFrame frame, String which,SelectionFrame selectionFrame) {
         frame.erase();
         for (Cluster c : clusters.values()) {
             if ((which.equals("selected") && c.selected)
@@ -291,7 +292,7 @@ public class Graph {
 
 
 
-    public static int unsavedClusters() {
+    public  int unsavedClusters() {
         int i = 0;
         for (Cluster c : clusters.values()) {
             if (c.unsaved) {
@@ -301,11 +302,11 @@ public class Graph {
         return i;
     }
 
-    static class LanguageMatrix {
+     class LanguageMatrix {
 
-        static HashMap<String, Integer> ll = new HashMap<>();
+         HashMap<String, Integer> ll = new HashMap<>();
 
-        public static int value(String language1, String language2) {
+        public  int value(String language1, String language2) {
             String key = language1 + ":" + language2;
             Integer i = ll.get(key);
             if (i == null) {
@@ -315,7 +316,7 @@ public class Graph {
             }
         }
 
-        public static void increment(String language1, String language2) {
+        public  void increment(String language1, String language2) {
             String key1 = language1 + ":" + language2;
             Integer value;
 
@@ -327,7 +328,7 @@ public class Graph {
             ll.put(key1, value + 1);
         }
 
-        public static void generate() {
+        public  void generate() {
 
             ArrayList<String> languages = new ArrayList<>();
 
@@ -351,5 +352,9 @@ public class Graph {
         }
 
     }
+     
+     public void generateLanguageMatrix(){
+         languageMatrix=new LanguageMatrix();
+     }
 
 }

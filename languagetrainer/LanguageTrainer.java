@@ -60,7 +60,7 @@ public class LanguageTrainer {
     }
 
     public static void main(String[] args) {
-        messageTextPanel = new GenericTextPanel();
+        messageTextPanel = new GenericTextPanel(780,500);
         readParameters();
         languages.LanguageNames.readLanguages();
 

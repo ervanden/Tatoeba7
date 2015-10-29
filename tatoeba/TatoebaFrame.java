@@ -29,9 +29,9 @@ import utils.MsgTextPane;
 // If the source or target language is one single language, a language-specific text pane is used.
 public class TatoebaFrame extends JFrame implements ActionListener {
 
-    private JFrame thisFrame = (JFrame) this;
     public SelectionFrame selectionFrame;
     public WorkingSet workingSet;
+    public Graph graph;
 
     public LanguageTextPane sourceArea;
     public LanguageTextPane targetArea;
@@ -72,8 +72,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
     class WindowUtils extends WindowAdapter {
 
         public void windowClosing(WindowEvent e) {
-            if (Graph.unsavedClusters() > 0) {
-                JOptionPane.showMessageDialog(thisFrame, "There are unsaved clusters! Close window via Exit menu");
+            if (graph.unsavedClusters() > 0) {
+                JOptionPane.showMessageDialog(null, "There are unsaved clusters! Close window via Exit menu");
             } else {
                 setVisible(false);
             }
@@ -156,7 +156,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         public void run() {
             readClusters(fileName);
-            Graph.LanguageMatrix.generate();
+           graph.generateLanguageMatrix();
             selectionFrame.populateAreas();
             selectionFrame.setVisible(true);
             enableStandard();
@@ -173,7 +173,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         public void run() {
             readSentences(dirName);
-            Graph.LanguageMatrix.generate();
+           graph.generateLanguageMatrix();
             selectionFrame.populateAreas();
             selectionFrame.setVisible(true);
             enableStandard();
@@ -243,8 +243,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Cluster Overview")) {
-            ClusterCountFrame cc = new ClusterCountFrame();
-            cc.display();
+            new ClusterCountFrame(this);
         }
 
         if (action.equals("Select clusters")) {
@@ -269,7 +268,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 unsavedClustersFrame = new GenericTextFrame();
             }
             unsavedClustersFrame.setVisible(true);
-            Graph.displayClusters(unsavedClustersFrame, "unsaved", selectionFrame);
+            graph.displayClusters(unsavedClustersFrame, "unsaved", selectionFrame);
         }
 
         if (action.equals("Horizontal")) {
@@ -426,8 +425,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 Cluster c = editingCluster;
                 if (c == null) { // user created a new cluster
                     c = new Cluster();
-                    c.nr = Graph.maximumClusterNumber() + 1;
-                    Graph.clusters.put(c.nr, c);
+                    c.nr = graph.maximumClusterNumber() + 1;
+                    graph.clusters.put(c.nr, c);
 
                     // a newly created cluster is now on the screen. Adjust state accordingly
                     clusterFifo.push(c);
@@ -471,7 +470,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             buttonPrevious.setEnabled(clusterFifo.size() > 1);
             buttonEdit.setEnabled(true);
 
-            spacer2.setText(" " + Graph.unsavedClusters());
+            spacer2.setText(" " + graph.unsavedClusters());
 
         }
 
@@ -897,7 +896,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowUtils());
 
-        workingSet = new WorkingSet(selectionFrame);
+        graph = new Graph();
+        workingSet = new WorkingSet(this);
         selectionFrame = new SelectionFrame(this);
     }
 
@@ -931,7 +931,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
                 if (s.language.matches("[a-z]+")) {
 
-                    Graph.addSentence(s);
+                    graph.addSentence(s);
 
                     // when reading the tatoeba files, there are no source, target or language
                     // keywords like in a cluster database, so 'allLanguages' is populated here
@@ -969,7 +969,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 String[] ls = l.split("\u0009");
                 int nr1 = Integer.parseInt(ls[0]);
                 int nr2 = Integer.parseInt(ls[1]);
-                if (Graph.addLink(nr1, nr2)) {
+                if (graph.addLink(nr1, nr2)) {
                     validLinks++;
                 }
                 count++;
@@ -1004,7 +1004,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             InputStreamReader isr = new InputStreamReader(is, "UTF-8");
             inputStream = new BufferedReader(isr);
 
-            clusterCount = Graph.clusters.size();
+            clusterCount = graph.clusters.size();
 
             clustersFileName = fileName;
             MsgTextPane.write("reading clusters from " + fileName + "...");
@@ -1019,7 +1019,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                     clusterCount++;
                     c = new Cluster();
                     c.nr = clusterCount;
-                    Graph.clusters.put(c.nr, c);
+                    graph.clusters.put(c.nr, c);
                     // the remaining strings are cluster tags
                     String tag;
                     for (int i = 1; i <= ls.length - 1; i++) {
@@ -1093,7 +1093,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                     usedLanguages.addAll(selectionFrame.targetLanguages);
                 }
 
-                for (Cluster c : Graph.clusters.values()) {
+                for (Cluster c : graph.clusters.values()) {
                     if (mode.equals("all") || c.selected) {
                         outputStream.write("cluster");
                         for (String tag : c.tags) {
