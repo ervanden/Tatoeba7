@@ -2,13 +2,19 @@ package tatoeba;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,6 +23,29 @@ import javax.swing.JTextField;
 import languages.Language;
 import languages.LanguageContext;
 import utils.GenericTextPanel;
+
+
+        class ImagePanel extends JPanel{ 
+    BufferedImage image;
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        System.out.println("paintcomponent");
+        if(image != null){
+                    System.out.println("drawimage");
+            g.drawImage(image, 0, 0, this);
+        }
+    }
+    
+    public ImagePanel(String imageFile){
+                String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
+        String fileName = defaultFolder + "\\Tatoeba\\Images\\"+imageFile;
+       try {
+    image = ImageIO.read(new File(fileName));
+} catch (IOException e) {
+    System.out.println("io exception : "+fileName);
+}
+    }
+}
 
 public class NumberTrainer extends JFrame implements ActionListener {
 
@@ -102,6 +131,9 @@ public class NumberTrainer extends JFrame implements ActionListener {
         content.add(Box.createRigidArea(new Dimension(0, 10)));
         content.add(numberPanel);
 
+        ImagePanel imagePanel = new ImagePanel("kijkeens.jpg");
+                content.add(imagePanel);
+                
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setContentPane(content);
         pack();
