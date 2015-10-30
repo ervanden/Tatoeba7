@@ -6,10 +6,11 @@ import javax.swing.JFileChooser;
 public class GenericLanguage {
 
     GenericDictionary d = null;
+    String languageName = "generic";
 
     public String dictionaryFileName() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        return defaultFolder + "\\Tatoeba\\GenericDictionary.txt";
+        return defaultFolder + "\\Tatoeba\\"+languageName+"Dictionary.txt";
     }
 
     public GenericDictionary dictionary() {

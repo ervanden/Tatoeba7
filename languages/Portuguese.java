@@ -1,17 +1,20 @@
 package languages;
 
 import dictionaries.PortugueseDictionary;
-import javax.swing.JFileChooser;
 
 public class Portuguese extends GenericLanguage implements Language {
 
     PortugueseDictionary d = null;
 
+        public Portuguese(){
+        languageName="Portuguese";
+    }
+/*        
     public String dictionaryFileName() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
         return defaultFolder + "\\Tatoeba\\PortugueseDictionary.txt";
     }
-
+*/
     public PortugueseDictionary dictionary() {
          if (d == null) {
             d = new PortugueseDictionary(this);

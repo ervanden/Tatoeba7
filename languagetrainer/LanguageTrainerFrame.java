@@ -3,6 +3,7 @@ package languagetrainer;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,11 +22,19 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
     JFrame thisFrame = this;
     LanguageTrainerFrame thisLanguageTrainer = this;
     JPanel content = new JPanel();
-    String[] tools = {"sentences", "numbers", "colors", "editors", "words"};
+    ArrayList<String> tools = new ArrayList<>();
     HashMap<String, JButton> buttons = new HashMap<>();
 
     public LanguageTrainerFrame() {
 
+        tools.add("Sentences");
+        tools.add("Numbers");
+        tools.add("Colors");
+        tools.add("Editors");
+        for (String theme : PictureTrainer.getPictureThemes()){
+            tools.add(theme);
+        }
+        
         for (String tool : tools) {
             JButton button = new JButton(tool);
             buttons.put(tool, button);
@@ -77,22 +86,18 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String action = ae.getActionCommand();
         System.out.println(action);
-                if (action.equals("words")) {
-            PictureTrainer p = new PictureTrainer();
-            p.setVisible(true);
-        } else 
-        if (action.equals("numbers")) {
+
+        if (action.equals("Numbers")) {
             NumberTrainer n = new NumberTrainer();
             n.setVisible(true);
-        } else if (action.equals("colors")) {
+        } else if (action.equals("Colors")) {
             ColorTrainer n = new ColorTrainer();
             n.setVisible(true);
-        } else if (action.equals("editors")) {
-            LanguageEditorFrame f = new LanguageEditorFrame("pol");
+        } else if (action.equals("Editors")) {
+            LanguageEditorFrame f = new LanguageEditorFrame(LanguageTrainer.targetLanguage);
             f.setVisible(true);
-        } else if (action.equals("sentences")) {
+        } else if (action.equals("Sentences")) {
             TatoebaFrame t = new TatoebaFrame();
-
         } else if (action.equals("targetLanguageBox")) {
             JComboBox box = (JComboBox) ae.getSource();
             String longName = (String) box.getSelectedItem();
@@ -103,6 +108,9 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
             String longName = (String) box.getSelectedItem();
             LanguageTrainer.sourceLanguage = LanguageNames.longToShort(longName);
             MsgTextPane.write("source language is " + LanguageTrainer.sourceLanguage);
+        } else {
+            PictureTrainer p = new PictureTrainer(action);
+            p.setVisible(true);
         }
     }
 

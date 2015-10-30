@@ -1,6 +1,7 @@
 package tatoeba;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import languages.Language;
@@ -22,30 +24,28 @@ import languages.LanguageContext;
 
 class ImagePanel extends JPanel {
 
-    BufferedImage image;
+    BufferedImage imageObject;
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (image != null) {
-            g.drawImage(image, 0, 0, this);
+        if (imageObject != null) {
+            g.drawImage(imageObject, 0, 0, this);
         }
     }
 
-    public Dimension setImage(String imageFile) {
+    public boolean setImage(String theme, String image) {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        String fileName = defaultFolder + "\\Tatoeba\\Images\\" + imageFile + ".jpg";
+        String fileName = defaultFolder + "\\Tatoeba\\Images\\" + theme + "\\" + image + ".jpg";
         try {
-            image = ImageIO.read(new File(fileName));
-            int width = image.getWidth();
-            int height = image.getHeight();
-            System.out.println("image w=" + width + "  h=" + height);
+            imageObject = ImageIO.read(new File(fileName));
+            int width = imageObject.getWidth();
+            int height = imageObject.getHeight();
             setPreferredSize(new Dimension(width, height));
-            setMinimumSize(new Dimension(width, height));
             repaint();
-            return new Dimension(width, height);
+            return true;
         } catch (IOException e) {
             System.out.println("io exception : " + fileName);
-            return null;
+            return false;
         }
     }
 
@@ -56,13 +56,15 @@ public class PictureTrainer extends JFrame implements ActionListener {
     PictureTrainer thisPictureTrainer = this;
     JFrame thisFrame = (JFrame) this;
     JPanel content = new JPanel();
+    JLabel name;
     ImagePanel imagePanel;
+    String theme;
     ArrayList<String> pictures;
     Random randomGenerator = new Random();
 
-    public PictureTrainer() {
-
-        pictures = getPictureNames();
+    public PictureTrainer(String pictureTheme) {
+        theme = pictureTheme;
+        pictures = getPictureNames(theme);
 
         JButton transButton = new JButton("translate");
         transButton.setActionCommand("translate");
@@ -70,14 +72,24 @@ public class PictureTrainer extends JFrame implements ActionListener {
         JButton nextButton = new JButton("next");
         nextButton.setActionCommand("next");
         nextButton.addActionListener(thisPictureTrainer);
+        name = new JLabel("");
+        Font font = new Font("Courier", Font.BOLD, 23);
+        name.setFont(font);
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.LINE_AXIS));
+        topPanel.add(Box.createRigidArea(new Dimension(10, 10)));
+        topPanel.add(nextButton);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 10)));
+        topPanel.add(transButton);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 10)));
+        topPanel.add(name);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 10)));
+        topPanel.add(Box.createHorizontalGlue());
         imagePanel = new ImagePanel();
-        imagePanel.setImage(pictures.get(0));
+        nextPicture();
+        
         content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
-        content.add(Box.createRigidArea(new Dimension(0, 10)));
-        content.add(transButton);
-        content.add(Box.createRigidArea(new Dimension(0, 10)));
-        content.add(nextButton);
-        content.add(Box.createRigidArea(new Dimension(0, 10)));
+        content.add(topPanel);
         content.add(imagePanel);
 
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -85,11 +97,26 @@ public class PictureTrainer extends JFrame implements ActionListener {
         pack();
     }
 
-    private ArrayList<String> getPictureNames() {
+    public static ArrayList<String> getPictureThemes() {
+        ArrayList<String> themeNames;
+        themeNames = new ArrayList<>();
+        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
+        String folderName = defaultFolder + "\\Tatoeba\\Images\\";
+        File folder = new File(folderName);
+        File[] listOfFiles = folder.listFiles();
+        for (File file : listOfFiles) {
+            if (file.isDirectory()) {
+                themeNames.add(file.getName());
+            }
+        }
+        return themeNames;
+    }
+
+    private ArrayList<String> getPictureNames(String theme) {
         ArrayList<String> pictureNames;
         pictureNames = new ArrayList<>();
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        String folderName = defaultFolder + "\\Tatoeba\\Images\\";
+        String folderName = defaultFolder + "\\Tatoeba\\Images\\" + theme + "\\";
         File folder = new File(folderName);
         File[] listOfFiles = folder.listFiles();
 
@@ -109,27 +136,27 @@ public class PictureTrainer extends JFrame implements ActionListener {
         return pictureNames;
     }
 
+    private void nextPicture() {
+        int nr = randomGenerator.nextInt(pictures.size());
+        name.setText(pictures.get(nr));
+        imagePanel.setImage(theme, pictures.get(nr));
+    }
+
     public void actionPerformed(ActionEvent ae) {
         String action = ae.getActionCommand();
         if (action.equals("next")) {
-            Dimension imageDimension;
-            int nr = randomGenerator.nextInt(pictures.size());
-            imageDimension = imagePanel.setImage(pictures.get(nr));
-            if (imageDimension != null) {
-                content.remove(imagePanel);
-  //              System.out.println("setbounds " + imageDimension.getWidth() + " " + (int) imageDimension.getHeight());
-  //              setBounds(0, 0, (int) imageDimension.getWidth(), (int) imageDimension.getHeight());
-                content.remove(imagePanel);
-                imagePanel = new ImagePanel();
-                imagePanel.setImage(pictures.get(nr));
-                content.add(imagePanel);
-                pack();
-            }
+            nextPicture();
+            // remove and create new image otherwise pack() seems to have no effect
+            // need pack to resize JFrame to image
+            content.remove(imagePanel);
+            content.add(imagePanel);
+            pack();
         }
         if (action.equals("translate")) {
             String lang = languagetrainer.LanguageTrainer.targetLanguage;
             Language language = LanguageContext.get(lang);
-            //           textPanel.write(language.number(currentPicture));
+ //           System.out.println("translated="+
+ //                   language.translatePicture(theme,name.getText()));
         }
     }
 

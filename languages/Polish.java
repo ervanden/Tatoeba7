@@ -2,17 +2,20 @@ package languages;
 
 import dictionaries.PolishDictionary;
 import java.util.HashMap;
-import javax.swing.JFileChooser;
 
 public class Polish extends GenericLanguage implements Language {
 
     PolishDictionary d = null;
 
+        public Polish(){
+        languageName="Polish";
+    }
+ /*       
     public String dictionaryFileName() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
         return defaultFolder + "\\Tatoeba\\PolishDictionary.txt";
     }
-
+*/
     public PolishDictionary dictionary() {
         if (d == null) {
             d = new PolishDictionary(this);

@@ -2,17 +2,20 @@ package languages;
 
 import dictionaries.TurkishDictionary;
 import java.util.HashMap;
-import javax.swing.JFileChooser;
 
 public class Turkish extends GenericLanguage implements Language {
 
     TurkishDictionary d = null;
 
+    public Turkish(){
+        languageName="Turkish";
+    }
+ /*       
     public String dictionaryFileName() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
         return defaultFolder + "\\Tatoeba\\TurkishDictionary.txt";
     }
-
+*/
     public TurkishDictionary dictionary() {
         if (d == null) {
             d = new TurkishDictionary(this);
