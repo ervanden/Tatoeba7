@@ -9,12 +9,7 @@ public class Dutch extends GenericLanguage implements Language {
     public Dutch() {
         languageName = "Dutch";
     }
-/*
-    public String dictionaryFileName() {
-        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        return defaultFolder + "\\Tatoeba\\FrenchDictionary.txt";
-    }
-*/
+
     public DutchDictionary dictionary() {
         if (d == null) {
             d = new DutchDictionary(this);

@@ -21,7 +21,7 @@ import java.util.*;
 
 import langeditor.LanguageTextPane;
 import langeditor.LanguageEditorFrame;
-import languages.LanguageContext;
+
 
 import utils.AreaFont;
 import utils.MsgTextPane;
@@ -800,18 +800,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         menuBar.add(menuClusters);
         AddMenuItem(menuClusters, "Horizontal", "");
         AddMenuItem(menuClusters, "Vertical", "");
-
-        menuClusters = new JMenu("Editor");
-        menuBar.add(menuClusters);
-        for (String lang : LanguageContext.knownLanguages()) {
-            AddMenuItem(menuClusters, lang, "Editor");
-        }
-
-        menuClusters = new JMenu("Numbers");
-        menuBar.add(menuClusters);
-        for (String lang : LanguageContext.knownLanguages()) {
-            AddMenuItem(menuClusters, lang, "Numbers");
-        }
 
         pack();
     }

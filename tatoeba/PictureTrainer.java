@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -51,16 +54,21 @@ class ImagePanel extends JPanel {
 
 }
 
-public class PictureTrainer extends JFrame implements ActionListener {
+public class PictureTrainer extends JFrame implements ActionListener, ItemListener {
 
     PictureTrainer thisPictureTrainer = this;
     JFrame thisFrame = (JFrame) this;
     JPanel content = new JPanel();
+    JPanel topPanel;
+    JPanel namePanel;
     JLabel name;
     ImagePanel imagePanel;
     String theme;
     ArrayList<String> pictures;
     Random randomGenerator = new Random();
+    JCheckBox cBox;
+    boolean circular = false;
+    int currentPicture = 0;
 
     public PictureTrainer(String pictureTheme) {
         theme = pictureTheme;
@@ -72,24 +80,37 @@ public class PictureTrainer extends JFrame implements ActionListener {
         JButton nextButton = new JButton("next");
         nextButton.setActionCommand("next");
         nextButton.addActionListener(thisPictureTrainer);
+        cBox = new JCheckBox("circular");
+        cBox.addItemListener(thisPictureTrainer);
+        cBox.setEnabled(true);
         name = new JLabel("");
         Font font = new Font("Courier", Font.BOLD, 23);
         name.setFont(font);
-        JPanel topPanel = new JPanel();
+
+        topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.LINE_AXIS));
         topPanel.add(Box.createRigidArea(new Dimension(10, 10)));
         topPanel.add(nextButton);
         topPanel.add(Box.createRigidArea(new Dimension(10, 10)));
         topPanel.add(transButton);
         topPanel.add(Box.createRigidArea(new Dimension(10, 10)));
-        topPanel.add(name);
+        topPanel.add(cBox);
         topPanel.add(Box.createRigidArea(new Dimension(10, 10)));
         topPanel.add(Box.createHorizontalGlue());
+
+        namePanel = new JPanel();
+        namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.LINE_AXIS));
+        namePanel.add(Box.createRigidArea(new Dimension(10, 10)));
+        namePanel.add(name);
+        namePanel.add(Box.createRigidArea(new Dimension(10, 10)));
+        namePanel.add(Box.createHorizontalGlue());
+
         imagePanel = new ImagePanel();
         nextPicture();
-        
+
         content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
         content.add(topPanel);
+        content.add(namePanel);
         content.add(imagePanel);
 
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -112,7 +133,7 @@ public class PictureTrainer extends JFrame implements ActionListener {
         return themeNames;
     }
 
-    private ArrayList<String> getPictureNames(String theme) {
+    public static ArrayList<String> getPictureNames(String theme) {
         ArrayList<String> pictureNames;
         pictureNames = new ArrayList<>();
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
@@ -122,11 +143,11 @@ public class PictureTrainer extends JFrame implements ActionListener {
 
         for (File file : listOfFiles) {
             if (file.isFile()) {
-                System.out.println("File " + file.getName());
+                //               System.out.println("File " + file.getName());
                 if (file.getName().matches(".*[.]jpg")) {
-                    System.out.println("   Picture " + file.getName());
+                    //                   System.out.println("   Picture " + file.getName());
                     String pictureName = file.getName().replaceAll("[.]jpg$", "");
-                    System.out.println("   PictureName " + pictureName);
+                    //                   System.out.println("   PictureName " + pictureName);
                     pictureNames.add(pictureName);
                 }
             } else if (file.isDirectory()) {
@@ -137,9 +158,16 @@ public class PictureTrainer extends JFrame implements ActionListener {
     }
 
     private void nextPicture() {
-        int nr = randomGenerator.nextInt(pictures.size());
-        name.setText(pictures.get(nr));
-        imagePanel.setImage(theme, pictures.get(nr));
+        if (circular) {
+            currentPicture++;
+            if (currentPicture >= pictures.size()) {
+                currentPicture = 0;
+            }
+        } else {
+            currentPicture = randomGenerator.nextInt(pictures.size());
+        }
+        name.setText(pictures.get(currentPicture));
+        imagePanel.setImage(theme, pictures.get(currentPicture));
     }
 
     public void actionPerformed(ActionEvent ae) {
@@ -155,8 +183,27 @@ public class PictureTrainer extends JFrame implements ActionListener {
         if (action.equals("translate")) {
             String lang = languagetrainer.LanguageTrainer.targetLanguage;
             Language language = LanguageContext.get(lang);
- //           System.out.println("translated="+
- //                   language.translatePicture(theme,name.getText()));
+            String translatedWord = language.translate(theme, name.getText());
+            if (translatedWord == null) {
+                translatedWord = "no translation";
+            }
+            name.setText(translatedWord);
+
+        }
+    }
+
+    public void itemStateChanged(ItemEvent e) {
+
+        Object source = e.getItemSelectable();
+
+        if (source == cBox) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                circular = true;
+                currentPicture=pictures.size();
+            }
+            if (e.getStateChange() == ItemEvent.DESELECTED) {
+                circular = false;
+            }
         }
     }
 
