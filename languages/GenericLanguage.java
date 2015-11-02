@@ -14,12 +14,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import javax.swing.JFileChooser;
-import tatoeba.Cluster;
 import tatoeba.PictureTrainer;
-import tatoeba.Sentence;
 import utils.MsgTextPane;
 
 public class GenericLanguage {
@@ -169,7 +166,6 @@ public class GenericLanguage {
                     String value = ls[1];
                     themeWordMap.put(key, value);
                     count++;
-                    System.out.println("entry " + ls.length + " " + key + " " + value);
                     }
                 }
             } catch (FileNotFoundException fnf) {
@@ -227,7 +223,7 @@ public class GenericLanguage {
             outputStream.close();
 
         } catch (IOException io) {
-            MsgTextPane.write(" io exception during save clusters");
+            MsgTextPane.write(" io exception during save"+fileName);
         }
     }
 }

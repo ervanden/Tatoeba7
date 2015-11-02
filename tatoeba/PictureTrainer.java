@@ -68,7 +68,8 @@ public class PictureTrainer extends JFrame implements ActionListener, ItemListen
     Random randomGenerator = new Random();
     JCheckBox cBox;
     boolean circular = false;
-    int currentPicture = 0;
+    int currentPictureIndex = 0;
+    String currentPicture;
 
     public PictureTrainer(String pictureTheme) {
         theme = pictureTheme;
@@ -159,15 +160,35 @@ public class PictureTrainer extends JFrame implements ActionListener, ItemListen
 
     private void nextPicture() {
         if (circular) {
-            currentPicture++;
-            if (currentPicture >= pictures.size()) {
-                currentPicture = 0;
+            currentPictureIndex++;
+            if (currentPictureIndex >= pictures.size()) {
+                currentPictureIndex = 0;
             }
         } else {
-            currentPicture = randomGenerator.nextInt(pictures.size());
+            currentPictureIndex = randomGenerator.nextInt(pictures.size());
         }
-        name.setText(pictures.get(currentPicture));
-        imagePanel.setImage(theme, pictures.get(currentPicture));
+        currentPicture = pictures.get(currentPictureIndex);
+        imagePanel.setImage(theme, currentPicture);
+
+        String sourceLanguage = languagetrainer.LanguageTrainer.sourceLanguage;
+        String translation;
+        translation = translateCurrentPicture(languagetrainer.LanguageTrainer.sourceLanguage);
+        name.setText(translation);
+    }
+
+    private String translateCurrentPicture(String lang) {
+        // translate the name of the picture if it is not english
+        String translation;
+        if (lang.equals("eng")) {
+            translation = currentPicture;
+        } else {
+            Language language = LanguageContext.get(lang);
+            translation = language.translate(theme, currentPicture);
+            if (translation == null) {
+                translation = "no translation";
+            }
+        }
+        return translation;
     }
 
     public void actionPerformed(ActionEvent ae) {
@@ -181,14 +202,9 @@ public class PictureTrainer extends JFrame implements ActionListener, ItemListen
             pack();
         }
         if (action.equals("translate")) {
-            String lang = languagetrainer.LanguageTrainer.targetLanguage;
-            Language language = LanguageContext.get(lang);
-            String translatedWord = language.translate(theme, name.getText());
-            if (translatedWord == null) {
-                translatedWord = "no translation";
-            }
-            name.setText(translatedWord);
-
+            String translation;
+            translation = translateCurrentPicture(languagetrainer.LanguageTrainer.targetLanguage);
+            name.setText(translation);
         }
     }
 
@@ -199,7 +215,7 @@ public class PictureTrainer extends JFrame implements ActionListener, ItemListen
         if (source == cBox) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 circular = true;
-                currentPicture=pictures.size();
+                currentPictureIndex = pictures.size();
             }
             if (e.getStateChange() == ItemEvent.DESELECTED) {
                 circular = false;

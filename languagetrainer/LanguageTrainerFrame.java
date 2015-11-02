@@ -26,11 +26,12 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
     HashMap<String, JButton> buttons = new HashMap<>();
 
     public LanguageTrainerFrame() {
-
+        
+        tools.add("Editors");
         tools.add("Sentences");
         tools.add("Numbers");
         tools.add("Colors");
-        tools.add("Editors");
+
         for (String theme : PictureTrainer.getPictureThemes()){
             tools.add(theme);
         }
@@ -42,7 +43,7 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
             button.addActionListener(thisLanguageTrainer);
         }
 
-        JPanel toolsPanel = new JPanel();
+        JPanel languagePanel = new JPanel();
 
         String[] languageArray = new String[LanguageTrainer.userLanguages.size()];
         for (int i = 0; i < languageArray.length; i++) {
@@ -61,22 +62,27 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
         targetLanguageBox.setActionCommand("targetLanguageBox");
         targetLanguageBox.setSelectedItem(LanguageNames.shortToLong(LanguageTrainer.targetLanguage));
 
-        toolsPanel.add(sourceLabel);
-        toolsPanel.add(sourceLanguageBox);
-        toolsPanel.add(targetLabel);
-        toolsPanel.add(targetLanguageBox);
+        languagePanel.add(sourceLabel);
+        languagePanel.add(sourceLanguageBox);
+        languagePanel.add(targetLabel);
+        languagePanel.add(targetLanguageBox);
 
- //       JPanel numberPanel = new JPanel();
- //       numberPanel.setLayout(new BoxLayout(numberPanel, BoxLayout.LINE_AXIS));
+       JPanel toolsPanel = new JPanel();
+       toolsPanel.setLayout(new BoxLayout(toolsPanel, BoxLayout.PAGE_AXIS));
 
         for (String tool : tools) {
             toolsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
             toolsPanel.add(buttons.get(tool));
         }
+        
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.LINE_AXIS));
+        mainPanel.add(toolsPanel);
+        mainPanel.add(LanguageTrainer.messageTextPanel);
 
         content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
-        content.add(toolsPanel);
-        content.add(LanguageTrainer.messageTextPanel);
+        content.add(languagePanel);
+        content.add(mainPanel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(content);
