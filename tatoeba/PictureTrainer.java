@@ -24,6 +24,8 @@ import javax.swing.JPanel;
 
 import languages.Language;
 import languages.LanguageContext;
+import static languagetrainer.LanguageTrainer.userLanguages;
+import utils.MsgTextPane;
 
 class ImagePanel extends JPanel {
 
@@ -219,6 +221,32 @@ public class PictureTrainer extends JFrame implements ActionListener, ItemListen
             }
             if (e.getStateChange() == ItemEvent.DESELECTED) {
                 circular = false;
+            }
+        }
+    }
+
+    public static void displayWordMaps() {
+        
+        // load all maps for all languages so that messages appear all together
+        
+        for (String theme : getPictureThemes()) {
+            for (String lang : userLanguages) {
+                Language language = LanguageContext.get(lang);
+                language.translate(theme, "");
+            }
+        }
+
+        for (String theme : getPictureThemes()) {
+            for (String picture : getPictureNames(theme)) {
+                MsgTextPane.write("---------------------------");
+                MsgTextPane.write(theme + " " + picture);
+                MsgTextPane.write("---------------------------");
+                for (String lang : userLanguages) {
+                    if (!lang.equals("eng")){
+                    Language language = LanguageContext.get(lang);
+                    MsgTextPane.write(lang + " : " + language.translate(theme, picture));
+                    }
+                }
             }
         }
     }

@@ -21,7 +21,6 @@ public class LanguageTrainer {
     public static ArrayList<String> userLanguages = new ArrayList<>();
     public static String targetLanguage = "eng";
     public static String sourceLanguage = "eng";
-    static boolean updateWordMaps=false;
 
     private static void readParameters() {
         String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
@@ -74,21 +73,11 @@ public class LanguageTrainer {
                 targetLanguage = e.value;
             } else if (e.key.equals("source")) {
                 sourceLanguage = e.value;
-            } else if (e.key.equals("updateWordMaps")) {
-                updateWordMaps=e.value.equals("true");
             } else {
                 MsgTextPane.write("invalid parameter : " + e.key);
             }
         }
-        
-        if (updateWordMaps) {
-                    for (String lang : userLanguages) {
-                        Language language = LanguageContext.get(lang);
-                        language.updateWordMaps();
-                    }
-                }
-
-
+ 
         languageTrainerFrame = new LanguageTrainerFrame();
         languageTrainerFrame.setVisible(true);
 

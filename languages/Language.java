@@ -45,4 +45,7 @@ public interface Language {
 
     public void updateWordMaps();
         // causes all word maps for all languages to be augmented with the missing picture names
+    
+    public void rereadWordMaps();
+       // reset Word Maps for this lang
 }

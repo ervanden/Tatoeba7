@@ -22,7 +22,7 @@ import utils.MsgTextPane;
 public class GenericLanguage {
 
     GenericDictionary d = null;
-    String languageName = "generic";
+    public String languageName = "generic";
     HashMap<String, HashMap<String, String>> wordMaps = new HashMap<>();
 
     public String dictionaryFileName() {
@@ -139,6 +139,7 @@ public class GenericLanguage {
         }
         return tcolor;
     }
+    
 
     public String translate(String theme, String word) {
 
@@ -192,6 +193,14 @@ public class GenericLanguage {
         for (String theme : PictureTrainer.getPictureThemes()) {
             addWordsToMap(theme, PictureTrainer.getPictureNames(theme));
             writeWordMap(theme);
+        }
+    }
+    
+        public void rereadWordMaps() {
+        for (String theme : PictureTrainer.getPictureThemes()) {
+            wordMaps.remove(theme);
+            translate(theme,"");
+
         }
     }
 

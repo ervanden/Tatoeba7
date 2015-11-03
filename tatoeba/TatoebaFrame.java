@@ -603,13 +603,16 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         menuItem.addActionListener(this);
         menu.add(menuItem);
         menuItems.put(name, menuItem);
-    }
+    }  
+    
+    
 
     public void enableMenuItem(String actionName, boolean enabled) {
         JMenuItem menuItem;
         menuItem = menuItems.get(actionName);
         menuItem.setEnabled(enabled);
     }
+    
 
     private GridBagConstraints newGridBagConstraints() {
         GridBagConstraints c = new GridBagConstraints();
