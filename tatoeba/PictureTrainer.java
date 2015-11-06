@@ -207,6 +207,10 @@ public class PictureTrainer extends JFrame implements ActionListener, ItemListen
             String translation;
             translation = translateCurrentPicture(languagetrainer.LanguageTrainer.targetLanguage);
             name.setText(translation);
+            namePanel.revalidate();
+            content.revalidate();
+            this.pack();
+            content.repaint();
         }
     }
 
