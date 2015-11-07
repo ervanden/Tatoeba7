@@ -197,11 +197,9 @@ public class PictureTrainer extends JFrame implements ActionListener, ItemListen
         String action = ae.getActionCommand();
         if (action.equals("next")) {
             nextPicture();
-            // remove and create new image otherwise pack() seems to have no effect
-            // need pack to resize JFrame to image
-            content.remove(imagePanel);
-            content.add(imagePanel);
+            content.revalidate();
             pack();
+            content.repaint();
         }
         if (action.equals("translate")) {
             String translation;
@@ -209,7 +207,7 @@ public class PictureTrainer extends JFrame implements ActionListener, ItemListen
             name.setText(translation);
             namePanel.revalidate();
             content.revalidate();
-            this.pack();
+            pack();
             content.repaint();
         }
     }
@@ -230,9 +228,8 @@ public class PictureTrainer extends JFrame implements ActionListener, ItemListen
     }
 
     public static void displayWordMaps() {
-        
+
         // load all maps for all languages so that messages appear all together
-        
         for (String theme : getPictureThemes()) {
             for (String lang : userLanguages) {
                 Language language = LanguageContext.get(lang);
@@ -246,9 +243,9 @@ public class PictureTrainer extends JFrame implements ActionListener, ItemListen
                 MsgTextPane.write(theme + " " + picture);
                 MsgTextPane.write("---------------------------");
                 for (String lang : userLanguages) {
-                    if (!lang.equals("eng")){
-                    Language language = LanguageContext.get(lang);
-                    MsgTextPane.write(lang + " : " + language.translate(theme, picture));
+                    if (!lang.equals("eng")) {
+                        Language language = LanguageContext.get(lang);
+                        MsgTextPane.write(lang + " : " + language.translate(theme, picture));
                     }
                 }
             }
