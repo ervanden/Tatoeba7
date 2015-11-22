@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
-import languages.Language;
-import languages.LanguageContext;
 import static languages.LanguageNames.longToShort;
 import utils.*;
 
@@ -35,6 +33,7 @@ public class LanguageTrainer {
             String[] ls;
             int lineNr = 0;
             while ((l = in.readLine()) != null) {
+                if (lineNr==0) l=ByteOrderMark.remove(l);
                 lineNr++;
                 ls = l.split("\\=");
                 if (ls.length < 2) {

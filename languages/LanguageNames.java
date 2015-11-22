@@ -12,7 +12,7 @@ import java.util.HashMap;
 import javax.swing.JFileChooser;
 import tatoeba.Cluster;
 import tatoeba.Sentence;
-import utils.MsgTextPane;
+import utils.*;
 
 
 public class LanguageNames {
@@ -80,6 +80,7 @@ public class LanguageNames {
             String l;
             int linecount = 0;
             while ((l = inputStream.readLine()) != null) {
+                if (linecount==0) l=ByteOrderMark.remove(l);
                 linecount++;
                 String[] ls = l.split("[|;\u0009]");
                 if (ls.length == 2) {

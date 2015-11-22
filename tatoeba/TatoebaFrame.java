@@ -22,9 +22,8 @@ import java.util.*;
 import langeditor.LanguageTextPane;
 import langeditor.LanguageEditorFrame;
 
+import utils.*;
 
-import utils.AreaFont;
-import utils.MsgTextPane;
 
 // If the source or target language is one single language, a language-specific text pane is used.
 public class TatoebaFrame extends JFrame implements ActionListener {
@@ -156,7 +155,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         public void run() {
             readClusters(fileName);
-           graph.generateLanguageMatrix();
+            graph.generateLanguageMatrix();
             selectionFrame.populateAreas();
             selectionFrame.setVisible(true);
             enableStandard();
@@ -173,7 +172,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         public void run() {
             readSentences(dirName);
-           graph.generateLanguageMatrix();
+            graph.generateLanguageMatrix();
             selectionFrame.populateAreas();
             selectionFrame.setVisible(true);
             enableStandard();
@@ -603,16 +602,13 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         menuItem.addActionListener(this);
         menu.add(menuItem);
         menuItems.put(name, menuItem);
-    }  
-    
-    
+    }
 
     public void enableMenuItem(String actionName, boolean enabled) {
         JMenuItem menuItem;
         menuItem = menuItems.get(actionName);
         menuItem.setEnabled(enabled);
     }
-    
 
     private GridBagConstraints newGridBagConstraints() {
         GridBagConstraints c = new GridBagConstraints();
@@ -1004,9 +1000,14 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             String[] ls;
             int lineCount = 0;
             while ((l = inputStream.readLine()) != null) {
+
+                if (lineCount == 0) {
+                   l=ByteOrderMark.remove(l);
+                }
+
                 lineCount++;
                 ls = l.split("\u0009");
-                if (l.matches("^.*cluster.*$")) {
+                if (ls[0].matches(" *cluster *")) {
                     clusterCount++;
                     c = new Cluster();
                     c.nr = clusterCount;

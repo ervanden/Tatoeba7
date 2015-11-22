@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JFileChooser;
 import tatoeba.PictureTrainer;
-import utils.MsgTextPane;
+import utils.*;
 
 public class GenericLanguage {
 
@@ -161,6 +161,9 @@ public class GenericLanguage {
                 String l;
                 count = 0;
                 while ((l = inputStream.readLine()) != null) {
+                    if (count==0){
+                        l=ByteOrderMark.remove(l);
+                    }
                     String[] ls = l.split("\u0009");
                     if (ls.length==2){
                     String key = ls[0];
