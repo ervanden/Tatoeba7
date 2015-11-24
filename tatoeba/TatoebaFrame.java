@@ -48,6 +48,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
     JButton buttonMinus = new JButton("-");
     JButton buttonNext = new JButton("Next");
     JButton buttonPrevious = new JButton("Previous");
+    JButton buttonTags = new JButton("Tags");
     JButton buttonTranslate = new JButton("Translate");
     JButton buttonCreate = new JButton("Create");
     JButton buttonEdit = new JButton("Edit");
@@ -130,6 +131,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonNext.setEnabled(true);
         buttonTranslate.setEnabled(false);
         buttonPrevious.setEnabled(false);
+                buttonTags.setEnabled(false);
         buttonCreate.setEnabled(true);
         buttonEdit.setEnabled(false);
         buttonCommit.setEnabled(false);
@@ -259,6 +261,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             editingCluster = null;
             buttonPrevious.setEnabled(false);
             buttonEdit.setEnabled(false);
+                        buttonTags.setEnabled(false);
 
         }
 
@@ -329,6 +332,10 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         }
 
+        if (action.equals("buttonTags")){
+            TagsFrame tagsFrame = new TagsFrame(clusterFifo.peekFirst(), selectionFrame);
+        }
+        
         if (action.equals("buttonNext") || action.equals("buttonPrevious")) {
 
             setAutoCorrect(false);
@@ -376,6 +383,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 sourceDisplayed = true;
                 targetDisplayed = false;
                 buttonEdit.setEnabled(true);
+                            buttonTags.setEnabled(true);
                 buttonTranslate.setEnabled(true);
             }
             buttonPrevious.setEnabled(clusterFifo.size() > 1);
@@ -405,6 +413,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                     sourceDisplayed = true;
                     targetDisplayed = true;
                     buttonEdit.setEnabled(true);
+                    buttonTags.setEnabled(true);
                 }
 
             } else {
@@ -465,6 +474,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             enableMenuItem("Save selected clusters", true);
 
             buttonNext.setEnabled(true);
+            buttonTags.setEnabled(true);
             buttonCreate.setEnabled(true);
             buttonPrevious.setEnabled(clusterFifo.size() > 1);
             buttonEdit.setEnabled(true);
@@ -511,6 +521,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             buttonNext.setEnabled(true);
             buttonTranslate.setEnabled(false);
             buttonPrevious.setEnabled(clusterFifo.size() > 1);
+            buttonTags.setEnabled(true);
             buttonCreate.setEnabled(true);
             buttonEdit.setEnabled(true);
             buttonCommit.setEnabled(false);
@@ -545,6 +556,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             buttonTranslate.setEnabled(false);
             buttonPrevious.setEnabled(false);
             buttonEdit.setEnabled(false);
+            buttonTags.setEnabled(false);
             setAutoCorrect(true);
             sourceDisplayed = false;
             targetDisplayed = false;
@@ -571,6 +583,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                     executeAction("buttonTranslate"); // make sure all sentences are on the screens
                 }
                 buttonEdit.setEnabled(false);
+                buttonTags.setEnabled(false);
                 buttonTranslate.setEnabled(false);
                 buttonNext.setEnabled(false);
                 buttonPrevious.setEnabled(false);
@@ -690,6 +703,15 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
         content.add(spacer1, c);
 
+                c = newGridBagConstraints();
+        c.fill = GridBagConstraints.NONE;
+        c.anchor = GridBagConstraints.CENTER;
+        c.weightx = 0;
+        c.gridx = topFields++;
+        c.gridy = 0;
+        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
+        content.add(buttonTags, c);
+        
         c = newGridBagConstraints();
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
@@ -840,6 +862,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonCommit.addActionListener(this);
         buttonCancel.addActionListener(this);
         buttonEdit.addActionListener(this);
+        buttonTags.addActionListener(this);
         buttonCreate.addActionListener(this);
 
         buttonPlus.setActionCommand("buttonPlus");
@@ -850,6 +873,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonCommit.setActionCommand("buttonCommit");
         buttonCancel.setActionCommand("buttonCancel");
         buttonEdit.setActionCommand("buttonEdit");
+        buttonTags.setActionCommand("buttonTags");
         buttonCreate.setActionCommand("buttonCreate");
 
         displayGUI(false);
@@ -872,6 +896,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonPrevious.setEnabled(false);
         buttonCreate.setEnabled(false);
         buttonEdit.setEnabled(false);
+        buttonTags.setEnabled(false);
         buttonCommit.setEnabled(false);
         buttonCancel.setEnabled(false);
 
