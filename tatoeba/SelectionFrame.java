@@ -123,6 +123,11 @@ public class SelectionFrame implements ActionListener {
                     (float) sliderMax.getValue() / (float) sliderScale, true);
             statusMessage(true);
         }
+        
+        // tags may have changed, so re-populate tags area
+        
+        populateArea(allTagsArea, new ArrayList<String>(allTags));
+                        
         frame.setVisible(visible);
         enableCaretListener = true;  // now we are sure that boxes are populated
     }

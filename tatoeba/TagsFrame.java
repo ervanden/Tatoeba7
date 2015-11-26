@@ -65,15 +65,17 @@ public class TagsFrame extends JFrame implements ActionListener {
         String action = ae.getActionCommand();
         if (action.equals("add")) {
             String newTag = newTagField.getText();
-            System.out.println("add " + newTag);
+            System.out.println("adding tag " + newTag);
             cluster.tags.add(newTag);
+            cluster.unsaved = true;
             selectionFrame.allTags.add(newTag);
         }
- //       System.out.println("split " + action.substring(0, 1) + "-" + action.substring(1));
+        //       System.out.println("split " + action.substring(0, 1) + "-" + action.substring(1));
         if (action.substring(0, 1).equals("+")) {
             String newTag = action.substring(1);
-            System.out.println("add " + newTag);
+            System.out.println("adding tag " + newTag);
             cluster.tags.add(newTag);
+            cluster.unsaved = true;
         }
 
     }

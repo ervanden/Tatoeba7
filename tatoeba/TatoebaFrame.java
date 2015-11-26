@@ -24,24 +24,22 @@ import langeditor.LanguageEditorFrame;
 
 import utils.*;
 
-
 // If the source or target language is one single language, a language-specific text pane is used.
 public class TatoebaFrame extends JFrame implements ActionListener {
 
     public SelectionFrame selectionFrame;
     public WorkingSet workingSet;
     public Graph graph;
+    public TagsFrame tagsFrame;
 
     public LanguageTextPane sourceArea;
     public LanguageTextPane targetArea;
-    public JTextPane infoArea;
 
     JScrollPane scrollingSourceArea;
     JScrollPane scrollingTargetArea;
-    JScrollPane scrollingInfoArea;
 
-    JSplitPane sentencesSplitPane;   // contains source and target panes
-    JSplitPane topSplitPane;        // contains sentencesSplitPane and info area
+    JPanel tagsPanel = null;
+
     JPanel content = new JPanel();
 
     JButton buttonPlus = new JButton("+");
@@ -55,6 +53,12 @@ public class TatoebaFrame extends JFrame implements ActionListener {
     JButton buttonCommit = new JButton("Save edits");
     JButton buttonCancel = new JButton("Cancel");
 
+    // components in tags panel
+    HashMap<String,JButton> tagButtons = new HashMap<>();
+    JButton buttonAddTag = new JButton("+tag");
+    JTextField newTagField = new JTextField();
+
+    // text between the top panel buttons
     JLabel spacer1 = new JLabel(" ");
     JLabel spacer2 = new JLabel(" ");
 
@@ -131,7 +135,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonNext.setEnabled(true);
         buttonTranslate.setEnabled(false);
         buttonPrevious.setEnabled(false);
-                buttonTags.setEnabled(false);
+        buttonTags.setEnabled(false);
         buttonCreate.setEnabled(true);
         buttonEdit.setEnabled(false);
         buttonCommit.setEnabled(false);
@@ -190,6 +194,32 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         JFileChooser fileChooser;
         int retval;
+
+        // actions from tags panel
+        if (action.equals("add new tag")) {
+            String newTag = newTagField.getText();
+            Cluster cluster = clusterFifo.peekFirst();
+            if (cluster == null) {
+                MsgTextPane.write("no cluster on top of the stack");
+            } else {
+                MsgTextPane.write("adding new tag " + newTag + " to cluster " + cluster.nr);
+                cluster.tags.add(newTag);
+                cluster.unsaved = true;
+                selectionFrame.allTags.add(newTag);
+            }
+        }
+        //       System.out.println("split " + action.substring(0, 1) + "-" + action.substring(1));
+        if (action.substring(0, 4).equals("tag+")) {
+            String newTag = action.substring(4);
+            Cluster cluster = clusterFifo.peekFirst();
+            if (cluster == null) {
+                MsgTextPane.write("no cluster on top of the stack");
+            } else {
+                MsgTextPane.write("adding tag " + newTag + " to cluster " + cluster.nr);
+                cluster.tags.add(newTag);
+                cluster.unsaved = true;
+            }
+        }
 
         // menu items
         if (action.equals("Exit without saving clusters")) {
@@ -253,7 +283,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             spacer1.setText("");
             erasePane(sourceArea);
             erasePane(targetArea);
-            erasePane(infoArea);
 
             sourceDisplayed = false;
             targetDisplayed = false;
@@ -261,7 +290,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             editingCluster = null;
             buttonPrevious.setEnabled(false);
             buttonEdit.setEnabled(false);
-                        buttonTags.setEnabled(false);
+            buttonTags.setEnabled(false);
 
         }
 
@@ -274,15 +303,11 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Horizontal")) {
-            displayGUI(true);
-            enableMenuItem("Vertical", true);
-            enableMenuItem("Horizontal", false);
+
         }
 
         if (action.equals("Vertical")) {
-            displayGUI(false);
-            enableMenuItem("Vertical", false);
-            enableMenuItem("Horizontal", true);
+
         }
 
         if (action.matches(".*[|].*")) {
@@ -305,38 +330,40 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             AreaFont.multiply((float) 1.2);
             AreaFont.setFont(sourceArea);
             AreaFont.setFont(targetArea);
-            AreaFont.setFont(infoArea);
         }
 
         if (action.equals("buttonMinus")) {
             AreaFont.multiply((float) 0.8);
             AreaFont.setFont(sourceArea);
             AreaFont.setFont(targetArea);
-            AreaFont.setFont(infoArea);
         }
 
         if (action.equals("buttonPrevious")) {
 
             erasePane(sourceArea);
             erasePane(targetArea);
-            erasePane(infoArea);
             if (!clusterFifo.isEmpty()) {
                 clusterFifo.pop();
                 sourceDisplayed = false;
                 targetDisplayed = false;
             }
             if (clusterFifo.isEmpty()) {
-                writePane(infoArea, "");
-                writePane(infoArea, "no previous cluster");
+                MsgTextPane.write("no previous cluster");
             }
 
         }
 
-        if (action.equals("buttonTags")){
-            TagsFrame tagsFrame = new TagsFrame(clusterFifo.peekFirst(), selectionFrame);
+        if (action.equals("buttonTags")) {
+            tagsFrame = new TagsFrame(clusterFifo.peekFirst(), selectionFrame);
         }
-        
+
         if (action.equals("buttonNext") || action.equals("buttonPrevious")) {
+
+            if (tagsFrame != null) {
+                tagsFrame.setVisible(false);
+                tagsFrame.dispose();
+                tagsFrame = null;
+            }
 
             setAutoCorrect(false);
 
@@ -368,7 +395,16 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
                 erasePane(sourceArea);
                 erasePane(targetArea);
-                erasePane(infoArea);
+
+                // update tags panel
+                if (tagsPanel != null) {
+                    content.remove(tagsPanel);
+                }
+                tagsPanel = createTagsPanel(activeCluster);
+                content.add(tagsPanel);
+                content.revalidate();
+                pack();
+                content.repaint();
 
                 writePane(sourceArea, "");
                 for (Sentence s : activeCluster.sentences) {
@@ -377,13 +413,10 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                     }
                 }
 
-                for (String tag : activeCluster.tags) {
-                    writePane(infoArea, "tag : " + tag);
-                }
                 sourceDisplayed = true;
                 targetDisplayed = false;
                 buttonEdit.setEnabled(true);
-                            buttonTags.setEnabled(true);
+                buttonTags.setEnabled(true);
                 buttonTranslate.setEnabled(true);
             }
             buttonPrevious.setEnabled(clusterFifo.size() > 1);
@@ -447,8 +480,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 c.sentences.clear();
                 c.readSentencesFromDocument(sourceArea.getStyledDocument(), selectionFrame);
                 c.readSentencesFromDocument(targetArea.getStyledDocument(), selectionFrame);
-                c.tags.clear();
-                c.readTagsFromDocument(infoArea.getStyledDocument());
+                //               c.tags.clear();
                 c.unsaved = true;
 
                 editing = false;
@@ -458,10 +490,9 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
             sourceArea.setBackground(Color.WHITE);
             targetArea.setBackground(Color.WHITE);
-            infoArea.setBackground(Color.WHITE);
+
             sourceArea.setEditable(false);
             targetArea.setEditable(false);
-            infoArea.setEditable(false);
 
             enableMenuItem("Save clusters and exit", true);
             enableMenuItem("Exit without saving clusters", true);
@@ -494,7 +525,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 if (editingCluster == null) { // user created a new cluster
                     erasePane(sourceArea);
                     erasePane(targetArea);
-                    erasePane(infoArea);
                 } else {
                     // The user was editing an existing cluster: redisplay the original sentences
                     // The cluster is on the  stack so we can call ButtonNext and buttonTranslate
@@ -513,10 +543,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
             sourceArea.setBackground(Color.WHITE);
             targetArea.setBackground(Color.WHITE);
-            infoArea.setBackground(Color.WHITE);
             sourceArea.setEditable(false);
             targetArea.setEditable(false);
-            infoArea.setEditable(false);
 
             buttonNext.setEnabled(true);
             buttonTranslate.setEnabled(false);
@@ -530,6 +558,12 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         if (action.equals("buttonCreate")) {
 
+            if (tagsFrame != null) {
+                tagsFrame.setVisible(false);
+                tagsFrame.dispose();
+                tagsFrame = null;
+            }
+
             editing = true;
             editingCluster = null;
             buttonCommit.setEnabled(true);
@@ -537,7 +571,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
             erasePane(sourceArea);
             erasePane(targetArea);
-            erasePane(infoArea);
 
             sourceArea.getLanguage().dictionary().dictionaryWindowVisible(true);
             targetArea.getLanguage().dictionary().dictionaryWindowVisible(true);
@@ -562,11 +595,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             targetDisplayed = false;
             sourceArea.setEditable(true);
             targetArea.setEditable(true);
-            infoArea.setEditable(true);
             sourceArea.setBackground(Color.LIGHT_GRAY);
             targetArea.setBackground(Color.LIGHT_GRAY);
-            infoArea.setBackground(Color.LIGHT_GRAY);
-
         }
 
         if (action.equals("buttonEdit")) {
@@ -591,10 +621,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 setAutoCorrect(true);
                 sourceArea.setEditable(true);
                 targetArea.setEditable(true);
-                infoArea.setEditable(true);
                 sourceArea.setBackground(Color.LIGHT_GRAY);
                 targetArea.setBackground(Color.LIGHT_GRAY);
-                infoArea.setBackground(Color.LIGHT_GRAY);
             }
         }
 
@@ -638,7 +666,37 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         return c;
     }
 
-    private void displayGUI(boolean horizontal) {
+    private JPanel createTagsPanel(Cluster c) {
+
+        JPanel thisPanel = new JPanel();
+        thisPanel.setLayout(new BoxLayout(thisPanel, BoxLayout.LINE_AXIS));
+
+        Iterator iterator = selectionFrame.allTags.iterator();
+        while (iterator.hasNext()) {
+            String tag = (String) iterator.next();
+            //           System.out.println("Value: " + tag + " ");
+            thisPanel.add(Box.createRigidArea(new Dimension(10, 10)));
+            JButton button = new JButton(tag);
+            if (c.tags.contains(tag)) {
+                button.setBackground(Color.GREEN);
+            }
+            button.setActionCommand("tag+" + tag);
+            button.addActionListener(this);
+            thisPanel.add(button);
+        }
+
+        buttonAddTag.setActionCommand("add new tag");
+        buttonAddTag.addActionListener(this);
+        newTagField.setText("enter new tag");
+        thisPanel.add(Box.createRigidArea(new Dimension(10, 10)));
+        thisPanel.add(buttonAddTag);
+        thisPanel.add(Box.createRigidArea(new Dimension(10, 10)));
+        thisPanel.add(newTagField);
+
+        return thisPanel;
+    }
+
+    private void displayGUInew() {
 
         Dimension minimumDimension = new Dimension(200, 50);
         Dimension preferredDimension = new Dimension(780, 200);
@@ -649,150 +707,45 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         targetArea.setMinimumSize(minimumDimension);
         targetArea.setPreferredSize(preferredDimension);
 
-        infoArea.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2)); // 2 pixels around text   
-        infoArea.setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
-
         scrollingSourceArea.setMinimumSize(minimumDimension);
         scrollingSourceArea.setPreferredSize(preferredDimension);
 
         scrollingTargetArea.setMinimumSize(minimumDimension);
         scrollingTargetArea.setPreferredSize(preferredDimension);
 
-        scrollingInfoArea.setMinimumSize(new Dimension(780, 100));
-        scrollingInfoArea.setMaximumSize(new Dimension(780, 100));
-        scrollingInfoArea.setPreferredSize(new Dimension(780, 100));
+        content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
 
-        int topFields = 0;
-        int bottomFields;
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.LINE_AXIS));
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPanel.add(buttonNext);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPanel.add(buttonTranslate);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPanel.add(buttonPrevious);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPanel.add(spacer1);
+        topPanel.add(Box.createRigidArea(new Dimension(30, 0)));
+        topPanel.add(buttonTags);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPanel.add(buttonCreate);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPanel.add(buttonEdit);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPanel.add(buttonCommit);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPanel.add(buttonCancel);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPanel.add(spacer2);
+        topPanel.add(Box.createRigidArea(new Dimension(30, 0)));
+        topPanel.add(buttonPlus);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPanel.add(buttonMinus);
+        topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
 
-        GridBagConstraints c;
-
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0;
-        c.gridx = topFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(buttonNext, c);
-
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0;
-        c.gridx = topFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(buttonTranslate, c);
-
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0;
-        c.gridx = topFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(buttonPrevious, c);
-
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0.5;
-        c.gridx = topFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(spacer1, c);
-
-                c = newGridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0;
-        c.gridx = topFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(buttonTags, c);
-        
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0;
-        c.gridx = topFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(buttonCreate, c);
-
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0;
-        c.gridx = topFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(buttonEdit, c);
-
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0;
-        c.gridx = topFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(buttonCommit, c);
-
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0;
-        c.gridx = topFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(buttonCancel, c);
-
-        bottomFields = topFields;
-
-        // RIGHT : TARGET
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0.5;
-        c.gridx = bottomFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(spacer2, c);
-
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0;
-        c.gridx = bottomFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(buttonPlus, c);
-
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0;
-        c.gridx = bottomFields++;
-        c.gridy = 0;
-        c.insets = new Insets(0, 5, 0, 0);  // top left bottom right
-        content.add(buttonMinus, c);
-
-        if (horizontal) {
-            sentencesSplitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-        } else {
-            sentencesSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-        }
-
-        c = newGridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
-        c.weighty = 0.5;
-        c.weightx = 0;
-        c.gridx = 0;
-        c.gridy = 1;
-        c.gridwidth = bottomFields;
-        c.anchor = GridBagConstraints.FIRST_LINE_START;
-        content.add(topSplitPane, c);
+        content.add(topPanel);
+        content.add(scrollingSourceArea);
+        content.add(scrollingTargetArea);
 
         JMenuBar menuBar;
         JMenu menuExit;
@@ -838,19 +791,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         scrollingSourceArea = new JScrollPane(sourceArea);
         scrollingTargetArea = new JScrollPane(targetArea);
 
-        infoArea = new JTextPane();
-        scrollingInfoArea = new JScrollPane(infoArea);
-
-        sentencesSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollingSourceArea, scrollingTargetArea);
-        topSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sentencesSplitPane, scrollingInfoArea);
-
-        sentencesSplitPane.setDividerSize(sentencesSplitPane.getDividerSize() / 4);
-        topSplitPane.setDividerSize(topSplitPane.getDividerSize() / 4);
-        sentencesSplitPane.setResizeWeight(0.5);
-
         sourceArea.setEditable(false);
         targetArea.setEditable(false);
-        infoArea.setEditable(false);
 
         content.setLayout(new GridBagLayout());
 
@@ -876,7 +818,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonTags.setActionCommand("buttonTags");
         buttonCreate.setActionCommand("buttonCreate");
 
-        displayGUI(false);
+        displayGUInew();
+
         enableMenuItem("Vertical", false);
         enableMenuItem("Horizontal", true);
 
@@ -1027,7 +970,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             while ((l = inputStream.readLine()) != null) {
 
                 if (lineCount == 0) {
-                   l=ByteOrderMark.remove(l);
+                    l = ByteOrderMark.remove(l);
                 }
 
                 lineCount++;
