@@ -30,7 +30,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
     public SelectionFrame selectionFrame;
     public WorkingSet workingSet;
     public Graph graph;
-    public TagsFrame tagsFrame;
+    //   public TagsFrame tagsFrame;
 
     public LanguageTextPane sourceArea;
     public LanguageTextPane targetArea;
@@ -52,9 +52,11 @@ public class TatoebaFrame extends JFrame implements ActionListener {
     JButton buttonEdit = new JButton("Edit");
     JButton buttonCommit = new JButton("Save edits");
     JButton buttonCancel = new JButton("Cancel");
+    
+    Color neutralButtonColor=buttonCancel.getBackground();
 
     // components in tags panel
-    HashMap<String,JButton> tagButtons = new HashMap<>();
+    HashMap<String, JButton> tagButtons = new HashMap<>();
     JButton buttonAddTag = new JButton("+tag");
     JTextField newTagField = new JTextField();
 
@@ -196,7 +198,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         int retval;
 
         // actions from tags panel
-        if (action.equals("add new tag")) {
+        if (action.equals("buttonAddTag")) {
             String newTag = newTagField.getText();
             Cluster cluster = clusterFifo.peekFirst();
             if (cluster == null) {
@@ -206,18 +208,29 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 cluster.tags.add(newTag);
                 cluster.unsaved = true;
                 selectionFrame.allTags.add(newTag);
+                updateTagsPanel(cluster);
             }
         }
         //       System.out.println("split " + action.substring(0, 1) + "-" + action.substring(1));
-        if (action.substring(0, 4).equals("tag+")) {
-            String newTag = action.substring(4);
+        if (action.substring(0, 4).equals("tag|")) {
+            String tag = action.substring(4);
             Cluster cluster = clusterFifo.peekFirst();
             if (cluster == null) {
                 MsgTextPane.write("no cluster on top of the stack");
             } else {
-                MsgTextPane.write("adding tag " + newTag + " to cluster " + cluster.nr);
-                cluster.tags.add(newTag);
-                cluster.unsaved = true;
+                JButton button = tagButtons.get(tag);  // button must exist since it was clicked
+                if (!cluster.tags.contains(tag)) {
+                    MsgTextPane.write("adding tag " + tag + " to cluster " + cluster.nr);
+                    cluster.tags.add(tag);
+                    cluster.unsaved = true;
+                    button.setBackground(Color.GREEN);
+                } else {
+                    MsgTextPane.write("removing tag " + tag + " from cluster " + cluster.nr);
+                    cluster.tags.remove(tag);
+                    cluster.unsaved = true;
+                    button.setBackground(neutralButtonColor);
+
+                }
             }
         }
 
@@ -353,17 +366,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         }
 
-        if (action.equals("buttonTags")) {
-            tagsFrame = new TagsFrame(clusterFifo.peekFirst(), selectionFrame);
-        }
-
         if (action.equals("buttonNext") || action.equals("buttonPrevious")) {
-
-            if (tagsFrame != null) {
-                tagsFrame.setVisible(false);
-                tagsFrame.dispose();
-                tagsFrame = null;
-            }
 
             setAutoCorrect(false);
 
@@ -396,15 +399,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 erasePane(sourceArea);
                 erasePane(targetArea);
 
-                // update tags panel
-                if (tagsPanel != null) {
-                    content.remove(tagsPanel);
-                }
-                tagsPanel = createTagsPanel(activeCluster);
-                content.add(tagsPanel);
-                content.revalidate();
-                pack();
-                content.repaint();
+                updateTagsPanel(activeCluster);
 
                 writePane(sourceArea, "");
                 for (Sentence s : activeCluster.sentences) {
@@ -558,12 +553,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         if (action.equals("buttonCreate")) {
 
-            if (tagsFrame != null) {
-                tagsFrame.setVisible(false);
-                tagsFrame.dispose();
-                tagsFrame = null;
-            }
-
             editing = true;
             editingCluster = null;
             buttonCommit.setEnabled(true);
@@ -651,49 +640,46 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         menuItem.setEnabled(enabled);
     }
 
-    private GridBagConstraints newGridBagConstraints() {
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0.0;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        c.ipadx = 0;
-        c.ipady = 0;
-//                c.insets=null;
-        return c;
-    }
-
-    private JPanel createTagsPanel(Cluster c) {
-
-        JPanel thisPanel = new JPanel();
-        thisPanel.setLayout(new BoxLayout(thisPanel, BoxLayout.LINE_AXIS));
+    private void updateTagsPanel(Cluster c) {
+ //       MsgTextPane.write("updateTagsPanel");
+        for (Component component : tagsPanel.getComponents()) {
+            tagsPanel.remove(component);
+ //           MsgTextPane.write("updateTagsPanel: removing component " + component.getClass().getSimpleName());
+        }
 
         Iterator iterator = selectionFrame.allTags.iterator();
         while (iterator.hasNext()) {
             String tag = (String) iterator.next();
-            //           System.out.println("Value: " + tag + " ");
-            thisPanel.add(Box.createRigidArea(new Dimension(10, 10)));
-            JButton button = new JButton(tag);
+ //           MsgTextPane.write("updateTagsPanel: adding tag " + tag);
+            tagsPanel.add(Box.createRigidArea(new Dimension(10, 10)));
+            JButton button = tagButtons.get(tag);
+            if (button == null) {
+//                MsgTextPane.write("updateTagsPanel: new button created");
+                button = new JButton(tag);
+                button.setActionCommand("tag|" + tag);
+                button.addActionListener(this);
+                tagButtons.put(tag, button);
+            }
             if (c.tags.contains(tag)) {
                 button.setBackground(Color.GREEN);
+            } else {
+                button.setBackground(neutralButtonColor);
             }
-            button.setActionCommand("tag+" + tag);
-            button.addActionListener(this);
-            thisPanel.add(button);
+
+            tagsPanel.add(button);
         }
 
-        buttonAddTag.setActionCommand("add new tag");
-        buttonAddTag.addActionListener(this);
         newTagField.setText("enter new tag");
-        thisPanel.add(Box.createRigidArea(new Dimension(10, 10)));
-        thisPanel.add(buttonAddTag);
-        thisPanel.add(Box.createRigidArea(new Dimension(10, 10)));
-        thisPanel.add(newTagField);
+        tagsPanel.add(Box.createRigidArea(new Dimension(10, 10)));
+        tagsPanel.add(buttonAddTag);
+        MsgTextPane.write("updateTagsPanel: addTag button color = " + buttonAddTag.getBackground());
+        tagsPanel.add(Box.createRigidArea(new Dimension(10, 10)));
+        tagsPanel.add(newTagField);
 
-        return thisPanel;
+        tagsPanel.revalidate();
+        content.revalidate();
+        pack();
+        content.repaint();
     }
 
     private void displayGUInew() {
@@ -746,6 +732,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         content.add(topPanel);
         content.add(scrollingSourceArea);
         content.add(scrollingTargetArea);
+        content.add(tagsPanel);
 
         JMenuBar menuBar;
         JMenu menuExit;
@@ -794,6 +781,9 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         sourceArea.setEditable(false);
         targetArea.setEditable(false);
 
+        tagsPanel = new JPanel();
+        tagsPanel.setLayout(new BoxLayout(tagsPanel, BoxLayout.LINE_AXIS));
+
         content.setLayout(new GridBagLayout());
 
         buttonPlus.addActionListener(this);
@@ -806,6 +796,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonEdit.addActionListener(this);
         buttonTags.addActionListener(this);
         buttonCreate.addActionListener(this);
+        buttonAddTag.addActionListener(this);
 
         buttonPlus.setActionCommand("buttonPlus");
         buttonMinus.setActionCommand("buttonMinus");
@@ -817,6 +808,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonEdit.setActionCommand("buttonEdit");
         buttonTags.setActionCommand("buttonTags");
         buttonCreate.setActionCommand("buttonCreate");
+        buttonAddTag.setActionCommand("buttonAddTag");
 
         displayGUInew();
 
