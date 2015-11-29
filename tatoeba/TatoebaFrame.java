@@ -18,6 +18,7 @@ import java.io.OutputStreamWriter;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.util.*;
+import javax.imageio.ImageIO;
 
 import langeditor.LanguageTextPane;
 import langeditor.LanguageEditorFrame;
@@ -52,8 +53,10 @@ public class TatoebaFrame extends JFrame implements ActionListener {
     JButton buttonEdit = new JButton("Edit");
     JButton buttonCommit = new JButton("Save edits");
     JButton buttonCancel = new JButton("Cancel");
-    
-    Color neutralButtonColor=buttonCancel.getBackground();
+
+    Color neutralButtonColor = buttonCancel.getBackground();
+
+    ImageIcon favouriteIcon;
 
     // components in tags panel
     HashMap<String, JButton> tagButtons = new HashMap<>();
@@ -641,21 +644,28 @@ public class TatoebaFrame extends JFrame implements ActionListener {
     }
 
     private void updateTagsPanel(Cluster c) {
- //       MsgTextPane.write("updateTagsPanel");
+        //       MsgTextPane.write("updateTagsPanel");
         for (Component component : tagsPanel.getComponents()) {
             tagsPanel.remove(component);
- //           MsgTextPane.write("updateTagsPanel: removing component " + component.getClass().getSimpleName());
+            //           MsgTextPane.write("updateTagsPanel: removing component " + component.getClass().getSimpleName());
         }
 
+        if (c.tags.contains("favourite")) {
+
+        }
         Iterator iterator = selectionFrame.allTags.iterator();
         while (iterator.hasNext()) {
             String tag = (String) iterator.next();
- //           MsgTextPane.write("updateTagsPanel: adding tag " + tag);
+            //           MsgTextPane.write("updateTagsPanel: adding tag " + tag);
             tagsPanel.add(Box.createRigidArea(new Dimension(10, 10)));
             JButton button = tagButtons.get(tag);
             if (button == null) {
 //                MsgTextPane.write("updateTagsPanel: new button created");
-                button = new JButton(tag);
+                if (tag.equals("favourite")) {
+                    button = new JButton(favouriteIcon);
+                } else {
+                    button = new JButton(tag);
+                }
                 button.setActionCommand("tag|" + tag);
                 button.addActionListener(this);
                 tagButtons.put(tag, button);
@@ -809,6 +819,16 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonTags.setActionCommand("buttonTags");
         buttonCreate.setActionCommand("buttonCreate");
         buttonAddTag.setActionCommand("buttonAddTag");
+
+        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
+        String fileName = defaultFolder + "\\Tatoeba\\Images\\favourite.jpg";
+        try {
+            Image imageObject = ImageIO.read(new File(fileName));
+            imageObject = imageObject.getScaledInstance(20,20, java.awt.Image.SCALE_SMOOTH);
+            favouriteIcon = new ImageIcon(imageObject);
+        } catch (IOException e) {
+            System.out.println("io exception : " + fileName);
+        }
 
         displayGUInew();
 
