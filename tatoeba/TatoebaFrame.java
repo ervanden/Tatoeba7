@@ -202,26 +202,19 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         int retval;
 
         // actions from tags panel
-        if (action.equals("buttonNotFavourite")) {
-            Cluster cluster = clusterFifo.peekFirst();
-            if (cluster == null) {
-                MsgTextPane.write("no cluster on top of the stack");
-            } else {
-                MsgTextPane.write("adding new tag " + "favourite" + " to cluster " + cluster.nr);
-                cluster.tags.add("favourite");
-                cluster.unsaved = true;
-                selectionFrame.allTags.add("favourite");
-                updateTagsPanel(cluster);
-            }
-        }
         
-                if (action.equals("buttonFavourite")) {
+        if (action.equals("buttonNotFavourite") || action.equals("buttonFavourite")) {
             Cluster cluster = clusterFifo.peekFirst();
             if (cluster == null) {
                 MsgTextPane.write("no cluster on top of the stack");
             } else {
-                MsgTextPane.write("removing tag " + "favourite" + " to cluster " + cluster.nr);
-                cluster.tags.remove("favourite");
+                if (cluster.tags.contains("favourite")) {
+                    MsgTextPane.write("removing tag " + "favourite" + " from cluster " + cluster.nr);
+                    cluster.tags.remove("favourite");
+                } else {
+                    MsgTextPane.write("adding new tag " + "favourite" + " to cluster " + cluster.nr);
+                    cluster.tags.add("favourite");
+                }
                 cluster.unsaved = true;
                 selectionFrame.allTags.add("favourite");
                 updateTagsPanel(cluster);
@@ -241,7 +234,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 updateTagsPanel(cluster);
             }
         }
-        //       System.out.println("split " + action.substring(0, 1) + "-" + action.substring(1));
+
         if (action.substring(0, 4).equals("tag|")) {
             String tag = action.substring(4);
             Cluster cluster = clusterFifo.peekFirst();
