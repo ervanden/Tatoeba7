@@ -293,18 +293,17 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Read clusters")) {
-            String fileName;
             fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fileChooser.setDialogTitle("Select a cluster database file");
             retval = fileChooser.showOpenDialog(null);
             if (retval == JFileChooser.APPROVE_OPTION) {
                 File f = fileChooser.getSelectedFile();
-                fileName = f.getAbsolutePath();
+                clustersFileName = f.getAbsolutePath();
 
                 enableMenuItem("Read clusters", false); // prevent starting two reading threads
                 enableMenuItem("Read Tatoeba Database", false);
-                Thread readClustersThread = new Thread(new readClustersThread(fileName));
+                Thread readClustersThread = new Thread(new readClustersThread(clustersFileName));
                 readClustersThread.start();
             }
         }
@@ -705,7 +704,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         newTagField.setText("enter new tag");
         tagsPanel.add(Box.createRigidArea(new Dimension(10, 10)));
         tagsPanel.add(buttonAddTag);
-        MsgTextPane.write("updateTagsPanel: addTag button color = " + buttonAddTag.getBackground());
         tagsPanel.add(Box.createRigidArea(new Dimension(10, 10)));
         tagsPanel.add(newTagField);
 
@@ -1086,10 +1084,10 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
     public void saveClusters(String mode) {
 
-        String fileName = clustersFileName;
+        String fileName;
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setSelectedFile(new File(fileName));
+        fileChooser.setSelectedFile(new File(clustersFileName));
         int retval = fileChooser.showSaveDialog(null);
         if (retval == JFileChooser.APPROVE_OPTION) {
             File f = fileChooser.getSelectedFile();
@@ -1100,7 +1098,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 OutputStream is = new FileOutputStream(initialFile);
                 OutputStreamWriter isr = new OutputStreamWriter(is, "UTF-8");
                 BufferedWriter outputStream = new BufferedWriter(isr);
-
+/*
                 HashSet<String> usedLanguages;
                 if (mode.equals("all")) {
                     usedLanguages = new HashSet<String>(selectionFrame.usedLanguages);
@@ -1108,7 +1106,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                     usedLanguages = new HashSet<String>(selectionFrame.sourceLanguages);
                     usedLanguages.addAll(selectionFrame.targetLanguages);
                 }
-
+*/
                 for (Cluster c : graph.clusters.values()) {
                     if (mode.equals("all") || c.selected) {
                         outputStream.write("cluster");
@@ -1118,12 +1116,12 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                         }
                         outputStream.newLine();
                         for (Sentence s : c.sentences) {
-                            if (usedLanguages.contains(s.language)) {
+//                            if (usedLanguages.contains(s.language)) {
                                 outputStream.write(s.language);
                                 outputStream.write("\u0009");
                                 outputStream.write(s.sentence);
                                 outputStream.newLine();
-                            }
+//                            }
                         }
                         c.unsaved = false;
                     }

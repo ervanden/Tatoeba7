@@ -71,39 +71,6 @@ public class Cluster {
 
     }
     
-    
-        public void readTagsFromDocument(StyledDocument document) {
-        // read tags from edited info text panes
-        javax.swing.text.Element root = document.getDefaultRootElement();
-        int lineNr;
-        String s1,s2;
-        int count = root.getElementCount();
-        for (int i = 0; i < count; i++) {
-            lineNr = i + 1;
-            javax.swing.text.Element lineElement = (javax.swing.text.Element) root.getElement(i);
-            int start = lineElement.getStartOffset();
-            int end = lineElement.getEndOffset();
-            try {
-                String line = document.getText(start, end - start - 1);
-                String[] lineArray = line.split(":");
-                if (lineArray.length == 2) {
-
-                    s1 = lineArray[0];
-                    s1=s1.replaceAll("^ *", "");
-                    s1=s1.replaceAll(" *$", "");
-                    s2 = lineArray[1];
-                    s2=s2.replaceAll("^ *", "");
-                    s2=s2.replaceAll(" *$", "");
-
-                   if (s1.equals("tag")) tags.add(s2);
-
-                }
-            } catch (BadLocationException ble) {
-            }
-        }
-
-    }
-
     public synchronized void add(Sentence v) {
         sentences.add(v);
     }

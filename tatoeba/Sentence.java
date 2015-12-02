@@ -1,9 +1,6 @@
 package tatoeba;
 
 
-import tatoeba.Cluster;
-
-
 public class Sentence {
 
     int nr;

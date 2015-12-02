@@ -160,9 +160,9 @@ public class SelectionFrame implements ActionListener {
                 }
 
                 JOptionPane.showMessageDialog(frame, tatoebaFrame.graph.selectedClusterCount + " clusters selected");
-                if (tatoebaFrame.graph.selectedClusterCount > 0) {
+//                if (tatoebaFrame.graph.selectedClusterCount > 0) {
                     setVisible(false);
-                }
+//                }
             } else if (e.getSource() == buttonDisplay){
                 if (searchResultsFrame == null) {
                     searchResultsFrame = new GenericTextFrame();
