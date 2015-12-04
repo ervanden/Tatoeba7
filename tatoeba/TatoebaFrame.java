@@ -50,7 +50,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
     JButton buttonMinus = new JButton("-");
     JButton buttonNext = new JButton("Next");
     JButton buttonPrevious = new JButton("Previous");
-    JButton buttonTags = new JButton("Tags");
+    JButton buttonComments = new JButton("Comments");
     JButton buttonTranslate = new JButton("Translate");
     JButton buttonCreate = new JButton("Create");
     JButton buttonEdit = new JButton("Edit");
@@ -144,7 +144,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonNext.setEnabled(true);
         buttonTranslate.setEnabled(false);
         buttonPrevious.setEnabled(false);
-        buttonTags.setEnabled(false);
+        buttonComments.setEnabled(false);
         buttonCreate.setEnabled(true);
         buttonEdit.setEnabled(false);
         buttonCommit.setEnabled(false);
@@ -328,7 +328,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             editingCluster = null;
             buttonPrevious.setEnabled(false);
             buttonEdit.setEnabled(false);
-            buttonTags.setEnabled(false);
+            buttonComments.setEnabled(false);
 
         }
 
@@ -376,7 +376,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 scrollingCommentArea.setPreferredSize(preferredDimension);
             } else {
                 Dimension minimumDimension = new Dimension(780, 0);
- //               Dimension preferredDimension = new Dimension(780, 10);
+                //               Dimension preferredDimension = new Dimension(780, 10);
                 commentArea.setMinimumSize(minimumDimension);
                 commentArea.setPreferredSize(minimumDimension);
                 scrollingCommentArea.setMinimumSize(minimumDimension);
@@ -467,7 +467,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 sourceDisplayed = true;
                 targetDisplayed = false;
                 buttonEdit.setEnabled(true);
-                buttonTags.setEnabled(true);
+                buttonComments.setEnabled(true);
                 buttonTranslate.setEnabled(true);
             }
             buttonPrevious.setEnabled(clusterFifo.size() > 1);
@@ -491,13 +491,17 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                     writePane(targetArea, "");
                     for (Sentence s : activeCluster.sentences) {
                         if (selectionFrame.targetLanguages.contains(s.language)) {
-                            writePane(targetArea, " " + s.language + ">  " + s.sentence);
+                            if (s.comment) {
+                                writePane(commentArea, s.sentence);
+                            } else {
+                                writePane(targetArea, " " + s.language + ">  " + s.sentence);
+                            }
                         }
                     }
                     sourceDisplayed = true;
                     targetDisplayed = true;
                     buttonEdit.setEnabled(true);
-                    buttonTags.setEnabled(true);
+                    buttonComments.setEnabled(true);
                 }
 
             } else {
@@ -531,7 +535,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 c.sentences.clear();
                 c.readSentencesFromDocument(sourceArea.getStyledDocument(), selectionFrame);
                 c.readSentencesFromDocument(targetArea.getStyledDocument(), selectionFrame);
-                c.readSentencesFromDocument(commentArea.getStyledDocument(), selectionFrame);
+                c.readCommentsFromDocument(commentArea.getStyledDocument(), selectionFrame);
 
                 c.unsaved = true;
 
@@ -558,7 +562,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             enableMenuItem("Save selected clusters", true);
 
             buttonNext.setEnabled(true);
-            buttonTags.setEnabled(true);
+            buttonComments.setEnabled(true);
             buttonCreate.setEnabled(true);
             buttonPrevious.setEnabled(clusterFifo.size() > 1);
             buttonEdit.setEnabled(true);
@@ -605,7 +609,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             buttonNext.setEnabled(true);
             buttonTranslate.setEnabled(false);
             buttonPrevious.setEnabled(clusterFifo.size() > 1);
-            buttonTags.setEnabled(true);
+            buttonComments.setEnabled(true);
             buttonCreate.setEnabled(true);
             buttonEdit.setEnabled(true);
             buttonCommit.setEnabled(false);
@@ -639,7 +643,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             buttonTranslate.setEnabled(false);
             buttonPrevious.setEnabled(false);
             buttonEdit.setEnabled(false);
-            buttonTags.setEnabled(false);
+            buttonComments.setEnabled(false);
             setAutoCorrect(true);
             sourceDisplayed = false;
             targetDisplayed = false;
@@ -665,7 +669,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                     executeAction("buttonTranslate"); // make sure all sentences are on the screens
                 }
                 buttonEdit.setEnabled(false);
-                buttonTags.setEnabled(false);
+                buttonComments.setEnabled(false);
                 buttonTranslate.setEnabled(false);
                 buttonNext.setEnabled(false);
                 buttonPrevious.setEnabled(false);
@@ -788,7 +792,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         topPanel.add(spacer1);
         topPanel.add(Box.createRigidArea(new Dimension(30, 0)));
-        topPanel.add(buttonTags);
+        topPanel.add(buttonComments);
         topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         topPanel.add(buttonCreate);
         topPanel.add(Box.createRigidArea(new Dimension(10, 0)));
@@ -902,7 +906,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonCommit.addActionListener(this);
         buttonCancel.addActionListener(this);
         buttonEdit.addActionListener(this);
-        buttonTags.addActionListener(this);
+        buttonComments.addActionListener(this);
         buttonCreate.addActionListener(this);
         buttonAddTag.addActionListener(this);
         buttonFavourite.addActionListener(this);
@@ -916,7 +920,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonCommit.setActionCommand("buttonCommit");
         buttonCancel.setActionCommand("buttonCancel");
         buttonEdit.setActionCommand("buttonEdit");
-        buttonTags.setActionCommand("buttonTags");
+        buttonComments.setActionCommand("buttonTags");
         buttonCreate.setActionCommand("buttonCreate");
         buttonAddTag.setActionCommand("buttonAddTag");
         buttonNotFavourite.setActionCommand("buttonNotFavourite");
@@ -943,7 +947,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         buttonPrevious.setEnabled(false);
         buttonCreate.setEnabled(false);
         buttonEdit.setEnabled(false);
-        buttonTags.setEnabled(false);
+        buttonComments.setEnabled(false);
         buttonCommit.setEnabled(false);
         buttonCancel.setEnabled(false);
 
@@ -1069,7 +1073,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             MsgTextPane.write("reading clusters from " + fileName + "...");
 
             String l;
-            String[] ls;
+            ArrayList<String> ls;
             int lineCount = 0;
             while ((l = inputStream.readLine()) != null) {
 
@@ -1078,39 +1082,57 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 }
 
                 lineCount++;
-                ls = l.split("\u0009");
-                if (ls[0].matches(" *cluster *")) {
-                    clusterCount++;
-                    c = new Cluster();
-                    c.nr = clusterCount;
-                    graph.clusters.put(c.nr, c);
-                    // the remaining strings are cluster tags
-                    String tag;
-                    for (int i = 1; i <= ls.length - 1; i++) {
-                        tag = ls[i];
-                        tag = tag.replaceAll(" *", "");
-                        c.tags.add(tag);
-                        selectionFrame.allTags.add(tag);
-                    }
+                ls = new ArrayList<String>(Arrays.asList(l.split("\u0009")));
+//                MsgTextPane.write("line " + lineCount + " |" + l + "|");
+//                for (String ss : ls) {
+//                    MsgTextPane.write("word |" + ss + "|");
+//                }
 
-                } else {
-                    int lslength = 0;
-                    for (String z : ls) {
-                        lslength++;
-                    }
+                {
+                    if (ls.get(0).matches(" *cluster *")) {
+                        clusterCount++;
+                        c = new Cluster();
+                        c.nr = clusterCount;
+                        graph.clusters.put(c.nr, c);
+                        // the remaining strings are cluster tags
+                        String tag;
+                        for (int i = 1; i <= ls.size() - 1; i++) {
+                            tag = ls.get(i);
+                            tag = tag.replaceAll(" *", "");
+                            c.tags.add(tag);
+                            selectionFrame.allTags.add(tag);
+                        }
 
-                    if ((lslength == 2) && (ls[0].length() == 3) && (ls[1].length() > 3)) {
+                    } else {
+                        boolean isComment = false;
+                        String language = "";
+                        String sentence = "";
+
+                        if ((ls.get(0).charAt(0) == '[') && (ls.get(0).charAt(4) == ']')) {
+                            language = ls.get(0).substring(1, 4);
+                            isComment = true;
+
+                            if (ls.size()>1) sentence=ls.get(1);  // test because comment line can be blank, then entry is missing
+                            for (int i=2; i<=ls.size()-1; i++){   // if comment contains <tab>, the line was split. Now reconstruct it.
+                                sentence=sentence+"\u0009"+ls.get(i);
+                            }
+                        } else {
+                            language = ls.get(0);
+                            sentence = ls.get(1);
+                        }
+
                         s = new Sentence();
-                        s.language = ls[0];
-                        s.sentence = ls[1];
-                        s.sentence = s.sentence.replaceAll("^ *", "");
-                        s.sentence = s.sentence.replaceAll(" *$", "");
+                        s.language = language;
+                        s.sentence = sentence;
+                        s.comment = isComment;
+                        if (!isComment) {
+                            s.sentence = s.sentence.replaceAll("^ *", "");
+                            s.sentence = s.sentence.replaceAll(" *$", "");
+                        }
                         c.sentences.add(s);
 
                         selectionFrame.usedLanguages.add(s.language);
 
-                    } else {
-                        System.out.println("invalid line " + lineCount + " |" + l + "|");
                     }
                 }
             }
@@ -1167,7 +1189,11 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                         outputStream.newLine();
                         for (Sentence s : c.sentences) {
 //                            if (usedLanguages.contains(s.language)) {
-                            outputStream.write(s.language);
+                            if (s.comment) {
+                                outputStream.write("[" + s.language + "]");
+                            } else {
+                                outputStream.write(s.language);
+                            }
                             outputStream.write("\u0009");
                             outputStream.write(s.sentence);
                             outputStream.newLine();

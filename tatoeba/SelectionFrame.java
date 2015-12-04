@@ -15,6 +15,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,6 +35,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import utils.*;
 
 public class SelectionFrame implements ActionListener {
 
@@ -108,11 +110,25 @@ public class SelectionFrame implements ActionListener {
     }
 
     class WindowCloser extends WindowAdapter {
+
         public void windowClosing(WindowEvent e) {
             setVisible(false);
             if (searchResultsFrame != null) {
                 searchResultsFrame.setVisible(false);
             }
+        }
+    }
+
+    public String targetLanguage() {
+        // targetLanguages is a set for uniformity with the other sets
+        // There can only be one target language
+        // This function returns this language
+        if (targetLanguages.size() != 1) {
+            MsgTextPane.write("ERROR size of target language set is " + targetLanguages.size() + ", must be 1 ");
+            return null;
+        } else {
+            Iterator iter = targetLanguages.iterator();
+            return (String) iter.next();
         }
     }
 
@@ -123,11 +139,10 @@ public class SelectionFrame implements ActionListener {
                     (float) sliderMax.getValue() / (float) sliderScale, true);
             statusMessage(true);
         }
-        
+
         // tags may have changed, so re-populate tags area
-        
         populateArea(allTagsArea, new ArrayList<String>(allTags));
-                        
+
         frame.setVisible(visible);
         enableCaretListener = true;  // now we are sure that boxes are populated
     }
@@ -139,42 +154,42 @@ public class SelectionFrame implements ActionListener {
             System.out.println("ble");
         }
     }
-    
-     public void actionPerformed(ActionEvent e) {
-         if (e.getSource()== buttonSelect){
-                tatoebaFrame.graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
-                        (float) sliderMax.getValue() / (float) sliderScale, false);
-                tatoebaFrame.graph.selectClusters();
-                tatoebaFrame.workingSet.build();
 
-                // if the source or target are one single language, make the corresponding window language sensitive
-                if (targetLanguages.size() == 1) {
-                    for (String language : targetLanguages) {
-                        tatoebaFrame.newTargetArea(language);
-                    }
-                }
-                if (sourceLanguages.size() == 1) {
-                    for (String language : sourceLanguages) {
-                        tatoebaFrame.newSourceArea(language);
-                    }
-                }
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == buttonSelect) {
+            tatoebaFrame.graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
+                    (float) sliderMax.getValue() / (float) sliderScale, false);
+            tatoebaFrame.graph.selectClusters();
+            tatoebaFrame.workingSet.build();
 
-                JOptionPane.showMessageDialog(frame, tatoebaFrame.graph.selectedClusterCount + " clusters selected");
-//                if (tatoebaFrame.graph.selectedClusterCount > 0) {
-                    setVisible(false);
-//                }
-            } else if (e.getSource() == buttonDisplay){
-                if (searchResultsFrame == null) {
-                    searchResultsFrame = new GenericTextFrame();
+            // if the source or target are one single language, make the corresponding window language sensitive
+            if (targetLanguages.size() == 1) {
+                for (String language : targetLanguages) {
+                    tatoebaFrame.newTargetArea(language);
                 }
-                searchResultsFrame.setVisible(true);
-                tatoebaFrame.graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
-                        (float) sliderMax.getValue() / (float) sliderScale, false);
-                tatoebaFrame.graph.selectClusters();
-                tatoebaFrame.graph.displayClusters(searchResultsFrame, "selected",this);
-                tatoebaFrame.workingSet.build();
             }
-     }
+            if (sourceLanguages.size() == 1) {
+                for (String language : sourceLanguages) {
+                    tatoebaFrame.newSourceArea(language);
+                }
+            }
+
+            JOptionPane.showMessageDialog(frame, tatoebaFrame.graph.selectedClusterCount + " clusters selected");
+//                if (tatoebaFrame.graph.selectedClusterCount > 0) {
+            setVisible(false);
+//                }
+        } else if (e.getSource() == buttonDisplay) {
+            if (searchResultsFrame == null) {
+                searchResultsFrame = new GenericTextFrame();
+            }
+            searchResultsFrame.setVisible(true);
+            tatoebaFrame.graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
+                    (float) sliderMax.getValue() / (float) sliderScale, false);
+            tatoebaFrame.graph.selectClusters();
+            tatoebaFrame.graph.displayClusters(searchResultsFrame, "selected", this);
+            tatoebaFrame.workingSet.build();
+        }
+    }
 
     class selectLinesTask implements Runnable {
 
@@ -266,7 +281,6 @@ public class SelectionFrame implements ActionListener {
     areaCaretListener allTagsCaretListener = new areaCaretListener(allTagsArea);
     areaCaretListener selectedTagsCaretListener = new areaCaretListener(selectedTagsArea);
 
-
     ArrayList<String> listShortToLong(HashSet<String> shortNames) {
         ArrayList<String> longNames = new ArrayList<String>();
         for (String s : shortNames) {
@@ -275,7 +289,7 @@ public class SelectionFrame implements ActionListener {
         return longNames;
     }
 
-    private void populateArea(JTextPane pane, ArrayList<String> longNames) {        
+    private void populateArea(JTextPane pane, ArrayList<String> longNames) {
         StyledDocument doc;
         Collections.sort(longNames);
         doc = pane.getStyledDocument();
@@ -608,7 +622,7 @@ public class SelectionFrame implements ActionListener {
     }
 
     public SelectionFrame(TatoebaFrame t) {
-        tatoebaFrame=t;
+        tatoebaFrame = t;
         sourceLanguages.add(languagetrainer.LanguageTrainer.sourceLanguage);
         targetLanguages.add(languagetrainer.LanguageTrainer.targetLanguage);
 
@@ -693,19 +707,26 @@ public class SelectionFrame implements ActionListener {
         buttonRight2.addActionListener((new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
-                targetLanguages.addAll(allLanguagesSelected);
-                populateArea(allLanguagesArea, listShortToLong(usedLanguages));
-                populateArea(targetLanguagesArea, listShortToLong(targetLanguages));
-                allLanguagesSelected.clear();
-                targetLanguagesSelected.clear();
-                statusMessage(false);
-                tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
-                statusMessage(true);
-                enableCaretListener = true;
+                // there can only be one target language. Arbitrarily take the first selected language as target language
+                if (allLanguagesSelected.size() > 0) {
+                    targetLanguages.clear();
+                    Iterator iter = allLanguagesSelected.iterator();
+                    targetLanguages.add((String) iter.next());
+                    populateArea(allLanguagesArea, listShortToLong(usedLanguages));
+                    populateArea(targetLanguagesArea, listShortToLong(targetLanguages));
+                    allLanguagesSelected.clear();
+                    targetLanguagesSelected.clear();
+                    statusMessage(false);
+                    tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
+                    statusMessage(true);
+                    enableCaretListener = true;
+                }
             }
+
         }));
 
         buttonLeft2.addActionListener((new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 enableCaretListener = false;
                 targetLanguages.removeAll(targetLanguagesSelected);

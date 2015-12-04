@@ -1,10 +1,10 @@
 package tatoeba;
 
-
 import java.util.HashSet;
 import java.util.LinkedList;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
+import utils.*;
 
 public class Cluster {
 
@@ -38,7 +38,7 @@ public class Cluster {
                 String line = document.getText(start, end - start - 1);
                 String[] lineArray = line.split(">");
                 if ((lineArray.length == 2) && !(lineArray[1].equals(""))) {
-                    System.out.println("line " + lineNr + " lang=" + lineArray[0] + " sentence |" + lineArray[1] + "|");
+                    //                   MsgTextPane.write("line " + lineNr + " lang=" + lineArray[0] + " sentence |" + lineArray[1] + "|");
                     Sentence s = new Sentence();
                     s.language = lineArray[0];
                     s.language = s.language.replaceAll("^ *", "");
@@ -48,29 +48,44 @@ public class Cluster {
                     s.sentence = s.sentence.replaceAll(" *$", "");
 
                     // sanity check
-                    
                     if (!selectionFrame.sourceLanguages.contains(s.language)
                             && !selectionFrame.targetLanguages.contains(s.language)) {
-                        System.out.println("unrecognized language <" + s.language + ">");
+                        MsgTextPane.write("unrecognized language <" + s.language + ">");
                     } else {
                         sentences.add(s);
-                        System.out.println("added sentence to cluster " + nr + " nr of sentences=" + sentences.size());
+                        MsgTextPane.write("added sentence to cluster " + nr + " nr of sentences=" + sentences.size());
                     }
-                } else {
-                    if (line.matches("^ *[a-zA-Z0-9]+ *$")) {
-                        line = line.replaceAll(" ", "");
-                        tags.add(line);
-                        System.out.println("added tag " + line + " to cluster " + nr + " nr of tags=" + tags.size());
-                    } else { // format must be :  lang> sentence
-                        System.out.println("line " + lineNr + " DISCARDED");
-                    }
+                } else { // format must be :  lang> sentence
+                    MsgTextPane.write("line " + lineNr + " DISCARDED");
                 }
             } catch (BadLocationException ble) {
             }
         }
 
     }
-    
+
+    public void readCommentsFromDocument(StyledDocument document, SelectionFrame selectionFrame) {
+        // read comments from comment area. 
+        javax.swing.text.Element root = document.getDefaultRootElement();
+        int count = root.getElementCount();
+        for (int i = 0; i < count; i++) {
+            javax.swing.text.Element lineElement = (javax.swing.text.Element) root.getElement(i);
+            int start = lineElement.getStartOffset();
+            int end = lineElement.getEndOffset();
+            try {
+                String line = document.getText(start, end - start - 1);
+                Sentence s = new Sentence();
+                s.language = selectionFrame.targetLanguage();
+                s.sentence = line;
+                s.comment = true;
+                sentences.add(s);
+                MsgTextPane.write("added [" + s.language + "] to cluster " + nr + " :" + s.sentence);
+            } catch (BadLocationException ble) {
+            }
+        }
+
+    }
+
     public synchronized void add(Sentence v) {
         sentences.add(v);
     }
