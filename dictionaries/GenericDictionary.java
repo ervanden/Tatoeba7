@@ -24,6 +24,7 @@ import javax.swing.text.StyledDocument;
 import langeditor.ConfirmDialog;
 import langeditor.LanguageTextPane;
 import languages.Language;
+import utils.ByteOrderMark;
 import utils.MsgTextPane;
 import utils.Sas;
 
@@ -163,7 +164,10 @@ public class GenericDictionary {
             inputStream = new BufferedReader(isr);
 
             String l;
+            int linecount = 0;
             while ((l = inputStream.readLine()) != null) {
+                if (linecount==0) l=ByteOrderMark.remove(l);
+                linecount++;
                 if (l.charAt(0) == '[') {
                     l = l.substring(1, l.length() - 1);
                     stems.put(language.removeDiacritics(l), l);

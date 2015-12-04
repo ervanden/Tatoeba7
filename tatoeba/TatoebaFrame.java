@@ -35,9 +35,12 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
     public LanguageTextPane sourceArea;
     public LanguageTextPane targetArea;
+    public JTextPane commentArea;
 
     JScrollPane scrollingSourceArea;
     JScrollPane scrollingTargetArea;
+    JScrollPane scrollingCommentArea;
+    boolean commentAreaMinimized = false;
 
     JPanel tagsPanel = null;
 
@@ -202,7 +205,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         int retval;
 
         // actions from tags panel
-        
         if (action.equals("buttonNotFavourite") || action.equals("buttonFavourite")) {
             Cluster cluster = clusterFifo.peekFirst();
             if (cluster == null) {
@@ -318,6 +320,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             spacer1.setText("");
             erasePane(sourceArea);
             erasePane(targetArea);
+            erasePane(commentArea);
 
             sourceDisplayed = false;
             targetDisplayed = false;
@@ -361,22 +364,52 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         // buttons
+        if (action.equals("buttonTags")) {
+
+            System.out.println("buttonTags");
+            if (commentAreaMinimized) {
+                Dimension minimumDimension = new Dimension(780, 0);
+                Dimension preferredDimension = new Dimension(780, 200);
+                commentArea.setMinimumSize(minimumDimension);
+                commentArea.setPreferredSize(preferredDimension);
+                scrollingCommentArea.setMinimumSize(minimumDimension);
+                scrollingCommentArea.setPreferredSize(preferredDimension);
+            } else {
+                Dimension minimumDimension = new Dimension(780, 0);
+ //               Dimension preferredDimension = new Dimension(780, 10);
+                commentArea.setMinimumSize(minimumDimension);
+                commentArea.setPreferredSize(minimumDimension);
+                scrollingCommentArea.setMinimumSize(minimumDimension);
+                scrollingCommentArea.setPreferredSize(minimumDimension);
+            }
+            commentAreaMinimized = !commentAreaMinimized;
+
+            commentArea.revalidate();
+            scrollingCommentArea.revalidate();
+            content.revalidate();
+            pack();
+            content.repaint();
+        }
+
         if (action.equals("buttonPlus")) {
             AreaFont.multiply((float) 1.2);
             AreaFont.setFont(sourceArea);
             AreaFont.setFont(targetArea);
+            AreaFont.setFont(commentArea);
         }
 
         if (action.equals("buttonMinus")) {
             AreaFont.multiply((float) 0.8);
             AreaFont.setFont(sourceArea);
             AreaFont.setFont(targetArea);
+            AreaFont.setFont(commentArea);
         }
 
         if (action.equals("buttonPrevious")) {
 
             erasePane(sourceArea);
             erasePane(targetArea);
+            erasePane(commentArea);
             if (!clusterFifo.isEmpty()) {
                 clusterFifo.pop();
                 sourceDisplayed = false;
@@ -420,6 +453,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
                 erasePane(sourceArea);
                 erasePane(targetArea);
+                erasePane(commentArea);
 
                 updateTagsPanel(activeCluster);
 
@@ -497,7 +531,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 c.sentences.clear();
                 c.readSentencesFromDocument(sourceArea.getStyledDocument(), selectionFrame);
                 c.readSentencesFromDocument(targetArea.getStyledDocument(), selectionFrame);
-                //               c.tags.clear();
+                c.readSentencesFromDocument(commentArea.getStyledDocument(), selectionFrame);
+
                 c.unsaved = true;
 
                 editing = false;
@@ -507,9 +542,10 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
             sourceArea.setBackground(Color.WHITE);
             targetArea.setBackground(Color.WHITE);
-
+            commentArea.setBackground(Color.WHITE);
             sourceArea.setEditable(false);
             targetArea.setEditable(false);
+            commentArea.setEditable(false);
 
             enableMenuItem("Save clusters and exit", true);
             enableMenuItem("Exit without saving clusters", true);
@@ -542,6 +578,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 if (editingCluster == null) { // user created a new cluster
                     erasePane(sourceArea);
                     erasePane(targetArea);
+                    erasePane(commentArea);
                 } else {
                     // The user was editing an existing cluster: redisplay the original sentences
                     // The cluster is on the  stack so we can call ButtonNext and buttonTranslate
@@ -560,8 +597,10 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
             sourceArea.setBackground(Color.WHITE);
             targetArea.setBackground(Color.WHITE);
+            commentArea.setBackground(Color.WHITE);
             sourceArea.setEditable(false);
             targetArea.setEditable(false);
+            commentArea.setEditable(false);
 
             buttonNext.setEnabled(true);
             buttonTranslate.setEnabled(false);
@@ -582,7 +621,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
             erasePane(sourceArea);
             erasePane(targetArea);
-
+            erasePane(commentArea);
             sourceArea.getLanguage().dictionary().dictionaryWindowVisible(true);
             targetArea.getLanguage().dictionary().dictionaryWindowVisible(true);
 
@@ -606,8 +645,10 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             targetDisplayed = false;
             sourceArea.setEditable(true);
             targetArea.setEditable(true);
+            commentArea.setEditable(true);
             sourceArea.setBackground(Color.LIGHT_GRAY);
             targetArea.setBackground(Color.LIGHT_GRAY);
+            commentArea.setBackground(Color.LIGHT_GRAY);
         }
 
         if (action.equals("buttonEdit")) {
@@ -632,8 +673,10 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 setAutoCorrect(true);
                 sourceArea.setEditable(true);
                 targetArea.setEditable(true);
+                commentArea.setEditable(true);
                 sourceArea.setBackground(Color.LIGHT_GRAY);
                 targetArea.setBackground(Color.LIGHT_GRAY);
+                commentArea.setBackground(Color.LIGHT_GRAY);
             }
         }
 
@@ -720,15 +763,17 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         sourceArea.setMinimumSize(minimumDimension);
         sourceArea.setPreferredSize(preferredDimension);
-
         targetArea.setMinimumSize(minimumDimension);
         targetArea.setPreferredSize(preferredDimension);
+        commentArea.setMinimumSize(minimumDimension);
+        commentArea.setPreferredSize(preferredDimension);
 
         scrollingSourceArea.setMinimumSize(minimumDimension);
         scrollingSourceArea.setPreferredSize(preferredDimension);
-
         scrollingTargetArea.setMinimumSize(minimumDimension);
         scrollingTargetArea.setPreferredSize(preferredDimension);
+        scrollingCommentArea.setMinimumSize(minimumDimension);
+        scrollingCommentArea.setPreferredSize(preferredDimension);
 
         content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
 
@@ -763,6 +808,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         content.add(topPanel);
         content.add(scrollingSourceArea);
         content.add(scrollingTargetArea);
+        content.add(scrollingCommentArea);
         content.add(tagsPanel);
 
         JMenuBar menuBar;
@@ -806,11 +852,15 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         sourceArea = createTextPane("generic");
         targetArea = createTextPane("generic");
+        commentArea = new JTextPane();
+
         scrollingSourceArea = new JScrollPane(sourceArea);
         scrollingTargetArea = new JScrollPane(targetArea);
+        scrollingCommentArea = new JScrollPane(commentArea);
 
         sourceArea.setEditable(false);
         targetArea.setEditable(false);
+        commentArea.setEditable(false);
 
         tagsPanel = new JPanel();
         tagsPanel.setLayout(new BoxLayout(tagsPanel, BoxLayout.LINE_AXIS));
@@ -1098,15 +1148,15 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 OutputStream is = new FileOutputStream(initialFile);
                 OutputStreamWriter isr = new OutputStreamWriter(is, "UTF-8");
                 BufferedWriter outputStream = new BufferedWriter(isr);
-/*
-                HashSet<String> usedLanguages;
-                if (mode.equals("all")) {
-                    usedLanguages = new HashSet<String>(selectionFrame.usedLanguages);
-                } else {
-                    usedLanguages = new HashSet<String>(selectionFrame.sourceLanguages);
-                    usedLanguages.addAll(selectionFrame.targetLanguages);
-                }
-*/
+                /*
+                 HashSet<String> usedLanguages;
+                 if (mode.equals("all")) {
+                 usedLanguages = new HashSet<String>(selectionFrame.usedLanguages);
+                 } else {
+                 usedLanguages = new HashSet<String>(selectionFrame.sourceLanguages);
+                 usedLanguages.addAll(selectionFrame.targetLanguages);
+                 }
+                 */
                 for (Cluster c : graph.clusters.values()) {
                     if (mode.equals("all") || c.selected) {
                         outputStream.write("cluster");
@@ -1117,10 +1167,10 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                         outputStream.newLine();
                         for (Sentence s : c.sentences) {
 //                            if (usedLanguages.contains(s.language)) {
-                                outputStream.write(s.language);
-                                outputStream.write("\u0009");
-                                outputStream.write(s.sentence);
-                                outputStream.newLine();
+                            outputStream.write(s.language);
+                            outputStream.write("\u0009");
+                            outputStream.write(s.sentence);
+                            outputStream.newLine();
 //                            }
                         }
                         c.unsaved = false;

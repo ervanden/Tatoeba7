@@ -12,7 +12,7 @@
 ; #define MyOutputDir "C:\Users\Erik\Documents"
 
 ; settings on laptop
-#define MyAppLocation "C:\Users\ervanden\Desktop\java7"
+#define TatoebaLocation "C:\Users\ervanden\Documents"
 #define MyProjectsLocation "C:\Users\ervanden\Documents\NetBeansProjects"
 #define MyOutputDir "C:\Users\ervanden\Documents"
 
@@ -42,11 +42,8 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "{#MyProjectsLocation}\Tatoeba7\dist\Tatoeba7.jar"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyAppLocation}\Tatoeba7\installer\TurkishDictionary.txt"; DestDir: "{userdocs}\Tatoeba"; Flags: ignoreversion
-Source: "{#MyAppLocation}\Tatoeba7\installer\TatoebaLanguages.txt"; DestDir: "{userdocs}\Tatoeba"; Flags: ignoreversion
-Source: "{#MyAppLocation}\Tatoeba7\installer\clusters-erikv.txt"; DestDir: "{userdocs}\Tatoeba"; Flags: ignoreversion
-Source: "{#MyAppLocation}\Tatoeba7\installer\clusters-empty.txt"; DestDir: "{userdocs}\Tatoeba"; Flags: ignoreversion
-Source: "{#MyAppLocation}\Tatoeba7\installer\tatoeba.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#TatoebaLocation}\Tatoeba\*"; DestDir: "{userdocs}\Tatoeba"; Flags: ignoreversion recursesubdirs
+Source: "{#TatoebaLocation}\Tatoeba\Images\tatoeba.ico"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

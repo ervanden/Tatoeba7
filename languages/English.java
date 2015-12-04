@@ -6,26 +6,20 @@ public class English extends GenericLanguage implements Language {
 
     EnglishDictionary d = null;
 
-        public English(){
-        languageName="English";
+    public English() {
+        languageName = "English";
     }
-/*        
-    @Override
-    public String dictionaryFileName() {
-        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        return defaultFolder + "\\Tatoeba\\EnglishDictionary.txt";
-    }
-*/
+
     @Override
     public EnglishDictionary dictionary() {
-         if (d == null) {
+        if (d == null) {
             d = new EnglishDictionary(this);
             d.readDictionaryFromFile(dictionaryFileName());
-        }       
+        }
         return d;
     }
-            
-    public String color(String color){
+
+    public String color(String color) {
         // this method is always called with the argument 'color' in english
         return color;
     }
