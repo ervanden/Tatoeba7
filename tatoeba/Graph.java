@@ -219,8 +219,6 @@ public class Graph {
                     for (Sentence s : c.sentences) {
                         if (targetLanguages.contains(s.language)) {
                             matcher = pattern.matcher(s.sentence);
-
-                            System.out.println("matching |" + targetPattern + "| |" + s.sentence + "|");
                             if (matcher.find()) {
                                 System.out.println("true");
                                 match = true;

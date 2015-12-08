@@ -996,8 +996,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
                     graph.addSentence(s);
 
-                    // when reading the tatoeba files, there are no source, target or language
-                    // keywords like in a cluster database, so 'allLanguages' is populated here
                     selectionFrame.usedLanguages.add(s.language);
                     count++;
                 }
