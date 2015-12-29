@@ -261,7 +261,6 @@ public class Graph {
     }
 
     public  void selectClusters() {
-
         // selectClustersByLanguage and selectClustersByComplexity are supposed to be called already
         for (Cluster c : clusters.values()) {
             c.selected = c.selectedByParameters && c.selectedByComplexity;

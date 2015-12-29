@@ -76,7 +76,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
     boolean sourceDisplayed = false;
     boolean targetDisplayed = false;
 
-    GenericTextFrame unsavedClustersFrame = null;
+    GenericTextFrame displayClustersFrame = null;
     GenericTextFrame ngramFrame = null;
 
     boolean editing = false;
@@ -141,6 +141,9 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         enableMenuItem("Select clusters", true);
         enableMenuItem("Save all clusters", true);
         enableMenuItem("Save selected clusters", true);
+        enableMenuItem("Display unsaved clusters",true);
+        enableMenuItem("Display selected clusters",true);
+        
         buttonNext.setEnabled(true);
         buttonTranslate.setEnabled(false);
         buttonPrevious.setEnabled(false);
@@ -332,20 +335,20 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         }
 
-        if (action.equals("Display unsaved clusters")) {
-            if (unsavedClustersFrame == null) {
-                unsavedClustersFrame = new GenericTextFrame();
+        if (action.equals("Display unsaved clusters") || action.equals("Display selected clusters")) {
+            String whichClusters="";
+            if (action.equals("Display unsaved clusters")) {
+                whichClusters = "unsaved";
             }
-            unsavedClustersFrame.setVisible(true);
-            graph.displayClusters(unsavedClustersFrame, "unsaved", selectionFrame);
-        }
+            if (action.equals("Display selected clusters")) {
+                whichClusters = "selected";
+            }
+            if (displayClustersFrame == null) {
+                displayClustersFrame = new GenericTextFrame();
+            }
+            displayClustersFrame.setVisible(true);
 
-        if (action.equals("Horizontal")) {
-
-        }
-
-        if (action.equals("Vertical")) {
-
+            graph.displayClusters(displayClustersFrame, whichClusters, selectionFrame);
         }
 
         if (action.matches(".*[|].*")) {
@@ -558,6 +561,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             enableMenuItem("Cluster Overview", true);
             enableMenuItem("Select clusters", true);
             enableMenuItem("Display unsaved clusters", true);
+            enableMenuItem("Display selected clusters", true);
             enableMenuItem("Save all clusters", true);
             enableMenuItem("Save selected clusters", true);
 
@@ -833,15 +837,13 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         AddMenuItem(menuClusters, "Read clusters", "");
         AddMenuItem(menuClusters, "Cluster Overview", "");
         AddMenuItem(menuClusters, "Select clusters", "");
-        AddMenuItem(menuClusters, "Display unsaved clusters", "");
         AddMenuItem(menuClusters, "Save all clusters", "");
         AddMenuItem(menuClusters, "Save selected clusters", "");
-        AddMenuItem(menuClusters, "Save special clusters", "");
 
-        menuClusters = new JMenu("View");
+        menuClusters = new JMenu("Display");
         menuBar.add(menuClusters);
-        AddMenuItem(menuClusters, "Horizontal", "");
-        AddMenuItem(menuClusters, "Vertical", "");
+        AddMenuItem(menuClusters, "Display unsaved clusters", "");
+        AddMenuItem(menuClusters, "Display selected clusters", "");
 
         pack();
     }
@@ -928,9 +930,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         displayGUInew();
 
-        enableMenuItem("Vertical", false);
-        enableMenuItem("Horizontal", true);
-
         enableMenuItem("Save clusters and exit", false);
         enableMenuItem("Exit without saving clusters", false);
         enableMenuItem("Read Tatoeba Database", true);
@@ -938,9 +937,9 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         enableMenuItem("Cluster Overview", false);
         enableMenuItem("Select clusters", false);
         enableMenuItem("Display unsaved clusters", false);
+        enableMenuItem("Display selected clusters", false);
         enableMenuItem("Save all clusters", false);
         enableMenuItem("Save selected clusters", false);
-        enableMenuItem("Save special clusters", false);
 
         buttonNext.setEnabled(false);
         buttonTranslate.setEnabled(false);
@@ -1110,9 +1109,11 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                             language = ls.get(0).substring(1, 4);
                             isComment = true;
 
-                            if (ls.size()>1) sentence=ls.get(1);  // test because comment line can be blank, then entry is missing
-                            for (int i=2; i<=ls.size()-1; i++){   // if comment contains <tab>, the line was split. Now reconstruct it.
-                                sentence=sentence+"\u0009"+ls.get(i);
+                            if (ls.size() > 1) {
+                                sentence = ls.get(1);  // test because comment line can be blank, then entry is missing
+                            }
+                            for (int i = 2; i <= ls.size() - 1; i++) {   // if comment contains <tab>, the line was split. Now reconstruct it.
+                                sentence = sentence + "\u0009" + ls.get(i);
                             }
                         } else {
                             language = ls.get(0);
