@@ -1,5 +1,6 @@
 package dictionaries;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -46,7 +47,7 @@ import org.jsoup.nodes.Document;
 
 import utils.MsgTextPane;
 
-public class URLChooser extends JFrame implements ActionListener {
+public class URLChooserExperimental extends JFrame implements ActionListener {
 
     public boolean stop = false;
 
@@ -91,7 +92,7 @@ public class URLChooser extends JFrame implements ActionListener {
     int outputFileGeneration;
     int outputLinesWritten;
 
-    public URLChooser(Language l) {
+    public URLChooserExperimental(Language l) {
         language = l;
     }
 
@@ -260,6 +261,8 @@ public class URLChooser extends JFrame implements ActionListener {
         urlList.clear();
         boolean subURLs = true;
 
+ //       subURLs = false;
+
         urlString = todoUrls.peekFirst();
         if (urlString == null) {
             return false;
@@ -267,7 +270,7 @@ public class URLChooser extends JFrame implements ActionListener {
             todoUrls.removeFirst();
             doneUrls.add(urlString);
 
-            extractFromURL(urlString);
+ //           extractFromURL(urlString);
             if (showLinks) {
                 writeMsg("PROCESSED: " + urlString);
             }
@@ -384,7 +387,26 @@ public class URLChooser extends JFrame implements ActionListener {
                     //                   wordlc = wordorig.replaceAll("I", "ı").toLowerCase();
                     wordlc = language.toLowerCase(wordorig);
                     if (wordlc.length() > 2) {
-                        urlWords.add(wordlc);
+
+                        if (false) {
+// only words that match this pattern
+                            Matcher matcher;
+                            Pattern pattern;
+                            pattern = Pattern.compile("ować");
+                            boolean match = false;
+                            matcher = pattern.matcher(wordlc);
+                            if (matcher.find()) {
+                                match = true;
+                            }
+                            if (match) {
+                                urlWords.add(wordlc);
+                                System.out.println(wordlc + "   " + match);
+
+                            }
+                        } else {
+                            urlWords.add(wordlc);
+                        }
+
                     }
                 }
 
@@ -547,10 +569,20 @@ public class URLChooser extends JFrame implements ActionListener {
 
         if (action.equals("show links")) {
             showLinks = !showLinks;
+                        if (showLinks) {
+                buttonLinks.setBackground(Color.green);
+            } else {
+                buttonLinks.setBackground(Color.red);
+            }
         }
 
         if (action.equals("show words")) {
             showWords = !showWords;
+            if (showWords) {
+                buttonWords.setBackground(Color.green);
+            } else {
+                buttonWords.setBackground(Color.red);
+            }
         }
 
     }
@@ -685,6 +717,9 @@ public class URLChooser extends JFrame implements ActionListener {
 
         buttonScan.addActionListener(this);
         buttonScan.setActionCommand("scan");
+
+        buttonScan.setBackground(Color.yellow);
+
         buttonStopScan.addActionListener(this);
         buttonStopScan.setActionCommand("stop");
         buttonProcess.addActionListener(this);

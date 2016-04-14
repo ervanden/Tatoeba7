@@ -141,9 +141,9 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         enableMenuItem("Select clusters", true);
         enableMenuItem("Save all clusters", true);
         enableMenuItem("Save selected clusters", true);
-        enableMenuItem("Display unsaved clusters",true);
-        enableMenuItem("Display selected clusters",true);
-        
+        enableMenuItem("Display unsaved clusters", true);
+        enableMenuItem("Display selected clusters", true);
+
         buttonNext.setEnabled(true);
         buttonTranslate.setEnabled(false);
         buttonPrevious.setEnabled(false);
@@ -336,7 +336,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         }
 
         if (action.equals("Display unsaved clusters") || action.equals("Display selected clusters")) {
-            String whichClusters="";
+            String whichClusters = "";
             if (action.equals("Display unsaved clusters")) {
                 whichClusters = "unsaved";
             }
@@ -1080,10 +1080,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
                 lineCount++;
                 ls = new ArrayList<String>(Arrays.asList(l.split("\u0009")));
-//                MsgTextPane.write("line " + lineCount + " |" + l + "|");
-//                for (String ss : ls) {
-//                    MsgTextPane.write("word |" + ss + "|");
-//                }
 
                 {
                     if (ls.get(0).matches(" *cluster *")) {
@@ -1135,6 +1131,19 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                     }
                 }
             }
+
+            // remove clusters with too many sentences
+            
+            Iterator it = graph.clusters.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                Cluster cluster = (Cluster) pair.getValue();
+                if (cluster.sentences.size() > 10) {
+                    it.remove();
+                    System.out.println("removing cluster with " + cluster.sentences.size() + " sentences");
+                }
+            }
+
         } catch (FileNotFoundException fnf) {
             MsgTextPane.write("file not found : " + fileName);
         } catch (IOException io) {
