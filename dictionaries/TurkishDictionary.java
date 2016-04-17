@@ -227,57 +227,5 @@ public class TurkishDictionary extends GenericDictionary implements Dictionary {
         return stem;
     }
 
-    public void optimizeStems() {
-
-        WordTree w = new WordTree();
-        for (String key : words.keySet()) {
-            String word = words.get(key);
-            if (word.replaceFirst("[^a-zşçğıöü]", " ").equals(word)) {
-                w.addWord(word, 1);
-            } else {
-                MsgTextPane.write("OptimizeStems: word contains invalid character : |" + word + "|");
-            }
-        }
-
-        stems.clear();
-        ArrayList<String> stemList;
-        stemList = w.scanStems();
-        for (String stem : stemList) {
-            stems.put(language.removeDiacritics(stem), stem);
-        }
-        MsgTextPane.write(stemList.size() + " stems extracted");
-
-        if (true) {
-            String correctedWord;
-            String correctStem;
-            java.util.List<String> v = new ArrayList<String>(stems.keySet());
-//        MsgTextPane.write("Applying stem reduction to Dictionary...");
-            matchInfo = false;
-            Collections.sort(v);
-            int success = 0;
-            int failed = 0;
-
-            for (String str : v) {
-                correctStem = stems.get(str);
-                stems.remove(str);
-
-                correctedWord = correctWordByRules(str);
-                // no dictionary lookup because otherwise if stem happens to be in words it is removed
-                if (correctedWord.equals(correctStem)) {
-                    if (success < 100) {
-                        dictFrame.writeDictArea("Redundant stem removed : " + correctedWord + "\n", false);
-                    } else if (success == 100) {
-                        dictFrame.writeDictArea("...", false);
-                    }
-                    success++;
-                } else { // put it back
-                    stems.put(str, correctStem);
-                    failed++;
-                }
-            }
-            MsgTextPane.write(success + " redundant stems removed\n");
-            matchInfo = true;
-        }
-    }
 
 }

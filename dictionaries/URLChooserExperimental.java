@@ -47,6 +47,37 @@ import org.jsoup.nodes.Document;
 
 import utils.MsgTextPane;
 
+class UrlNode {
+// encapsulates an url and the level in the reference tree
+// level is needed to be able to impose a limit on the depth of the traversal.
+// The level of the URL is stored by means of UrlNode in the queue todoUrls 
+// By overriding equals() the contains() method only looks at the URL, not at the level
+// to check if an URL is already on the queue
+
+    String urlString;
+    int level;
+
+    public UrlNode(String s, int i) {
+        urlString = s;
+        level = i;
+    }
+
+    public String printString() {
+        return String.format("[%d] %s", level, urlString);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        UrlNode u = (UrlNode) o;
+        return (urlString.equals(u.urlString));
+    }
+
+    @Override
+    public int hashCode() {
+        return urlString.hashCode() * level;
+    }
+}
+
 public class URLChooserExperimental extends JFrame implements ActionListener {
 
     public boolean stop = false;
@@ -69,7 +100,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
     JButton buttonWords = new JButton("show words");
     JButton buttonLimit = new JButton("download limit");
 
-    ArrayDeque<String> todoUrls = new ArrayDeque<String>();
+    ArrayDeque<UrlNode> todoUrls = new ArrayDeque<>();
     SortedSet<String> doneUrls = new TreeSet<String>();
     int downloadedBytes = 0;
     int downloadedBytesLimit;
@@ -161,7 +192,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
             writeMsg("io exception in fileWriter()");
         }
 
-        if (outputLinesWritten >= 5000000) {
+        if (outputLinesWritten >= 1000) {
             fileClose();
             fileOpenerOut("next");
         }
@@ -236,7 +267,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
 
                             todoUrls.clear();
                             doneUrls.clear();
-                            todoUrls.addLast(urlString);
+                            todoUrls.addLast(new UrlNode(urlString, 0));
                             while (!stop && extractFromURLQueue(rootURL)) {
                             };
 
@@ -257,27 +288,39 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
 
     public boolean extractFromURLQueue(URL rootURL) {
         String urlString;
+        UrlNode urlNode;
         ArrayList<String> urlList = new ArrayList<>();
         urlList.clear();
         boolean subURLs = true;
+        int maxSubLevel = 1;
 
- //       subURLs = false;
-
-        urlString = todoUrls.peekFirst();
-        if (urlString == null) {
+        urlNode = todoUrls.peekFirst();
+        if (urlNode == null) {
             return false;
         } else {
+            urlString = urlNode.urlString;
             todoUrls.removeFirst();
             doneUrls.add(urlString);
 
- //           extractFromURL(urlString);
+ //          extractFromURL(urlString);
+            
             if (showLinks) {
-                writeMsg("PROCESSED: " + urlString);
+                writeMsg("PROCESSED: " + urlNode.printString());
             }
+
+            String word = urlString.replace("https://pl.wiktionary.org/wiki/", "");
+            
+            if (!word.contains(":")) {
+                writeMsg("<"+word+">");
+                fileWrite(word);
+            };
+
             if (subURLs) {
+//                                    writeMsg("SUBURLs");
                 urlList = ListLinks.run(urlString);
                 int urlcount = 0;
                 for (String suburlString : urlList) {
+                    //                   writeMsg("SUBURL " + suburlString);
                     urlcount++;
                     try {
                         URL subURL = new URL(suburlString);
@@ -287,21 +330,22 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
                             suburlString = suburlString.replaceAll("#.*$", "");
 
                             boolean skip = false;
-                            if (suburlString.contains(".php")) {
+                            if (urlNode.level >= maxSubLevel) {
                                 skip = true;
                             }
-                            if (suburlString.contains("Dosya:")) {
-                                skip = true;
-                            }
-                            if (suburlString.contains("/%C3%96zel:")) {
-                                skip = true;
-                            }
-
+                            if (suburlString.contains("Specjalna:")) skip=true;
+ //                           if (suburlString.contains("pl.wiktionary.org/w/")) skip=true;
                             if (!skip) {
-                                if (!doneUrls.contains(suburlString) && !todoUrls.contains(suburlString)) {
-                                    todoUrls.addLast(suburlString);
+                                UrlNode suburlNode = new UrlNode(suburlString, urlNode.level + 1);
+                                if (suburlString.contains("Kategoria:polski_(indeks)&pagefrom=")
+                                        && suburlString.contains("subcatfrom=")) {
+                                    writeMsg("RESET: " + suburlString);
+                                    suburlNode.level = 0;
+                                }
+                                if (!doneUrls.contains(suburlString) && !todoUrls.contains(suburlNode)) {
+                                    todoUrls.addLast(suburlNode);
                                     if (showLinks) {
-                                        writeMsg("ADDED: " + suburlString + " todo= " + todoUrls.size() + " done= " + doneUrls.size());
+                                        writeMsg("ADDED: " + suburlNode.printString() + " todo= " + todoUrls.size() + " done= " + doneUrls.size());
                                     }
                                 }
                             }
@@ -569,7 +613,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
 
         if (action.equals("show links")) {
             showLinks = !showLinks;
-                        if (showLinks) {
+            if (showLinks) {
                 buttonLinks.setBackground(Color.green);
             } else {
                 buttonLinks.setBackground(Color.red);

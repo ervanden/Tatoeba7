@@ -2,6 +2,15 @@ package dictionaries;
 
 import java.util.ArrayList;
 
+class WordLetters {
+    public static final String allLetters = "abcdefghijklmnopqrstuvwxyzşçğıöüąćęłńóśźż";
+    public static final int nrLetters = allLetters.length();
+    
+//better but not allowed since letters() not static:    
+//  static final String letters = "abcdefghijklmnopqrstuvwxyz"+Turkish.letters()+Polish.letters();
+}
+
+
 class WordNode {
 
     WordNode[] next;
@@ -10,8 +19,8 @@ class WordNode {
     boolean isTerminal;
 
     public WordNode() {
-        next = new WordNode[32];
-        for (int i = 0; i < 32; i++) {
+        next = new WordNode[WordLetters.nrLetters];
+        for (int i = 0; i < WordLetters.nrLetters; i++) {
             next[i] = null;
         };
         totalweight = 0;
@@ -52,7 +61,7 @@ public class WordTree {
 
     private int countWords(WordNode n) {
         int total = 0;
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < WordLetters.nrLetters; i++) {
             if (n.next[i] != null) {
                 total = total + countWords(n.next[i]);
             };
@@ -67,7 +76,7 @@ public class WordTree {
 
     private void printTree(WordNode n, int depth) {
 
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < WordLetters.nrLetters; i++) {
             if (n.next[i] != null) {
                 for (int k = 0; k <= depth + 1; k++) {
                     System.out.print(' ');
@@ -94,7 +103,7 @@ public class WordTree {
 
     private void scanStemsNode(WordNode n, int depth) {
 
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < WordLetters.nrLetters; i++) {
             if (n.next[i] != null) {
                 prefix[depth]=intToChar(i);
                 String prefixString = new String(prefix,0,depth+1);
@@ -109,240 +118,19 @@ public class WordTree {
         }
     }
 
-
-
     private int charToInt(char c) {
-        int i = 0;
-        if (c == 'a') {
-            return i;
-        }
-        i++;
-        if (c == 'b') {
-            return i;
-        }
-        i++;
-        if (c == 'c') {
-            return i;
-        }
-        i++;
-        if (c == 'd') {
-            return i;
-        }
-        i++;
-        if (c == 'e') {
-            return i;
-        }
-        i++;
-        if (c == 'f') {
-            return i;
-        }
-        i++;
-        if (c == 'g') {
-            return i;
-        }
-        i++;
-        if (c == 'h') {
-            return i;
-        }
-        i++;
-        if (c == 'i') {
-            return i;
-        }
-        i++;
-        if (c == 'j') {
-            return i;
-        }
-        i++;
-        if (c == 'k') {
-            return i;
-        }
-        i++;
-        if (c == 'l') {
-            return i;
-        }
-        i++;
-        if (c == 'm') {
-            return i;
-        }
-        i++;
-        if (c == 'n') {
-            return i;
-        }
-        i++;
-        if (c == 'o') {
-            return i;
-        }
-        i++;
-        if (c == 'p') {
-            return i;
-        }
-        i++;
-        if (c == 'q') {
-            return i;
-        }
-        i++;
-        if (c == 'r') {
-            return i;
-        }
-        i++;
-        if (c == 's') {
-            return i;
-        }
-        i++;
-        if (c == 't') {
-            return i;
-        }
-        i++;
-        if (c == 'u') {
-            return i;
-        }
-        i++;
-        if (c == 'v') {
-            return i;
-        }
-        i++;
-        if (c == 'w') {
-            return i;
-        }
-        i++;
-        if (c == 'x') {
-            return i;
-        }
-        i++;
-        if (c == 'y') {
-            return i;
-        }
-        i++;
-        if (c == 'z') {
-            return i;
-        }
-        i++;
-        if (c == 'ş') {
-            return i;
-        }
-        i++;
-        if (c == 'ç') {
-            return i;
-        }
-        i++;
-        if (c == 'ğ') {
-            return i;
-        }
-        i++;
-        if (c == 'ı') {
-            return i;
-        }
-        i++;
-        if (c == 'ö') {
-            return i;
-        }
-        i++;
-        if (c == 'ü') {
-            return i;
-        }
-        i++;
-        System.out.println("Invalid character in dictionary word");
-        return -1;
+       String letters = WordLetters.allLetters;     
+ //      System.out.println("charToInt "+c);
+ //      System.out.println(" >> "+letters.indexOf((int) c));
+        return letters.indexOf((int) c);
     }
 
+
     private char intToChar(int i) {
-        if (i == 0) {
-            return 'a';
-        }
-        if (i == 1) {
-            return 'b';
-        }
-        if (i == 2) {
-            return 'c';
-        }
-        if (i == 3) {
-            return 'd';
-        }
-        if (i == 4) {
-            return 'e';
-        }
-        if (i == 5) {
-            return 'f';
-        }
-        if (i == 6) {
-            return 'g';
-        }
-        if (i == 7) {
-            return 'h';
-        }
-        if (i == 8) {
-            return 'i';
-        }
-        if (i == 9) {
-            return 'j';
-        }
-        if (i == 10) {
-            return 'k';
-        }
-        if (i == 11) {
-            return 'l';
-        }
-        if (i == 12) {
-            return 'm';
-        }
-        if (i == 13) {
-            return 'n';
-        }
-        if (i == 14) {
-            return 'o';
-        }
-        if (i == 15) {
-            return 'p';
-        }
-        if (i == 16) {
-            return 'q';
-        }
-        if (i == 17) {
-            return 'r';
-        }
-        if (i == 18) {
-            return 's';
-        }
-        if (i == 19) {
-            return 't';
-        }
-        if (i == 20) {
-            return 'u';
-        }
-        if (i == 21) {
-            return 'v';
-        }
-        if (i == 22) {
-            return 'w';
-        }
-        if (i == 23) {
-            return 'x';
-        }
-        if (i == 24) {
-            return 'y';
-        }
-        if (i == 25) {
-            return 'z';
-        }
-        if (i == 26) {
-            return 'ş';
-        }
-        if (i == 27) {
-            return 'ç';
-        }
-        if (i == 28) {
-            return 'ğ';
-        }
-        if (i == 29) {
-            return 'ı';
-        }
-        if (i == 30) {
-            return 'ö';
-        }
-        if (i == 31) {
-            return 'ü';
-        }
-        return '#';
+       String letters = WordLetters.allLetters;     
+//       System.out.println("intToChar "+i);
+//       System.out.println(" >> "+letters.charAt(i));
+        return letters.charAt(i);
     }
 
 }

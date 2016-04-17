@@ -15,7 +15,7 @@ public class ListLinks {
     public static ArrayList<String>  run(String url)  {
         ArrayList<String> stringList = new ArrayList<String>();
 try{
-        print("Fetching %s...", url);
+ //       print("Fetching %s...", url);
         Document doc = Jsoup.connect(url).get();
         Elements links = doc.select("a[href]");
         for (Element link : links) {
