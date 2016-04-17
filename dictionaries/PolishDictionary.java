@@ -13,8 +13,10 @@ public class PolishDictionary extends GenericDictionary implements Dictionary {
     public String correctWordByRules(String word) {
 
         // for Polish, if the beginning of a word matches a stem, the corrected word is this stem
-        // followed by the rest of the word. This is to cover all word endings of declensions and conjugations.
-        // If the declension or conjugation ending has diacritics, the complete word must be in the dictionary
+        // followed by the rest of the word. This is to cover all word endings of declensions and conjugations
+        // that have no diacritics, e.g. cały cała całowa całym
+        // If the declension or conjugation ending has diacritics, the complete declined or conjugated
+        // word must be in the dictionary
         
         int nextpos = 0;
         char nextchar;
@@ -33,6 +35,10 @@ public class PolishDictionary extends GenericDictionary implements Dictionary {
                 newword=newword+nextchar;
             }
         }
+        
+//ąćęłńóśżź
+                newword = newword.replaceAll("ow$", "ów");
+                
 //System.out.println("CorrectByRules word="+word+" stem="+stem+" newword="+newword);
         
         return newword;
