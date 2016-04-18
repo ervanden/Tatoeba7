@@ -139,7 +139,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             fileChooser.setApproveButtonText("Select");
-            fileChooser.setDialogTitle("Chose an output folder");
+            fileChooser.setDialogTitle("Output folder for collected words");
             int retval = fileChooser.showOpenDialog(this);
             if (retval == JFileChooser.APPROVE_OPTION) {
                 File f = fileChooser.getSelectedFile();
@@ -192,7 +192,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
             writeMsg("io exception in fileWriter()");
         }
 
-        if (outputLinesWritten >= 1000) {
+        if (outputLinesWritten >= 100000) {
             fileClose();
             fileOpenerOut("next");
         }
@@ -210,6 +210,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
         String fileName = "";
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    fileChooser.setDialogTitle("Select the file with URLs");
         int retval = fileChooser.showOpenDialog(this);
         if (retval == JFileChooser.APPROVE_OPTION) {
             File f = fileChooser.getSelectedFile();
@@ -246,21 +247,21 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
 
         public void run() {
             stop = false;
-            StyledDocument document = (StyledDocument) editArea.getDocument();
 
             fileOpenerOut("new");
             downloadedWords = 0;
+            String urlString;
+            int rootUrls=0;
 
-            javax.swing.text.Element root = document.getDefaultRootElement();
-            int count = root.getElementCount();
-            for (int i = 0; i < count; i++) {
-                javax.swing.text.Element lineElement = (javax.swing.text.Element) root.getElement(i);
+            StyledDocument document = (StyledDocument) editArea.getDocument();
+
+            if (document.getLength() == 0) { // if editArea is empty, read urls from a file 
+
+                fileOpenerIn();
                 try {
-                    String urlString = document.getText(lineElement.getStartOffset(),
-                            lineElement.getEndOffset() - lineElement.getStartOffset() - 1);
-
-                    if (!stop && (urlString != null) && (!urlString.equals(""))) {
-                        writeMsg("URL : <" + urlString + ">");
+                    while (!stop && (urlString = inputStream.readLine()) != null) {
+                        rootUrls++;
+                        writeMsg(rootUrls+" URL FROM FILE : <" + urlString + ">");
                         try {   // start with a new root URL
 
                             URL rootURL = new URL(urlString);  // test if valid url string
@@ -275,14 +276,48 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
                             writeMsg("Not a URL : <" + urlString + ">");
                         }
                     }
-                } catch (BadLocationException ble) {
-                    writeMsg("Bad location in url window ");
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                } catch (IOException io) {
+                    writeMsg("IO exception when reading url file");
+                }
+
+            } else {  // read urls from editArea
+
+                javax.swing.text.Element root = document.getDefaultRootElement();
+                int count = root.getElementCount();
+                for (int i = 0; i < count; i++) {
+                    javax.swing.text.Element lineElement = (javax.swing.text.Element) root.getElement(i);
+                    try {
+                        urlString = document.getText(lineElement.getStartOffset(),
+                                lineElement.getEndOffset() - lineElement.getStartOffset() - 1);
+
+                        if (!stop && (urlString != null) && (!urlString.equals(""))) {
+
+                            writeMsg("URL : <" + urlString + ">");
+                            try {   // start with a new root URL
+
+                                URL rootURL = new URL(urlString);  // test if valid url string
+
+                                todoUrls.clear();
+                                doneUrls.clear();
+                                todoUrls.addLast(new UrlNode(urlString, 0));
+                                while (!stop && extractFromURLQueue(rootURL)) {
+                                };
+
+                            } catch (MalformedURLException mfu) {
+                                writeMsg("Not a URL : <" + urlString + ">");
+                            }
+                        }
+                    } catch (BadLocationException ble) {
+                        writeMsg("Bad location in url window ");
+                    }
                 }
             }
 
             writeMsg("end");
             fileClose();
-
         }
     }
 
@@ -292,7 +327,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
         ArrayList<String> urlList = new ArrayList<>();
         urlList.clear();
         boolean subURLs = true;
-        int maxSubLevel = 1;
+        int maxSubLevel = 0;
 
         urlNode = todoUrls.peekFirst();
         if (urlNode == null) {
@@ -302,19 +337,18 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
             todoUrls.removeFirst();
             doneUrls.add(urlString);
 
- //          extractFromURL(urlString);
-            
+            extractFromURL(urlString);
+
             if (showLinks) {
                 writeMsg("PROCESSED: " + urlNode.printString());
             }
-
-            String word = urlString.replace("https://pl.wiktionary.org/wiki/", "");
-            
-            if (!word.contains(":")) {
-                writeMsg("<"+word+">");
-                fileWrite(word);
-            };
-
+            /*
+             String word = urlString.replace("https://pl.wiktionary.org/wiki/", "");           
+             if (!word.contains(":")) {
+             writeMsg("<"+word+">");
+             fileWrite(word);
+             };
+             */
             if (subURLs) {
 //                                    writeMsg("SUBURLs");
                 urlList = ListLinks.run(urlString);
@@ -333,8 +367,10 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
                             if (urlNode.level >= maxSubLevel) {
                                 skip = true;
                             }
-                            if (suburlString.contains("Specjalna:")) skip=true;
- //                           if (suburlString.contains("pl.wiktionary.org/w/")) skip=true;
+                            if (suburlString.contains("Specjalna:")) {
+                                skip = true;
+                            }
+                            //                           if (suburlString.contains("pl.wiktionary.org/w/")) skip=true;
                             if (!skip) {
                                 UrlNode suburlNode = new UrlNode(suburlString, urlNode.level + 1);
                                 if (suburlString.contains("Kategoria:polski_(indeks)&pagefrom=")
