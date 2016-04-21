@@ -6,9 +6,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import dictionaries.GenericDictionary;
+import javax.swing.text.StyledDocument;
 import languages.Language;
-import utils.MsgTextPane;
 import utils.AreaFont;
+import utils.FileOpener;
 
 public class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener {
 
@@ -61,13 +62,34 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         String action = ae.getActionCommand();
 
-        if (action.equals("Correct Selected Text")) {
+        if (action.equals("Correct Text")) {
             editArea.setManualCorrect(false);
             language.dictionary().setMarkCorrection(true);
-            language.dictionary().correctText(editArea,
-                    editArea.selectedPosition, editArea.selectedLength);
+            language.dictionary().setMatchInfo(false);
+            language.dictionary().correctText(editArea, 0, editArea.getDocument().getLength());
             language.dictionary().setMarkCorrection(false);
+            language.dictionary().setMatchInfo(true);
             editArea.setManualCorrect(true);
+        }
+
+        if (action.equals("Save to file")) {
+            StyledDocument document = (StyledDocument) editArea.getDocument();
+            FileOpener f = new FileOpener();
+            f.openOutputFile();
+
+            javax.swing.text.Element root = document.getDefaultRootElement();
+            int count = root.getElementCount();
+            for (int i = 0; i < count; i++) {
+                javax.swing.text.Element lineElement = (javax.swing.text.Element) root.getElement(i);
+                try {
+                    String line = document.getText(lineElement.getStartOffset(),
+                            lineElement.getEndOffset() - lineElement.getStartOffset() - 1);
+                    f.writeln(line);
+                } catch (Exception e) {
+                };
+            }
+            f.closeOutputFile();
+
         }
 
         if (action.equals("Show Dictionary Window")) {
@@ -160,7 +182,9 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         AddMenuItem(menuView, "Show Dictionary Window", "Show Dictionary Window");
         JMenu menuText = new JMenu("Text");
         menuBar.add(menuText);
-        AddMenuItem(menuText, "Correct Selected Text", "Correct Selected Text");
+        AddMenuItem(menuText, "Correct Text", "Correct Text");
+        menuBar.add(menuText);
+        AddMenuItem(menuText, "Save to file", "Save to file");
         pack();
 
     }

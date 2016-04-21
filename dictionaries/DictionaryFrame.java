@@ -177,7 +177,7 @@ public class DictionaryFrame extends JFrame implements ActionListener {
         }
                
         if (action.equals("words from web")) {
-            URLChooserExperimental urlChooser = new URLChooserExperimental(language);
+            URLChooserWiktionary urlChooser = new URLChooserWiktionary(language);
             urlChooser.execute();
         }
 

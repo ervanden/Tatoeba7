@@ -166,7 +166,9 @@ public class GenericDictionary {
             String l;
             int linecount = 0;
             while ((l = inputStream.readLine()) != null) {
-                if (linecount==0) l=ByteOrderMark.remove(l);
+                if (linecount == 0) {
+                    l = ByteOrderMark.remove(l);
+                }
                 linecount++;
                 if (l.charAt(0) == '[') {
                     l = l.substring(1, l.length() - 1);
@@ -244,7 +246,7 @@ public class GenericDictionary {
 
     public String correctWord(String word) {
         // word is expected to be lowercase and diacritics removed
-        if (words.containsKey(word)) { 
+        if (words.containsKey(word)) {
             return correctWordByDictionary(word);
         } else {
             return correctWordByRules(word);
@@ -265,22 +267,25 @@ public class GenericDictionary {
             return word;
         }
     }
-    
-    public String correctWordByRules(String word){
+
+    public String correctWordByRules(String word) {
         return word;
     }
 
     public void correctText(LanguageTextPane textPane, int position, int length) {
         StyledDocument doc = textPane.getStyledDocument();
+
         int startWordPosition = 0;
         int endWordPosition = 0;
         String wordorig, word, wordlc, wordnew, wordnewlc;
+        int percentageDone=0;
 
         int nrWords = 0;
         int nrCorrected = 0;
         if (markCorrection) {
             nrWords = 0;
             nrCorrected = 0;
+            MsgTextPane.write(String.format("%d%% corrected", percentageDone));
         }
 
         position = WordUtils.startOfWord(doc, position);
@@ -296,11 +301,8 @@ public class GenericDictionary {
                 endWordPosition = WordUtils.nextNonAlphabetic(doc, startWordPosition);
                 wordorig = doc.getText(startWordPosition, endWordPosition - startWordPosition);
                 word = language.removeDiacritics(wordorig);
-//                MsgTextPane.write("word = "+word);
-                wordlc = language.toLowerCase(word); 
-//  MsgTextPane.write("wordlc = "+wordlc);              
-                wordnewlc = correctWord(wordlc);  // dictionary lookup for words and stems
-//MsgTextPane.write("wordnewlc = "+wordnewlc);
+                wordlc = language.toLowerCase(word);
+                wordnewlc = correctWord(wordlc);  // dictionary lookup for words and stems              
                 // make characters uppercase if they were originally
                 wordnew = "";
                 for (int i = 0; i < word.length(); i++) {
@@ -311,7 +313,7 @@ public class GenericDictionary {
                         wordnew = wordnew + nextChar;
                     }
                 }
-                //MsgTextPane.write("wordnew = "+wordnew);               
+
                 if (!wordnew.equals(wordorig)) {
                     textPane.setFinalInsert(true);
                     doc.remove(startWordPosition, endWordPosition - startWordPosition);
@@ -328,6 +330,15 @@ public class GenericDictionary {
                 System.exit(1);
             };
             position = endWordPosition;
+
+            if (markCorrection) {
+                int p = Math.round(((float) position / (float) length) * 100);
+                if (((p / 10) * 10) > (percentageDone)) {
+                    percentageDone = ((p / 10) * 10);
+                    MsgTextPane.write(String.format("%d%% corrected", percentageDone));
+                }
+            }
+
         }
 
         if (markCorrection) {
@@ -374,7 +385,7 @@ public class GenericDictionary {
         WordTree w = new WordTree();
         for (String key : words.keySet()) {
             String word = words.get(key);
-                w.addWord(word, 1);
+            w.addWord(word, 1);
         }
 
         stems.clear();
@@ -417,7 +428,6 @@ public class GenericDictionary {
             matchInfo = true;
         }
     }
-
 
     public void printAll(String dictionaryPattern) {
 

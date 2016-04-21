@@ -46,6 +46,7 @@ import org.jsoup.examples.ListLinks;
 import org.jsoup.nodes.Document;
 
 import utils.MsgTextPane;
+import utils.FileOpener;
 
 class UrlNode {
 // encapsulates an url and the level in the reference tree
@@ -78,13 +79,15 @@ class UrlNode {
     }
 }
 
-public class URLChooserExperimental extends JFrame implements ActionListener {
+public class URLChooserWiktionary extends JFrame implements ActionListener {
 
     public boolean stop = false;
 
     private JFrame thisFrame = (JFrame) this;
     private JTextPane editArea;
     private JTextPane msgArea;
+
+    FileOpener f;
 
     Language language;
 
@@ -115,120 +118,8 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
     Hashtable<String, String> xDictWords = new Hashtable<String, String>();
     Hashtable<String, Integer> xDictFrequency = new Hashtable<String, Integer>();
 
-    // input and output file for words collected from url's
-    BufferedWriter outputStream;
-    BufferedReader inputStream;
-
-    String outputFileName;
-    int outputFileGeneration;
-    int outputLinesWritten;
-
-    public URLChooserExperimental(Language l) {
+    public URLChooserWiktionary(Language l) {
         language = l;
-    }
-
-    public boolean fileOpenerOut(String action) {
-
-        // when the output file gets too large, it is closed and a new one is openened
-        // action == "new"  : user selects an output file name
-        // action == "next" : switch to a new file. outputFileGeneration is appended to the name
-        String fileName = "";
-        if (action.equals("new")) {
-
-            String dirName = "";
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            fileChooser.setApproveButtonText("Select");
-            fileChooser.setDialogTitle("Output folder for collected words");
-            int retval = fileChooser.showOpenDialog(this);
-            if (retval == JFileChooser.APPROVE_OPTION) {
-                File f = fileChooser.getSelectedFile();
-                dirName = f.getAbsolutePath();
-                fileName = dirName + "\\collectedWords";
-            }
-
-            fileName = (String) JOptionPane.showInputDialog(
-                    null,
-                    "Output file name",
-                    "Confirm or change file name",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    fileName);
-
-            if ((fileName == null) || (fileName.length() == 0)) {
-                return false;
-            }
-            outputFileName = fileName;
-            outputFileGeneration = 1;
-        }
-
-        if (action.equals("next")) {
-            outputFileGeneration++;
-        }
-
-        fileName = outputFileName + "-" + outputFileGeneration + ".txt";
-
-        try {
-            OutputStream is = new FileOutputStream(new File(fileName));
-            OutputStreamWriter isr = new OutputStreamWriter(is, "UTF-8");
-            outputStream = new BufferedWriter(isr);
-            outputLinesWritten = 0;
-            writeMsg("Start writing to " + fileName);
-            return true;
-        } catch (IOException fnf) {
-            writeMsg("exception in FileOpenerOut");
-            return false;
-        }
-
-    }
-
-    public void fileWrite(String s) {
-        try {
-            outputStream.write(s);
-            outputStream.newLine();
-            outputLinesWritten++;
-        } catch (IOException ioe) {
-            writeMsg("io exception in fileWriter()");
-        }
-
-        if (outputLinesWritten >= 100000) {
-            fileClose();
-            fileOpenerOut("next");
-        }
-    }
-
-    public void fileClose() {
-        try {
-            outputStream.close();
-        } catch (IOException ioe) {
-            writeMsg("io exception closing in fileClose()");
-        }
-    }
-
-    public void fileOpenerIn() {
-        String fileName = "";
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    fileChooser.setDialogTitle("Select the file with URLs");
-        int retval = fileChooser.showOpenDialog(this);
-        if (retval == JFileChooser.APPROVE_OPTION) {
-            File f = fileChooser.getSelectedFile();
-            fileName = f.getAbsolutePath();
-        }
-
-        if ((fileName != null) && (fileName.length() > 0)) {
-            File initialFile = new File(fileName);
-            try {
-                InputStream is = new FileInputStream(initialFile);
-                InputStreamReader isr = new InputStreamReader(is, "UTF-8");
-                inputStream = new BufferedReader(isr);
-            } catch (IOException fnf) {
-                writeMsg("exception in FileOpenerIn");
-            }
-
-        }
-
     }
 
     public void writeMsg(String msg) {
@@ -248,40 +139,36 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
         public void run() {
             stop = false;
 
-            fileOpenerOut("new");
+            f.openOutputFile();
+
             downloadedWords = 0;
             String urlString;
-            int rootUrls=0;
+            int rootUrls = 0;
 
             StyledDocument document = (StyledDocument) editArea.getDocument();
 
             if (document.getLength() == 0) { // if editArea is empty, read urls from a file 
 
-                fileOpenerIn();
-                try {
-                    while (!stop && (urlString = inputStream.readLine()) != null) {
-                        rootUrls++;
-                        writeMsg(rootUrls+" URL FROM FILE : <" + urlString + ">");
-                        try {   // start with a new root URL
+                f.openInputFile();
 
-                            URL rootURL = new URL(urlString);  // test if valid url string
+                while (!stop && (urlString = f.readLine()) != null) {
+                    rootUrls++;
+                    writeMsg(rootUrls + " URL FROM FILE : <" + urlString + ">");
+                    try {   // start with a new root URL
 
-                            todoUrls.clear();
-                            doneUrls.clear();
-                            todoUrls.addLast(new UrlNode(urlString, 0));
-                            while (!stop && extractFromURLQueue(rootURL)) {
-                            };
+                        URL rootURL = new URL(urlString);  // test if valid url string
 
-                        } catch (MalformedURLException mfu) {
-                            writeMsg("Not a URL : <" + urlString + ">");
-                        }
+                        todoUrls.clear();
+                        doneUrls.clear();
+                        todoUrls.addLast(new UrlNode(urlString, 0));
+                        while (!stop && extractFromURLQueue(rootURL)) {
+                        };
+
+                    } catch (MalformedURLException mfu) {
+                        writeMsg("Not a URL : <" + urlString + ">");
                     }
-                    if (inputStream != null) {
-                        inputStream.close();
-                    }
-                } catch (IOException io) {
-                    writeMsg("IO exception when reading url file");
                 }
+                f.closeInputFile();
 
             } else {  // read urls from editArea
 
@@ -317,7 +204,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
             }
 
             writeMsg("end");
-            fileClose();
+            f.closeOutputFile();
         }
     }
 
@@ -397,7 +284,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
 
     public void extractFromURL(String url) {
 
-        fileWrite("<" + url + ">");
+        f.writeln("<" + url + ">");
 
         if (doneUrls.size() % 10 == 1) {
             writeMsg("totalWords   words  downloaded   urls:done  urls:todo");
@@ -424,7 +311,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
             if (showWords) {
                 writeMsg("+ " + word);
             }
-            fileWrite(word);
+            f.writeln(word);
         }
 
         float printvalue;
@@ -467,26 +354,7 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
                     //                   wordlc = wordorig.replaceAll("I", "ı").toLowerCase();
                     wordlc = language.toLowerCase(wordorig);
                     if (wordlc.length() > 2) {
-
-                        if (false) {
-// only words that match this pattern
-                            Matcher matcher;
-                            Pattern pattern;
-                            pattern = Pattern.compile("ować");
-                            boolean match = false;
-                            matcher = pattern.matcher(wordlc);
-                            if (matcher.find()) {
-                                match = true;
-                            }
-                            if (match) {
-                                urlWords.add(wordlc);
-                                System.out.println(wordlc + "   " + match);
-
-                            }
-                        } else {
-                            urlWords.add(wordlc);
-                        }
-
+                        urlWords.add(wordlc);
                     }
                 }
 
@@ -512,80 +380,73 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
             Integer freq = 0;
             String word, keyword, dictword;
 
-            fileOpenerIn();   // opens inputStream
+            f.openInputFile();// opens inputStream
 
-            try {
-                while (!stop && (word = inputStream.readLine()) != null) {
+            while (!stop && (word = f.readLine()) != null) {
 
-                    if (word.charAt(0) == '<') {
-                        word = word.substring(1, word.length() - 1);
-                        urls++;
-                    } else {
-                        // sanitize if from unknown source
-                        // words containing capital letters or punctuation are ignored
-                        if (!word.replaceAll("[^a-z" + language.letters() + "]", " ").contains(" ")) {
+                if (word.charAt(0) == '<') {
+                    word = word.substring(1, word.length() - 1);
+                    urls++;
+                } else {
+                    // sanitize if from unknown source
+                    // words containing capital letters or punctuation are ignored
+                    if (!word.replaceAll("[^a-z" + language.letters() + "]", " ").contains(" ")) {
 
-                            words++;
+                        words++;
 
-                            if (words % 10000 == 1) {
-                                writeMsg(String.format("%5s %8s %8s %8s %10s %9s",
-                                        "urls",
-                                        "words",
-                                        "correct",
-                                        "accuracy",
-                                        "newWords",
-                                        "newKeys"));
-                            }
-                            if (words % 1000 == 0) {
-                                writeMsg(String.format("%5d %8d %8d %8.2f %10d %9d",
-                                        urls,
-                                        words,
-                                        words - variants,
-                                        (float) (words - variants) / (float) words,
-                                        dictCandidatesFrequency.size(),
-                                        xDictWords.size())
-                                );
-                            }
-
-                            // calculate accuracy against current dictionary
-                            language.dictionary().setMatchInfo(false);
-                            keyword = language.removeDiacritics(word);
-                            dictword = language.dictionary().correctWord(keyword);
-                            if (!word.equals(dictword)) {
-                                variants++;
-                            }
-                            language.dictionary().setMatchInfo(true);
-
-                            freq = dictCandidatesFrequency.get(word);
-                            if (freq == null) {
-                                freq = 0;
-                            }
-                            dictCandidatesFrequency.put(word, freq + 1);
-                            String key = language.removeDiacritics(word);
-                            xDictWords.put(key, word);
-                            xDictFrequency.put(key, 0);
+                        if (words % 10000 == 1) {
+                            writeMsg(String.format("%5s %8s %8s %8s %10s %9s",
+                                    "urls",
+                                    "words",
+                                    "correct",
+                                    "accuracy",
+                                    "newWords",
+                                    "newKeys"));
                         }
+                        if (words % 1000 == 0) {
+                            writeMsg(String.format("%5d %8d %8d %8.2f %10d %9d",
+                                    urls,
+                                    words,
+                                    words - variants,
+                                    (float) (words - variants) / (float) words,
+                                    dictCandidatesFrequency.size(),
+                                    xDictWords.size())
+                            );
+                        }
+
+                        // calculate accuracy against current dictionary
+                        language.dictionary().setMatchInfo(false);
+                        keyword = language.removeDiacritics(word);
+                        dictword = language.dictionary().correctWord(keyword);
+                        if (!word.equals(dictword)) {
+                            variants++;
+                        }
+                        language.dictionary().setMatchInfo(true);
+
+                        freq = dictCandidatesFrequency.get(word);
+                        if (freq == null) {
+                            freq = 0;
+                        }
+                        dictCandidatesFrequency.put(word, freq + 1);
+                        String key = language.removeDiacritics(word);
+                        xDictWords.put(key, word);
+                        xDictFrequency.put(key, 0);
                     }
                 }
-
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-
-                //  xDictWords and xDictFrequency contain the keys of all spelling variants, with frequency 0
-                for (String w : dictCandidatesFrequency.keySet()) {
-                    String key = language.removeDiacritics(w);
-                    if (dictCandidatesFrequency.get(w) > xDictFrequency.get(key)) {
-                        xDictWords.put(key, w);
-                        xDictFrequency.put(key, dictCandidatesFrequency.get(w));
-                    }
-                }
-
-                // Now xDictWords contains the spelling variants with the highest frequency
-            } catch (IOException io) {
-                writeMsg("IO exception");
             }
 
+            f.closeInputFile();
+
+            //  xDictWords and xDictFrequency contain the keys of all spelling variants, with frequency 0
+            for (String w : dictCandidatesFrequency.keySet()) {
+                String key = language.removeDiacritics(w);
+                if (dictCandidatesFrequency.get(w) > xDictFrequency.get(key)) {
+                    xDictWords.put(key, w);
+                    xDictFrequency.put(key, dictCandidatesFrequency.get(w));
+                }
+            }
+
+            // Now xDictWords contains the spelling variants with the highest frequency
             writeMsg("Resetting Dictionary");
             language.dictionary().reset();
             writeMsg("Adding " + xDictWords.size() + " dictionary entries");
@@ -814,6 +675,8 @@ public class URLChooserExperimental extends JFrame implements ActionListener {
         buttonLimit.setActionCommand("download limit");
 
         displayGUI(false);
+
+        f = new FileOpener();
 
         setContentPane(content);
 
