@@ -17,7 +17,6 @@ public class PolishDictionary extends GenericDictionary implements Dictionary {
         // that have no diacritics, e.g. cały cała całowa całym
         // If the declension or conjugation ending has diacritics, the complete declined or conjugated
         // word must be in the dictionary
-        
         int nextpos = 0;
         char nextchar;
 
@@ -32,15 +31,22 @@ public class PolishDictionary extends GenericDictionary implements Dictionary {
             newword = stem;
             for (int i = nextpos; i <= word.length() - 1; i++) {
                 nextchar = word.charAt(i);
-                newword=newword+nextchar;
+                newword = newword + nextchar;
             }
         }
-        
+
 //ąćęłńóśżź
-                newword = newword.replaceAll("ow$", "ów");
-                
+        newword = newword.replaceAll("ow$", "ów");
+        newword = newword.replaceAll("jac", "jąc");
+        newword = newword.replaceAll("jacy", "jący");
+        newword = newword.replaceAll("jacym", "jącym");
+        newword = newword.replaceAll("jaco", "jąco");
+        newword = newword.replaceAll("jaca", "jąca");
+        newword = newword.replaceAll("jace", "jące");
+        newword = newword.replaceAll("jacego", "jącego");
+        newword = newword.replaceAll("osci", "ości");
+
 //System.out.println("CorrectByRules word="+word+" stem="+stem+" newword="+newword);
-        
         return newword;
 
     }

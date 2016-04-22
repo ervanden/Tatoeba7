@@ -15,13 +15,15 @@ import javax.swing.JOptionPane;
 
 public class FileOpener {
 
-    String outputFileName;
+    String outputPathName;
     BufferedWriter outputStream;
     BufferedReader inputStream;
     int outputFileGeneration;
     int outputLinesWritten;
+    Integer maxOutputLines;
 
-    public boolean openOutputFile() {
+    public boolean openOutputFile(Integer maxOutputLines) {
+        this.maxOutputLines = maxOutputLines;
         return openOutputFileAction("new");
     }
 
@@ -37,27 +39,28 @@ public class FileOpener {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             fileChooser.setApproveButtonText("Select");
-            fileChooser.setDialogTitle("Output folder for collected words");
+            fileChooser.setDialogTitle("Chose output folder");
             int retval = fileChooser.showOpenDialog(null);
             if (retval == JFileChooser.APPROVE_OPTION) {
                 File f = fileChooser.getSelectedFile();
                 dirName = f.getAbsolutePath();
-                fileName = dirName + "\\collectedWords";
+                if ((dirName == null) || (dirName.length() == 0)) {
+                    return false;
+                }
             }
 
             fileName = (String) JOptionPane.showInputDialog(
                     null,
                     "Output file name",
-                    "Confirm or change file name",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    fileName);
+                    "Enter the name of the output file",
+                    JOptionPane.PLAIN_MESSAGE
+            );
 
             if ((fileName == null) || (fileName.length() == 0)) {
                 return false;
             }
-            outputFileName = fileName;
+            outputPathName = dirName + "\\" + fileName;
+            outputPathName = outputPathName.replaceAll("[.]...$", "");   //remove extension
             outputFileGeneration = 1;
         }
 
@@ -65,20 +68,31 @@ public class FileOpener {
             outputFileGeneration++;
         }
 
-        fileName = outputFileName + "-" + outputFileGeneration + ".txt";
+        if (maxOutputLines != null) {
+            fileName = outputPathName + "-" + outputFileGeneration + ".txt";
+        } else {
+            fileName = outputPathName + ".txt";
+        }
+
+        File f = new File(fileName);
+        if (f.exists()) {
+            int reply = JOptionPane.showConfirmDialog(null, "File exists. Overwrite?", f.getPath(), JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.NO_OPTION) {
+                return false;
+            }
+        }
 
         try {
-            OutputStream is = new FileOutputStream(new File(fileName));
+            MsgTextPane.write("Opening " + fileName);
+            OutputStream is = new FileOutputStream(f);
             OutputStreamWriter isr = new OutputStreamWriter(is, "UTF-8");
             outputStream = new BufferedWriter(isr);
             outputLinesWritten = 0;
-            MsgTextPane.write("Start writing to " + fileName);
             return true;
         } catch (IOException fnf) {
             MsgTextPane.write("exception in FileOpenerOut");
             return false;
         }
-
     }
 
     public void writeln(String s) {
@@ -98,29 +112,21 @@ public class FileOpener {
 
     public void closeOutputFile() {
         try {
-            if (outputStream!=null){
-            outputStream.close();
+            if (outputStream != null) {
+                outputStream.close();
             }
         } catch (IOException ioe) {
             MsgTextPane.write("io exception closing in fileClose()");
         }
     }
 
-    public void closeInputFile() {
-        try {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        } catch (IOException ioe) {
-            MsgTextPane.write("io exception closing in fileClose()");
-        }
-    }
+
 
     public void openInputFile() {
         String fileName = "";
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setDialogTitle("Select the file with URLs");
+        fileChooser.setDialogTitle("Select a file");
         int retval = fileChooser.showOpenDialog(null);
         if (retval == JFileChooser.APPROVE_OPTION) {
             File f = fileChooser.getSelectedFile();
@@ -147,6 +153,16 @@ public class FileOpener {
         } catch (IOException io) {
             MsgTextPane.write("IO exception when reading file");
             return null;
+        }
+    }
+    
+        public void closeInputFile() {
+        try {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        } catch (IOException ioe) {
+            MsgTextPane.write("io exception closing in fileClose()");
         }
     }
 }

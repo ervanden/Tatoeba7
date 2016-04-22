@@ -6,10 +6,12 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import dictionaries.GenericDictionary;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import languages.Language;
 import utils.AreaFont;
 import utils.FileOpener;
+import utils.MsgTextPane;
 
 public class LanguageEditorFrame extends JFrame implements ActionListener, ItemListener {
 
@@ -47,7 +49,6 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
     public void itemStateChanged(ItemEvent e) {
 
         Object source = e.getItemSelectable();
-
         if (source == radioButtonAuto) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 editArea.setAutoCorrect(true);
@@ -75,7 +76,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         if (action.equals("Save to file")) {
             StyledDocument document = (StyledDocument) editArea.getDocument();
             FileOpener f = new FileOpener();
-            f.openOutputFile();
+            f.openOutputFile(null);
 
             javax.swing.text.Element root = document.getDefaultRootElement();
             int count = root.getElementCount();
@@ -90,6 +91,21 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
             }
             f.closeOutputFile();
 
+        }
+
+        if (action.equals("Read from file")) {
+            StyledDocument document = (StyledDocument) editArea.getDocument();
+ MsgTextPane.write("setting auto button OFF");
+            radioButtonAuto.setSelected(false);
+            FileOpener f = new FileOpener();
+            f.openInputFile();
+            String line;
+            while ((line = f.readLine()) != null) {
+                try {
+                    document.insertString(document.getLength(), line + "\n", null);
+                } catch (BadLocationException blex) {
+                }
+            }
         }
 
         if (action.equals("Show Dictionary Window")) {
@@ -184,6 +200,8 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         menuBar.add(menuText);
         AddMenuItem(menuText, "Correct Text", "Correct Text");
         menuBar.add(menuText);
+        AddMenuItem(menuText, "Read from file", "Read from file");
+        menuBar.add(menuText);
         AddMenuItem(menuText, "Save to file", "Save to file");
         pack();
 
@@ -195,7 +213,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         dictionary = language.dictionary();
 
         editArea = new LanguageTextPane(lang);
-        editArea.setAutoCorrect(true);
+        radioButtonAuto.setSelected(true);
         editArea.setFinalInsert(false);
         editArea.setManualCorrect(true);
 
