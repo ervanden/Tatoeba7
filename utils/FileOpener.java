@@ -32,34 +32,22 @@ public class FileOpener {
         // when the output file gets too large, it is closed and a new one is openened
         // action == "new"  : user selects an output file name
         // action == "next" : switch to a new file. outputFileGeneration is appended to the name
-        String fileName = "";
+
         if (action.equals("new")) {
 
-            String dirName = "";
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            fileChooser.setApproveButtonText("Select");
-            fileChooser.setDialogTitle("Chose output folder");
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.setDialogTitle("Select an output file");
             int retval = fileChooser.showOpenDialog(null);
             if (retval == JFileChooser.APPROVE_OPTION) {
                 File f = fileChooser.getSelectedFile();
-                dirName = f.getAbsolutePath();
-                if ((dirName == null) || (dirName.length() == 0)) {
-                    return false;
-                }
+                outputPathName = f.getAbsolutePath();
             }
-
-            fileName = (String) JOptionPane.showInputDialog(
-                    null,
-                    "Output file name",
-                    "Enter the name of the output file",
-                    JOptionPane.PLAIN_MESSAGE
-            );
-
-            if ((fileName == null) || (fileName.length() == 0)) {
+            
+            if (outputPathName == null) {
                 return false;
             }
-            outputPathName = dirName + "\\" + fileName;
+
             outputPathName = outputPathName.replaceAll("[.]...$", "");   //remove extension
             outputFileGeneration = 1;
         }
@@ -67,7 +55,8 @@ public class FileOpener {
         if (action.equals("next")) {
             outputFileGeneration++;
         }
-
+        
+        String fileName = "";
         if (maxOutputLines != null) {
             fileName = outputPathName + "-" + outputFileGeneration + ".txt";
         } else {
@@ -90,7 +79,7 @@ public class FileOpener {
             outputLinesWritten = 0;
             return true;
         } catch (IOException fnf) {
-            MsgTextPane.write("exception in FileOpenerOut");
+            MsgTextPane.write("Exception in FileOpenerOut");
             return false;
         }
     }

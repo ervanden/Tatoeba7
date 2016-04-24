@@ -37,7 +37,6 @@ public class LanguageTextPane extends JTextPane {
     
     public void setAutoCorrect(boolean b) {
         autoCorrect = b;
-        System.out.println("setautocorrect "+autoCorrect);
     }
 
     public void setFinalInsert(boolean b) {

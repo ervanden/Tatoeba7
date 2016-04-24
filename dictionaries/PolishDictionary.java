@@ -37,14 +37,14 @@ public class PolishDictionary extends GenericDictionary implements Dictionary {
 
 //ąćęłńóśżź
         newword = newword.replaceAll("ow$", "ów");
-        newword = newword.replaceAll("jac", "jąc");
-        newword = newword.replaceAll("jacy", "jący");
-        newword = newword.replaceAll("jacym", "jącym");
-        newword = newword.replaceAll("jaco", "jąco");
-        newword = newword.replaceAll("jaca", "jąca");
-        newword = newword.replaceAll("jace", "jące");
-        newword = newword.replaceAll("jacego", "jącego");
-        newword = newword.replaceAll("osci", "ości");
+        newword = newword.replaceAll("jac$", "jąc");
+        newword = newword.replaceAll("jacy$", "jący");
+        newword = newword.replaceAll("jacym$", "jącym");
+        newword = newword.replaceAll("jaco$", "jąco");
+        newword = newword.replaceAll("jaca$", "jąca");
+        newword = newword.replaceAll("jace$", "jące");
+        newword = newword.replaceAll("jacego$", "jącego");
+        newword = newword.replaceAll("osci$", "ości");
 
 //System.out.println("CorrectByRules word="+word+" stem="+stem+" newword="+newword);
         return newword;

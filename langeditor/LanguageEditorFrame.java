@@ -95,7 +95,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         if (action.equals("Read from file")) {
             StyledDocument document = (StyledDocument) editArea.getDocument();
- MsgTextPane.write("setting auto button OFF");
+            MsgTextPane.write("setting auto button OFF");
             radioButtonAuto.setSelected(false);
             FileOpener f = new FileOpener();
             f.openInputFile();
