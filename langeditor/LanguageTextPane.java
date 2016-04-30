@@ -24,6 +24,7 @@ import languages.Language;
 public class LanguageTextPane extends JTextPane {
 
     LanguageTextPane thisTextPane;
+    String languageCode;
     Language language;
 
     public boolean autoCorrect = true;
@@ -50,6 +51,7 @@ public class LanguageTextPane extends JTextPane {
     }
 
     public LanguageTextPane(String lang) {
+        languageCode = lang;
         language = LanguageContext.get(lang);
         this.getStyledDocument().addDocumentListener(editAreaListener);
         this.addCaretListener(editAreaCaretListener);
@@ -62,7 +64,7 @@ public class LanguageTextPane extends JTextPane {
     }
 
     public void lookupWord(int position, String site) {
-        SwingUtilities.invokeLater(new LookupTask(position,site));
+        SwingUtilities.invokeLater(new LookupTask(position, site));
     }
 
     class LookupTask implements Runnable {
@@ -71,7 +73,7 @@ public class LanguageTextPane extends JTextPane {
         private int position;
         private String site;
 
-        LookupTask(int position,String site) {
+        LookupTask(int position, String site) {
             this.doc = thisTextPane.getStyledDocument();
             this.position = position;
             this.site = site;
@@ -88,9 +90,29 @@ public class LanguageTextPane extends JTextPane {
 
                 String selectedString = doc.getText(wordposition, wordlength);
                 if (selectedString.length() > 0) {
-                    String url="none";
-                    if (site.equals("Babla")) url="http://en.bab.la/dictionary/polish-english/" + selectedString;
-                    if (site.equals("Wiktionary")) url="https://pl.wiktionary.org/wiki/" + selectedString+ "#pl";
+                    String url = "none";
+                    if (languageCode.equals("fra")) {
+                        if (site.equals("Babla")) {
+                            url = "http://en.bab.la/dictionary/french-english/" + selectedString;
+                        }
+                        if (site.equals("Wiktionary")) {
+                            url = "https://fr.wiktionary.org/wiki/" + selectedString + "#fr";
+                        }
+                    } else if (languageCode.equals("pol")) {
+                        if (site.equals("Babla")) {
+                            url = "http://en.bab.la/dictionary/polish-english/" + selectedString;
+                        }
+                        if (site.equals("Wiktionary")) {
+                            url = "https://pl.wiktionary.org/wiki/" + selectedString + "#pl";
+                        }
+                    } else if (languageCode.equals("tur")) {
+                        if (site.equals("Babla")) {
+                            url = "http://en.bab.la/dictionary/turkish-english/" + selectedString;
+                        }
+                        if (site.equals("Wiktionary")) {
+                            url = "https://tr.wiktionary.org/wiki/" + selectedString + "#tr";
+                        }
+                    }
                     MsgTextPane.write("Opening site  <" + url + ">");
                     try {
                         Desktop.getDesktop().browse(new URI(url));
