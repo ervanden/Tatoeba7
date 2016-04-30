@@ -2,7 +2,9 @@ package langeditor;
 
 import languages.LanguageContext;
 import dictionaries.WordUtils;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.net.URI;
 import javax.swing.BorderFactory;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
@@ -31,10 +33,10 @@ public class LanguageTextPane extends JTextPane {
     public int selectedPosition = 0;
     public int selectedLength = 0;
 
-    public Language getLanguage(){
+    public Language getLanguage() {
         return language;
     }
-    
+
     public void setAutoCorrect(boolean b) {
         autoCorrect = b;
     }
@@ -47,16 +49,66 @@ public class LanguageTextPane extends JTextPane {
         manualCorrect = b;
     }
 
-    public LanguageTextPane(String lang) {       
-        language=LanguageContext.get(lang);      
+    public LanguageTextPane(String lang) {
+        language = LanguageContext.get(lang);
         this.getStyledDocument().addDocumentListener(editAreaListener);
         this.addCaretListener(editAreaCaretListener);
         thisTextPane = this;
     }
-    
-   public void displayParameters() {
+
+    public void displayParameters() {
         setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2)); // 2 pixels around text in JTextPane    
         setFont(new Font("monospaced", Font.PLAIN, AreaFont.getSize()));
+    }
+
+    public void lookupWord(int position, String site) {
+        SwingUtilities.invokeLater(new LookupTask(position,site));
+    }
+
+    class LookupTask implements Runnable {
+
+        private StyledDocument doc;
+        private int position;
+        private String site;
+
+        LookupTask(int position,String site) {
+            this.doc = thisTextPane.getStyledDocument();
+            this.position = position;
+            this.site = site;
+        }
+
+        public void run() {
+
+            int wordposition = 0;
+            int wordlength = 0;
+
+            try {
+                wordposition = WordUtils.startOfWord(doc, position);
+                wordlength = WordUtils.endOfWord(doc, position) - wordposition;
+
+                String selectedString = doc.getText(wordposition, wordlength);
+                if (selectedString.length() > 0) {
+                    String url="none";
+                    if (site.equals("Babla")) url="http://en.bab.la/dictionary/polish-english/" + selectedString;
+                    if (site.equals("Wiktionary")) url="https://pl.wiktionary.org/wiki/" + selectedString+ "#pl";
+                    MsgTextPane.write("Opening site  <" + url + ">");
+                    try {
+                        Desktop.getDesktop().browse(new URI(url));
+                    } catch (Exception ioe) {
+                        MsgTextPane.write("Can not open browser ");
+                    }
+                } else {
+                    MsgTextPane.write("No word at cursor position " + wordposition + ". No lookup");
+
+                }
+
+            } catch (BadLocationException ex) {
+                MsgTextPane.write("BadLocationException " + wordposition);
+                ex.printStackTrace();
+                System.exit(1);
+            };
+
+        }
     }
 
     class SubstitutionTask implements Runnable {
@@ -79,10 +131,10 @@ public class LanguageTextPane extends JTextPane {
             try {
                 selection = doc.getText(position, length);
 //        System.out.println("inverting "+selection);
-                if (selection.matches("[0-9]+")){
-                   selection = language.number(Integer.valueOf(selection)); 
+                if (selection.matches("[0-9]+")) {
+                    selection = language.number(Integer.valueOf(selection));
                 } else {
-                selection = language.invertDiacritics(selection);
+                    selection = language.invertDiacritics(selection);
                 }
 //        System.out.println("inverted= "+selection);
                 finalInsert = true;
@@ -90,7 +142,7 @@ public class LanguageTextPane extends JTextPane {
                 doc.insertString(position, selection, doc.getStyle("default"));
                 finalInsert = false;
 
-            //  put the words in the dictionary
+                //  put the words in the dictionary
                 // First extend the selection to complete words
                 wordposition = WordUtils.startOfWord(doc, position);
                 wordlength = WordUtils.endOfWord(doc, position + length) - wordposition;

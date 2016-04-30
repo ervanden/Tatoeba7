@@ -20,7 +20,6 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
     private Language language;
     private GenericDictionary dictionary;
     private LanguageTextPane editArea;
-    //   public JTextPane dictArea = null;  // public static for scrollEnd() function
 
     private JFileChooser fileChooser = new JFileChooser();
     JScrollPane scrollingEditArea;
@@ -29,10 +28,9 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
     JButton buttonPlus = new JButton("+");
     JButton buttonMinus = new JButton("-");
-    JButton buttonAddWord = new JButton("+");
-    JButton buttonAddStem = new JButton("[+]");
-    JButton buttonRemoveWord = new JButton("-");
-    JButton buttonRemoveStem = new JButton("[-]");
+    JButton buttonLookupBabla = new JButton("Bab.la");
+    JButton buttonLookupWiktionary = new JButton("Wiktionary");
+
     JRadioButton radioButtonAuto = new JRadioButton("auto", null, true);
     JTextField textFieldDictFileName = new JTextField("");
     Dimension textFieldDictFileNameSize;
@@ -122,6 +120,14 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
             AreaFont.setFont(editArea);
         }
 
+        if (action.equals("buttonLookupBabla")) {
+            editArea.lookupWord(editArea.selectedPosition, "Babla");
+        }
+
+        if (action.equals("buttonLookupWiktionary")) {
+            editArea.lookupWord(editArea.selectedPosition, "Wiktionary");
+        }
+
     }
 
     private void AddMenuItem(JMenu menu, String name, String actionName) {
@@ -174,9 +180,26 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         c = newGridBagConstraints();
         c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
+        c.anchor = GridBagConstraints.WEST;
         c.weightx = 0;
         c.gridx = 2;
+        c.gridy = 0;
+        c.insets = new Insets(0, 0, 0, 5);  // top left bottom right
+        content.add(buttonLookupBabla, c);
+
+        c = newGridBagConstraints();
+        c.fill = GridBagConstraints.NONE;
+        c.anchor = GridBagConstraints.WEST;
+        c.weightx = 0;
+        c.gridx = 3;
+        c.gridy = 0;
+        c.insets = new Insets(0, 0, 0, 5);  // top left bottom right
+        content.add(buttonLookupWiktionary, c);
+        c = newGridBagConstraints();
+        c.fill = GridBagConstraints.NONE;
+        c.anchor = GridBagConstraints.CENTER;
+        c.weightx = 0;
+        c.gridx = 4;
         c.gridy = 0;
         content.add(radioButtonAuto, c);
 
@@ -186,7 +209,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         c.weightx = 0.5;
         c.gridx = 0;
         c.gridy = 1;
-        c.gridwidth = 3;            // align with number of editArea buttons
+        c.gridwidth = 5;            // align with number of editArea buttons
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         content.add(scrollingEditArea, c);
 
@@ -231,14 +254,10 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         buttonMinus.addActionListener(this);
         buttonMinus.setActionCommand("buttonMinus");
 
-        buttonAddWord.addActionListener(this);
-        buttonAddStem.addActionListener(this);
-        buttonRemoveWord.addActionListener(this);
-        buttonRemoveStem.addActionListener(this);
-        buttonAddWord.setActionCommand("buttonAddWord");
-        buttonAddStem.setActionCommand("buttonAddStem");
-        buttonRemoveWord.setActionCommand("buttonRemoveWord");
-        buttonRemoveStem.setActionCommand("buttonRemoveStem");
+        buttonLookupBabla.addActionListener(this);
+        buttonLookupBabla.setActionCommand("buttonLookupBabla");
+        buttonLookupWiktionary.addActionListener(this);
+        buttonLookupWiktionary.setActionCommand("buttonLookupWiktionary");
 
         radioButtonAuto.addItemListener(this);
 
