@@ -20,6 +20,11 @@ import tatoeba.PictureTrainer;
 import utils.*;
 
 public class GenericLanguage {
+    
+    /* all other languages extend GenericLanguage
+       So this class contains default functions in case the language does not redefine them
+       or generic functions that are useful in all languages (e.g. invertDiacriticsGeneric()
+    */
 
     GenericDictionary d = null;
     public String languageName = "generic";
@@ -57,6 +62,35 @@ public class GenericLanguage {
     public String invertDiacritics(String word) {
         return word;
     }
+    
+    public String invertDiacriticsGeneric(String word,String letterGroups) {
+
+        /* letterGroups is a string containing contiguous substrings separated by a blank.
+           If a letter c occurs in a substring, it is replaced by the letter following immediately the first occurence of c
+        */
+        
+        ArrayList<Character> letterGroupsArray = new ArrayList<>();
+        for (Character c : letterGroups.toCharArray()) {
+            letterGroupsArray.add(c);
+        }
+
+        char c;
+        String newword = "";
+        for (int i = 0; i <= word.length() - 1; i++) {
+            c = word.charAt(i);
+            if (letterGroupsArray.contains(c)) {
+                if (c != ' ') {
+                    int j = letterGroupsArray.indexOf(c);
+                    if (j >= 0) {
+                        c = letterGroupsArray.get(j + 1);
+                    } // if c is not in the array it is not replaced
+                }
+            }
+            newword = newword + c;
+        }
+        return newword;
+    }
+
 
     public String removeDiacritics(String word) {
         return word;

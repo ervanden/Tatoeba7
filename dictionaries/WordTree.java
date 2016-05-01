@@ -3,7 +3,7 @@ package dictionaries;
 import java.util.ArrayList;
 
 class WordLetters {
-    public static final String allLetters = "abcdefghijklmnopqrstuvwxyzşçğıöüąćęłńóśźż";
+    public static final String allLetters = "abcdefghijklmnopqrstuvwxyzşçğıöüąćęłńóśźżâàéèêîôûç";
     public static final int nrLetters = allLetters.length();
     
 //better but not allowed since letters() not static:    

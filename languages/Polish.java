@@ -7,15 +7,16 @@ public class Polish extends GenericLanguage implements Language {
 
     PolishDictionary d = null;
 
-        public Polish(){
-        languageName="Polish";
+    public Polish() {
+        languageName = "Polish";
     }
- /*       
-    public String dictionaryFileName() {
-        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        return defaultFolder + "\\Tatoeba\\PolishDictionary.txt";
-    }
-*/
+    /*       
+     public String dictionaryFileName() {
+     String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
+     return defaultFolder + "\\Tatoeba\\PolishDictionary.txt";
+     }
+     */
+
     public PolishDictionary dictionary() {
         if (d == null) {
             d = new PolishDictionary(this);
@@ -25,10 +26,16 @@ public class Polish extends GenericLanguage implements Language {
     }
 
     public String letters() {
-        return "ąćęłńóśżź";    
+        return "ąćęłńóśżź";
     }
 
     public String invertDiacritics(String word) {
+
+        return invertDiacriticsGeneric(word, "aąa cćc eęe lłl nńn oóo sśs zżźz AĄA CĆC EĘE LŁL OÓO SŚS ZŻŹZ");
+
+    }
+
+    public String invertDiacriticsOld(String word) {
         char c;
         String newword = "";
         for (int i = 0; i <= word.length() - 1; i++) {
@@ -183,7 +190,7 @@ public class Polish extends GenericLanguage implements Language {
         int n10 = (nlow2 - nlow1) / 10;
         int n1 = nlow1;
 
- //       System.out.println(" n=" + (n1000 * 1000 + n100 * 100 + n10 * 10 + n1));
+        //       System.out.println(" n=" + (n1000 * 1000 + n100 * 100 + n10 * 10 + n1));
         String s = "";
 
         if (n == 0) {
@@ -223,32 +230,76 @@ public class Polish extends GenericLanguage implements Language {
         }
         return s;
     }
-    
-        public String color(String color){
-        String 	tcolor="?"; // translated color
-if (color.equals("white")) 		tcolor="biały";
-if (color.equals("brown")) 		tcolor="brązowy";
-if (color.equals("red")) 		tcolor="czerwony";
-if (color.equals("salmon")) 		tcolor="łososiowy";
-if (color.equals("orange")) 		tcolor="pomarańczowy";
-if (color.equals("gold")) 		tcolor="złoty";
-if (color.equals("yellow")) 		tcolor="żółty";
-if (color.equals("olive")) 		tcolor="oliwkowy";
-if (color.equals("green")) 		tcolor="zielony";
-if (color.equals("light blue")) 	tcolor="jasny niebieski";
-if (color.equals("turquoise")) 		tcolor="turkusowy";
-if (color.equals("dark blue")) 		tcolor="ciemny niebieski";
-if (color.equals("blue")) 		tcolor="niebieski";
-if (color.equals("purple")) 		tcolor="purpurowy";
-if (color.equals("violet")) 		tcolor="fioletowy";
-if (color.equals("magenta / fuchsia")) 	tcolor="fuksja";
-if (color.equals("beige")) 		tcolor=" beżowy";
-if (color.equals("pink")) 		tcolor="różowy";
-if (color.equals("ivory")) 		tcolor="koloru kości słoniowej";
-if (color.equals("black")) 		tcolor="czarny";
-if (color.equals("grey")) 		tcolor="szary";
-if (color.equals("silver")) 		tcolor="srebrny";
-return 	tcolor;
+
+    public String color(String color) {
+        String tcolor = "?"; // translated color
+        if (color.equals("white")) {
+            tcolor = "biały";
+        }
+        if (color.equals("brown")) {
+            tcolor = "brązowy";
+        }
+        if (color.equals("red")) {
+            tcolor = "czerwony";
+        }
+        if (color.equals("salmon")) {
+            tcolor = "łososiowy";
+        }
+        if (color.equals("orange")) {
+            tcolor = "pomarańczowy";
+        }
+        if (color.equals("gold")) {
+            tcolor = "złoty";
+        }
+        if (color.equals("yellow")) {
+            tcolor = "żółty";
+        }
+        if (color.equals("olive")) {
+            tcolor = "oliwkowy";
+        }
+        if (color.equals("green")) {
+            tcolor = "zielony";
+        }
+        if (color.equals("light blue")) {
+            tcolor = "jasny niebieski";
+        }
+        if (color.equals("turquoise")) {
+            tcolor = "turkusowy";
+        }
+        if (color.equals("dark blue")) {
+            tcolor = "ciemny niebieski";
+        }
+        if (color.equals("blue")) {
+            tcolor = "niebieski";
+        }
+        if (color.equals("purple")) {
+            tcolor = "purpurowy";
+        }
+        if (color.equals("violet")) {
+            tcolor = "fioletowy";
+        }
+        if (color.equals("magenta / fuchsia")) {
+            tcolor = "fuksja";
+        }
+        if (color.equals("beige")) {
+            tcolor = " beżowy";
+        }
+        if (color.equals("pink")) {
+            tcolor = "różowy";
+        }
+        if (color.equals("ivory")) {
+            tcolor = "koloru kości słoniowej";
+        }
+        if (color.equals("black")) {
+            tcolor = "czarny";
+        }
+        if (color.equals("grey")) {
+            tcolor = "szary";
+        }
+        if (color.equals("silver")) {
+            tcolor = "srebrny";
+        }
+        return tcolor;
     }
 
 }

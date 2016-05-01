@@ -1,6 +1,8 @@
 package languages;
 
 import dictionaries.FrenchDictionary;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class French extends GenericLanguage implements Language {
 
@@ -9,12 +11,6 @@ public class French extends GenericLanguage implements Language {
     public French() {
         languageName = "French";
     }
-    /*        
-     public String dictionaryFileName() {
-     String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-     return defaultFolder + "\\Tatoeba\\FrenchDictionary.txt";
-     }
-     */
 
     public FrenchDictionary dictionary() {
         if (d == null) {
@@ -25,15 +21,32 @@ public class French extends GenericLanguage implements Language {
     }
 
     public String letters() {
-        return "";
+        return "âàéèêîôûç"; //  "ÂÀÉÈÊÎÔÛÇ";
+
+        //http://leconjugueur.lefigaro.fr/frlistedeverbe.php
     }
 
     public String invertDiacritics(String word) {
-        return word;
+
+        return invertDiacriticsGeneric(word,"aâàa eéèêe iîi oôo uûu cçc AÂÀA EÉÈÊE IÎI OÔO UÛU CÇC");
+ 
     }
 
     public String removeDiacritics(String word) {
+        word = word.replaceAll("â", "a");
+        word = word.replaceAll("ä", "a");
+        word = word.replaceAll("à", "a");
+        word = word.replaceAll("é", "e");
+        word = word.replaceAll("è", "e");
+        word = word.replaceAll("ê", "e");
+        word = word.replaceAll("ë", "e");
+        word = word.replaceAll("î", "i");
+        word = word.replaceAll("ï", "i");
+        word = word.replaceAll("ô", "o");
+        word = word.replaceAll("ö", "o");
+        word = word.replaceAll("û", "u");
         return word;
+
     }
 
     public String color(String color) {

@@ -9,19 +9,7 @@ public class LanguageContext {
     
     static ArrayList<String> knownLanguages;
     static HashMap<String, Language> languageMap = new HashMap<>();
-/*
-    static {
-        knownLanguages = new ArrayList<>();
-        knownLanguages.add("tur");
-        knownLanguages.add("pol");
-        knownLanguages.add("por");
-        knownLanguages.add("ita");
-        knownLanguages.add("eng");
-        knownLanguages.add("fra");
-        knownLanguages.add("nld");
 
-    }
-*/
     public static Language get(String lang) {
         Language language;
         language = languageMap.get(lang);

@@ -40,7 +40,13 @@ public class Turkish extends GenericLanguage implements Language {
         return "şçğıöü";
     }
 
-    public String invertDiacritics(String word) {
+       public String invertDiacritics(String word) {
+
+        return invertDiacriticsGeneric(word, "sşs cçc gğg iıi oöo uüu CÇC GĞG İIİ OÖO SŞS UÜU");
+
+    }
+       
+    public String invertDiacriticsOld(String word) {
         char c;
         String newword = "";
         for (int i = 0; i <= word.length() - 1; i++) {
