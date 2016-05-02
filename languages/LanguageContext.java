@@ -1,13 +1,11 @@
 package languages;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LanguageContext {
 
     // static object that translates a language name to its corresponding language object
     
-    static ArrayList<String> knownLanguages;
     static HashMap<String, Language> languageMap = new HashMap<>();
 
     public static Language get(String lang) {

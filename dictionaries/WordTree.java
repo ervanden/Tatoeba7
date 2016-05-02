@@ -1,16 +1,17 @@
 package dictionaries;
 
 import java.util.ArrayList;
+import utils.MsgTextPane;
+import languages.Language;
 
-class WordLetters {
-    public static final String allLetters = "abcdefghijklmnopqrstuvwxyzşçğıöüąćęłńóśźżâàéèêîôûç";
-    public static final int nrLetters = allLetters.length();
+
+
+public class WordTree {
+
+    String allLetters;
+    int nrLetters;
+    Language language;
     
-//better but not allowed since letters() not static:    
-//  static final String letters = "abcdefghijklmnopqrstuvwxyz"+Turkish.letters()+Polish.letters();
-}
-
-
 class WordNode {
 
     WordNode[] next;
@@ -19,8 +20,8 @@ class WordNode {
     boolean isTerminal;
 
     public WordNode() {
-        next = new WordNode[WordLetters.nrLetters];
-        for (int i = 0; i < WordLetters.nrLetters; i++) {
+        next = new WordNode[nrLetters];
+        for (int i = 0; i < nrLetters; i++) {
             next[i] = null;
         };
         totalweight = 0;
@@ -29,11 +30,20 @@ class WordNode {
     }
 }
 
-public class WordTree {
+
+    
+    
+    
+    
+    
+    
 
     WordNode root;
 
-    public WordTree() {
+    public WordTree(Language language) {
+        this.language=language;
+        allLetters="abcdefghijklmnopqrstuvwxyz"+language.letters();
+        nrLetters = allLetters.length();
         root = new WordNode();
     }
 
@@ -46,8 +56,10 @@ public class WordTree {
         n.totalweight = n.totalweight + weight;
         if (word.length() > 0) {
             char firstChar = word.charAt(0);
-            //           System.out.println("appending : first char = " + firstChar + " next " + word.substring(1, word.length()));
             int firstIndex = charToInt(firstChar);
+            if (firstIndex==-1) {
+                MsgTextPane.write("Invalid character in dictionary key when building word tree : <"+firstChar+">");
+            }
             if (n.next[firstIndex] == null) {
                 n.next[firstIndex] = new WordNode();
                 n.children++;
@@ -61,7 +73,7 @@ public class WordTree {
 
     private int countWords(WordNode n) {
         int total = 0;
-        for (int i = 0; i < WordLetters.nrLetters; i++) {
+        for (int i = 0; i < nrLetters; i++) {
             if (n.next[i] != null) {
                 total = total + countWords(n.next[i]);
             };
@@ -76,7 +88,7 @@ public class WordTree {
 
     private void printTree(WordNode n, int depth) {
 
-        for (int i = 0; i < WordLetters.nrLetters; i++) {
+        for (int i = 0; i < nrLetters; i++) {
             if (n.next[i] != null) {
                 for (int k = 0; k <= depth + 1; k++) {
                     System.out.print(' ');
@@ -103,7 +115,7 @@ public class WordTree {
 
     private void scanStemsNode(WordNode n, int depth) {
 
-        for (int i = 0; i < WordLetters.nrLetters; i++) {
+        for (int i = 0; i < nrLetters; i++) {
             if (n.next[i] != null) {
                 prefix[depth]=intToChar(i);
                 String prefixString = new String(prefix,0,depth+1);
@@ -119,17 +131,13 @@ public class WordTree {
     }
 
     private int charToInt(char c) {
-       String letters = WordLetters.allLetters;     
- //      System.out.println("charToInt "+c);
- //      System.out.println(" >> "+letters.indexOf((int) c));
+       String letters = allLetters;     
         return letters.indexOf((int) c);
     }
 
 
     private char intToChar(int i) {
-       String letters = WordLetters.allLetters;     
-//       System.out.println("intToChar "+i);
-//       System.out.println(" >> "+letters.charAt(i));
+       String letters = allLetters;     
         return letters.charAt(i);
     }
 

@@ -20,12 +20,11 @@ import tatoeba.PictureTrainer;
 import utils.*;
 
 public class GenericLanguage {
-    
-    /* all other languages extend GenericLanguage
-       So this class contains default functions in case the language does not redefine them
-       or generic functions that are useful in all languages (e.g. invertDiacriticsGeneric()
-    */
 
+    /* all other languages extend GenericLanguage
+     So this class contains default functions in case the language does not redefine them
+     or generic functions that are useful in all languages (e.g. invertDiacriticsGeneric()
+     */
     GenericDictionary d = null;
     public String languageName = "generic";
     HashMap<String, HashMap<String, String>> wordMaps = new HashMap<>();
@@ -62,13 +61,12 @@ public class GenericLanguage {
     public String invertDiacritics(String word) {
         return word;
     }
-    
-    public String invertDiacriticsGeneric(String word,String letterGroups) {
+
+    public String invertDiacriticsGeneric(String word, String letterGroups) {
 
         /* letterGroups is a string containing contiguous substrings separated by a blank.
-           If a letter c occurs in a substring, it is replaced by the letter following immediately the first occurence of c
-        */
-        
+         If a letter c occurs in a substring, it is replaced by the letter following immediately the first occurence of c
+         */
         ArrayList<Character> letterGroupsArray = new ArrayList<>();
         for (Character c : letterGroups.toCharArray()) {
             letterGroupsArray.add(c);
@@ -91,9 +89,21 @@ public class GenericLanguage {
         return newword;
     }
 
-
     public String removeDiacritics(String word) {
+        word = word.replaceAll("[âäà]", "a");
+        word = word.replaceAll("[éèêë]", "e");
+        word = word.replaceAll("[îïı]", "i");
+        word = word.replaceAll("[ôöó]", "o");
+        word = word.replaceAll("ûü", "u");
+        word = word.replaceAll("[şś]", "s");
+        word = word.replaceAll("[çć]", "c");
+        word = word.replaceAll("ğ", "g");
+        word = word.replaceAll("ł", "l");
+        word = word.replaceAll("ń", "n");
+        word = word.replaceAll("[źż]", "z");
+        
         return word;
+
     }
 
     public String number(int n) {
@@ -173,7 +183,6 @@ public class GenericLanguage {
         }
         return tcolor;
     }
-    
 
     public String translate(String theme, String word) {
 
@@ -195,15 +204,15 @@ public class GenericLanguage {
                 String l;
                 count = 0;
                 while ((l = inputStream.readLine()) != null) {
-                    if (count==0){
-                        l=ByteOrderMark.remove(l);
+                    if (count == 0) {
+                        l = ByteOrderMark.remove(l);
                     }
                     String[] ls = l.split("\u0009");
-                    if (ls.length==2){
-                    String key = ls[0];
-                    String value = ls[1];
-                    themeWordMap.put(key, value);
-                    count++;
+                    if (ls.length == 2) {
+                        String key = ls[0];
+                        String value = ls[1];
+                        themeWordMap.put(key, value);
+                        count++;
                     }
                 }
             } catch (FileNotFoundException fnf) {
@@ -232,11 +241,11 @@ public class GenericLanguage {
             writeWordMap(theme);
         }
     }
-    
-        public void rereadWordMaps() {
+
+    public void rereadWordMaps() {
         for (String theme : PictureTrainer.getPictureThemes()) {
             wordMaps.remove(theme);
-            translate(theme,"");
+            translate(theme, "");
 
         }
     }
@@ -246,7 +255,9 @@ public class GenericLanguage {
         translate(theme, ""); // force word map to be read
         themeWordMap = wordMaps.get(theme);
         for (String word : words) {
-            if (!themeWordMap.containsKey(word)) themeWordMap.put(word, null);
+            if (!themeWordMap.containsKey(word)) {
+                themeWordMap.put(word, null);
+            }
         }
     }
 
@@ -269,9 +280,7 @@ public class GenericLanguage {
             outputStream.close();
 
         } catch (IOException io) {
-            MsgTextPane.write(" io exception during save"+fileName);
+            MsgTextPane.write(" io exception during save" + fileName);
         }
     }
 }
-
-

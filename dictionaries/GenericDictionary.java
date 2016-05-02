@@ -69,32 +69,51 @@ public class GenericDictionary {
         markCorrection = b;
     }
 
-    public void addWord(String word) {
-        words.put(language.removeDiacritics(word), word);
-        if (removedwords.contains(word)) {
-            removedwords.remove(word);
+    private boolean validCharacters(String word) {
+        // to be called after removeDiacritics(). If letters other than a-z are present, return false.
+        // Such words should not be in the dictionary  to avoid unknown letters that cause problems in WordTree
+
+        String residu = word.replaceAll("[a-z]", "");
+        if (!residu.equals("")) {
+            MsgTextPane.write("unknown character in <" + word + ">  : <" + residu + ">");
+            return false;
         } else {
-            addedwords.add(word);
+            return true;
         }
-        dictFrame.writeDictArea("Word added: ", false);
-        dictFrame.writeSelectDictArea(word);
-        dictFrame.writeDictArea("\n", false);
-        dictFrame.scrollEnd();
-        dictFrame.isModified(isModified());
+    }
+
+    public void addWord(String word) {
+        String key = language.removeDiacritics(word);
+        if (validCharacters(key)) {
+            words.put(key, word);
+            if (removedwords.contains(word)) {
+                removedwords.remove(word);
+            } else {
+                addedwords.add(word);
+            }
+            dictFrame.writeDictArea("Word added: ", false);
+            dictFrame.writeSelectDictArea(word);
+            dictFrame.writeDictArea("\n", false);
+            dictFrame.scrollEnd();
+            dictFrame.isModified(isModified());
+        }
     }
 
     public void addStem(String word) {
-        stems.put(language.removeDiacritics(word), word);
-        if (removedstems.contains(word)) {
-            removedstems.remove(word);
-        } else {
-            addedstems.add(word);
+        String key = language.removeDiacritics(word);
+        if (validCharacters(key)) {
+            stems.put(key, word);
+            if (removedstems.contains(word)) {
+                removedstems.remove(word);
+            } else {
+                addedstems.add(word);
+            }
+            dictFrame.writeDictArea("Stem added: ", false);
+            dictFrame.writeSelectDictArea(word);
+            dictFrame.writeDictArea("\n", false);
+            dictFrame.scrollEnd();
+            dictFrame.isModified(isModified());
         }
-        dictFrame.writeDictArea("Stem added: ", false);
-        dictFrame.writeSelectDictArea(word);
-        dictFrame.writeDictArea("\n", false);
-        dictFrame.scrollEnd();
-        dictFrame.isModified(isModified());
     }
 
     public void removeWord(String word) {
@@ -131,7 +150,10 @@ public class GenericDictionary {
 
     public void addWordsBulk(Collection<String> c) {
         for (String word : c) {
-            words.put(language.removeDiacritics(word), word);
+            String key = language.removeDiacritics(word);
+            if (validCharacters(key)) {
+                words.put(key, word);
+            }
         }
     }
 
@@ -172,11 +194,17 @@ public class GenericDictionary {
                 linecount++;
                 if (l.charAt(0) == '[') {
                     l = l.substring(1, l.length() - 1);
-                    stems.put(language.removeDiacritics(l), l);
-                    scount++;
+                    String key = language.removeDiacritics(l);
+                    if (validCharacters(key)) {
+                        stems.put(key, l);
+                        scount++;
+                    }
                 } else {
-                    words.put(language.removeDiacritics(l), l);
-                    wcount++;
+                    String key = language.removeDiacritics(l);
+                    if (validCharacters(key)) {
+                        words.put(key, l);
+                        wcount++;
+                    }
                 }
             }
         } catch (FileNotFoundException fnf) {
@@ -278,7 +306,7 @@ public class GenericDictionary {
         int startWordPosition = 0;
         int endWordPosition = 0;
         String wordorig, word, wordlc, wordnew, wordnewlc;
-        int percentageDone=0;
+        int percentageDone = 0;
 
         int nrWords = 0;
         int nrCorrected = 0;
@@ -382,7 +410,7 @@ public class GenericDictionary {
 
     public void optimizeStems() {
 
-        WordTree w = new WordTree();
+        WordTree w = new WordTree(language);
         for (String key : words.keySet()) {
             String word = words.get(key);
             w.addWord(word, 1);

@@ -7,15 +7,10 @@ public class Turkish extends GenericLanguage implements Language {
 
     TurkishDictionary d = null;
 
-    public Turkish(){
-        languageName="Turkish";
+    public Turkish() {
+        languageName = "Turkish";
     }
- /*       
-    public String dictionaryFileName() {
-        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        return defaultFolder + "\\Tatoeba\\TurkishDictionary.txt";
-    }
-*/
+
     public TurkishDictionary dictionary() {
         if (d == null) {
             d = new TurkishDictionary(this);
@@ -35,72 +30,18 @@ public class Turkish extends GenericLanguage implements Language {
     public String toLowerCase(String s) {
         return s.replaceAll("[İI]", "i").toLowerCase();
     }
-    
-    public String letters(){
+
+    public String letters() {
         return "şçğıöü";
     }
 
-       public String invertDiacritics(String word) {
+    public String invertDiacritics(String word) {
 
         return invertDiacriticsGeneric(word, "sşs cçc gğg iıi oöo uüu CÇC GĞG İIİ OÖO SŞS UÜU");
 
     }
-       
-    public String invertDiacriticsOld(String word) {
-        char c;
-        String newword = "";
-        for (int i = 0; i <= word.length() - 1; i++) {
-            c = word.charAt(i);
-            if (c == 'ş') {
-                c = 's';
-            } else if (c == 'Ş') {
-                c = 'S';
-            } else if (c == 'ç') {
-                c = 'c';
-            } else if (c == 'Ç') {
-                c = 'C';
-            } else if (c == 'ğ') {
-                c = 'g';
-            } else if (c == 'ı') {
-                c = 'i';
-            } else if (c == 'İ') {
-                c = 'I';
-            } else if (c == 'ö') {
-                c = 'o';
-            } else if (c == 'Ö') {
-                c = 'O';
-            } else if (c == 'ü') {
-                c = 'u';
-            } else if (c == 'Ü') {
-                c = 'U';
-            } else if (c == 's') {
-                c = 'ş';
-            } else if (c == 'S') {
-                c = 'Ş';
-            } else if (c == 'c') {
-                c = 'ç';
-            } else if (c == 'C') {
-                c = 'Ç';
-            } else if (c == 'g') {
-                c = 'ğ';
-            } else if (c == 'i') {
-                c = 'ı';
-            } else if (c == 'I') {
-                c = 'İ';
-            } else if (c == 'o') {
-                c = 'ö';
-            } else if (c == 'O') {
-                c = 'Ö';
-            } else if (c == 'u') {
-                c = 'ü';
-            } else if (c == 'U') {
-                c = 'Ü';
-            }
-            newword = newword + c;
-
-        }
-        return newword;
-    }
+    
+    /*
 
     public String removeDiacritics(String word) {
         word = word.replaceAll("ş", "s");
@@ -116,6 +57,7 @@ public class Turkish extends GenericLanguage implements Language {
         word = word.replaceAll("Ü", "U");
         return word;
     }
+    */
 
     public String number(int n) {
         HashMap<Integer, String> nrs = new HashMap<>();
@@ -174,31 +116,75 @@ public class Turkish extends GenericLanguage implements Language {
 
         return s;
     }
-    
-    public String color(String color){
-        String tcolor="?"; // translated color
-if (color.equals("white")) tcolor="beyaz";
-if (color.equals("black")) tcolor="siyah";
-if (color.equals("brown")) tcolor="kahverengi";
-if (color.equals("red")) tcolor="kırmızı";
-if (color.equals("salmon")) tcolor="?";
-if (color.equals("orange")) tcolor="turuncu";
-if (color.equals("yellow")) tcolor="sarı";
-if (color.equals("olive")) tcolor="zeytin rengi";
-if (color.equals("green")) tcolor="yeşil";
-if (color.equals("ivory")) tcolor="?";
-if (color.equals("light blue")) tcolor="açık mavi";
-if (color.equals("turquoise")) tcolor="turkuvaz";
-if (color.equals("dark blue")) tcolor="koyu mavi";
-if (color.equals("blue")) tcolor="mavi";
-if (color.equals("purple")) tcolor="mor";
-if (color.equals("violet")) tcolor="menekşe rengi";
-if (color.equals("magenta / fuchsia")) tcolor="galibarda";
-if (color.equals("beige")) tcolor="bej";
-if (color.equals("pink")) tcolor="pembe";
-if (color.equals("black")) tcolor="siyah";
-if (color.equals("grey")) tcolor="gri";
-if (color.equals("silver")) tcolor="gümüş renkli";
+
+    public String color(String color) {
+        String tcolor = "?"; // translated color
+        if (color.equals("white")) {
+            tcolor = "beyaz";
+        }
+        if (color.equals("black")) {
+            tcolor = "siyah";
+        }
+        if (color.equals("brown")) {
+            tcolor = "kahverengi";
+        }
+        if (color.equals("red")) {
+            tcolor = "kırmızı";
+        }
+        if (color.equals("salmon")) {
+            tcolor = "?";
+        }
+        if (color.equals("orange")) {
+            tcolor = "turuncu";
+        }
+        if (color.equals("yellow")) {
+            tcolor = "sarı";
+        }
+        if (color.equals("olive")) {
+            tcolor = "zeytin rengi";
+        }
+        if (color.equals("green")) {
+            tcolor = "yeşil";
+        }
+        if (color.equals("ivory")) {
+            tcolor = "?";
+        }
+        if (color.equals("light blue")) {
+            tcolor = "açık mavi";
+        }
+        if (color.equals("turquoise")) {
+            tcolor = "turkuvaz";
+        }
+        if (color.equals("dark blue")) {
+            tcolor = "koyu mavi";
+        }
+        if (color.equals("blue")) {
+            tcolor = "mavi";
+        }
+        if (color.equals("purple")) {
+            tcolor = "mor";
+        }
+        if (color.equals("violet")) {
+            tcolor = "menekşe rengi";
+        }
+        if (color.equals("magenta / fuchsia")) {
+            tcolor = "galibarda";
+        }
+        if (color.equals("beige")) {
+            tcolor = "bej";
+        }
+        if (color.equals("pink")) {
+            tcolor = "pembe";
+        }
+        if (color.equals("black")) {
+            tcolor = "siyah";
+        }
+        if (color.equals("grey")) {
+            tcolor = "gri";
+        }
+        if (color.equals("silver")) {
+            tcolor = "gümüş renkli";
+        }
         return tcolor;
     }
 

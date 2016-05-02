@@ -9,12 +9,7 @@ public class Italian extends GenericLanguage implements Language {
     public Italian(){
         languageName="Italian";
     }
-/*
-    public String dictionaryFileName() {
-        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        return defaultFolder + "\\Tatoeba\\ItalianDictionary.txt";
-    }
-*/
+
     public ItalianDictionary dictionary() {
         if (d == null) {
             d = new ItalianDictionary(this);
@@ -22,7 +17,7 @@ public class Italian extends GenericLanguage implements Language {
         }
         return d;
     }
-/*
+
     public String letters() {
         return "";    
     }
@@ -34,7 +29,7 @@ public class Italian extends GenericLanguage implements Language {
     public String removeDiacritics(String word) {
         return word;
     }
- */   
+   
         public String color(String color){
         String 		tcolor="?"; // translated color
 if (color.equals("white")) 		tcolor="bianco";

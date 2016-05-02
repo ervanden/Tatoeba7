@@ -1,8 +1,7 @@
 package languages;
 
 import dictionaries.FrenchDictionary;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 
 public class French extends GenericLanguage implements Language {
 
@@ -21,34 +20,19 @@ public class French extends GenericLanguage implements Language {
     }
 
     public String letters() {
-        return "âàéèêîôûç"; //  "ÂÀÉÈÊÎÔÛÇ";
+        return "âàéèêîïôûç"; 
 
         //http://leconjugueur.lefigaro.fr/frlistedeverbe.php
     }
 
     public String invertDiacritics(String word) {
 
-        return invertDiacriticsGeneric(word,"aâàa eéèêe iîi oôo uûu cçc AÂÀA EÉÈÊE IÎI OÔO UÛU CÇC");
+        return invertDiacriticsGeneric(word,"aâàa eéèêe iîïi oôo uûu cçc AÂÀA EÉÈÊE IÎÏI OÔO UÛU CÇC");
  
     }
 
-    public String removeDiacritics(String word) {
-        word = word.replaceAll("â", "a");
-        word = word.replaceAll("ä", "a");
-        word = word.replaceAll("à", "a");
-        word = word.replaceAll("é", "e");
-        word = word.replaceAll("è", "e");
-        word = word.replaceAll("ê", "e");
-        word = word.replaceAll("ë", "e");
-        word = word.replaceAll("î", "i");
-        word = word.replaceAll("ï", "i");
-        word = word.replaceAll("ô", "o");
-        word = word.replaceAll("ö", "o");
-        word = word.replaceAll("û", "u");
-        return word;
-
-    }
-
+    
+    
     public String color(String color) {
         String tcolor = "?"; // translated color
         if (color.equals("white")) {
