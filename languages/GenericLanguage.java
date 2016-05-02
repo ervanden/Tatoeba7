@@ -90,11 +90,11 @@ public class GenericLanguage {
     }
 
     public String removeDiacritics(String word) {
-        word = word.replaceAll("[âäà]", "a");
-        word = word.replaceAll("[éèêë]", "e");
+        word = word.replaceAll("[âäàą]", "a");
+        word = word.replaceAll("[éèêëę]", "e");
         word = word.replaceAll("[îïı]", "i");
         word = word.replaceAll("[ôöó]", "o");
-        word = word.replaceAll("ûü", "u");
+        word = word.replaceAll("[ûü]", "u");
         word = word.replaceAll("[şś]", "s");
         word = word.replaceAll("[çć]", "c");
         word = word.replaceAll("ğ", "g");
@@ -103,7 +103,6 @@ public class GenericLanguage {
         word = word.replaceAll("[źż]", "z");
         
         return word;
-
     }
 
     public String number(int n) {

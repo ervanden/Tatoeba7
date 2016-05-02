@@ -30,7 +30,7 @@ public class Polish extends GenericLanguage implements Language {
     }
 
  
-
+/*
     public String removeDiacritics(String word) {
         word = word.replaceAll("ą", "a");
         word = word.replaceAll("Ą", "A");
@@ -52,6 +52,7 @@ public class Polish extends GenericLanguage implements Language {
         word = word.replaceAll("Ż", "Z");
         return word;
     }
+*/
 
     public String number(int n) {
         HashMap<Integer, String> nrs = new HashMap<>();

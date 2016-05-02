@@ -109,7 +109,6 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent ae) {
         String action = ae.getActionCommand();
-        System.out.println(action);
 
         if (action.equals("Numbers")) {
             NumberTrainer n = new NumberTrainer();
