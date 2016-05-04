@@ -31,7 +31,7 @@ public class LanguageTextPane extends JTextPane {
     Language language;
 
     public boolean autoCorrect = true;
- 
+
     // store position of caret and selected text (not used)
     public int selectedPosition = 0;
     public int selectedLength = 0;
@@ -43,7 +43,6 @@ public class LanguageTextPane extends JTextPane {
     public void setAutoCorrect(boolean b) {
         autoCorrect = b;
     }
-
 
     public LanguageTextPane(String lang) {
         languageCode = lang;
@@ -129,8 +128,6 @@ public class LanguageTextPane extends JTextPane {
         }
     }
 
-
-
     class RunDictionaryTask implements Runnable {
 
         private Document doc;
@@ -203,12 +200,21 @@ public class LanguageTextPane extends JTextPane {
 
         public String invertChar(char c) {
 
-            String letterGroups = language.diacriticsGroups();
-
             ArrayList<Character> letterGroupsArray = new ArrayList<>();
-            for (Character cc : letterGroups.toCharArray()) {
-                letterGroupsArray.add(cc);
+
+            String letterGroups = language.diacriticsGroups();
+            String[] groups = letterGroups.split(" +");
+
+            // create an array of characters so that every character is followed by the replacing character on INSERT
+ //           System.out.println("---- groups");
+            for (String group : groups) {
+ //               System.out.println("group " + group);
+                for (Character cc : group.toCharArray()) {
+                    letterGroupsArray.add(cc);
+                };
+                letterGroupsArray.add(group.charAt(0));
             }
+ //          System.out.println("----");
 
             if (letterGroupsArray.contains(c)) {
                 if (c != ' ') {
@@ -229,6 +235,7 @@ public class LanguageTextPane extends JTextPane {
         public void keyReleased(KeyEvent e) {
             //           System.out.println("Released <" + e.getKeyChar() + "> <" + e.getKeyCode() + "> " + " at position " + selectedPosition);
             if (e.getKeyCode() == KeyEvent.VK_INSERT) {
+
                 try {
                     StyledDocument doc = thisTextPane.getStyledDocument();
                     String selection = doc.getText(selectedPosition - 1, 1);
@@ -241,7 +248,7 @@ public class LanguageTextPane extends JTextPane {
                         autoCorrect = true;
                         thisTextPane.setCaretPosition(selectedPosition); // because insertion advances caret
 
-                                        //  put the words in the dictionary
+                        //  put the words in the dictionary
                         // First extend the selection to complete words
                         int wordposition = WordUtils.startOfWord(doc, selectedPosition);
                         int wordlength = WordUtils.endOfWord(doc, selectedPosition) - wordposition;
