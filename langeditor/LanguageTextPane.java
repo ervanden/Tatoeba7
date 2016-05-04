@@ -31,9 +31,8 @@ public class LanguageTextPane extends JTextPane {
     Language language;
 
     public boolean autoCorrect = true;
-    boolean finalInsert = false; // prevents correction/insertion infinite loop
-    boolean manualCorrect = true; // set during correction of selected text
-    // store position of last selected text for "correct selected text" function
+ 
+    // store position of caret and selected text (not used)
     public int selectedPosition = 0;
     public int selectedLength = 0;
 
@@ -45,13 +44,6 @@ public class LanguageTextPane extends JTextPane {
         autoCorrect = b;
     }
 
-    public void setFinalInsert(boolean b) {
-        finalInsert = b;
-    }
-
-    public void setManualCorrect(boolean b) {
-        manualCorrect = b;
-    }
 
     public LanguageTextPane(String lang) {
         languageCode = lang;
@@ -178,7 +170,6 @@ public class LanguageTextPane extends JTextPane {
         public void insertUpdate(DocumentEvent e) {
             int position = e.getOffset();
             int length = e.getLength();
-            //           if (autoCorrect && !finalInsert) {
             if (autoCorrect) {
                 SwingUtilities.invokeLater(new RunDictionaryTask(position, length));
             }

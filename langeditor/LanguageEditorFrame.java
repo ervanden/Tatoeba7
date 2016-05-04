@@ -62,13 +62,11 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         String action = ae.getActionCommand();
 
         if (action.equals("Correct Text")) {
-            editArea.setManualCorrect(false);
             language.dictionary().setMarkCorrection(true);
             language.dictionary().setMatchInfo(false);
             language.dictionary().correctText(editArea, 0, editArea.getDocument().getLength());
             language.dictionary().setMarkCorrection(false);
             language.dictionary().setMatchInfo(true);
-            editArea.setManualCorrect(true);
         }
 
         if (action.equals("Save to file")) {
@@ -237,8 +235,6 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         editArea = new LanguageTextPane(lang);
         radioButtonAuto.setSelected(true);
-        editArea.setFinalInsert(false);
-        editArea.setManualCorrect(true);
 
         editArea.setMinimumSize(new Dimension(800, 300));
         editArea.setPreferredSize(new Dimension(800, 300));

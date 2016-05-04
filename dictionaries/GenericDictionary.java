@@ -343,14 +343,12 @@ public class GenericDictionary {
                 }
 
                 if (!wordnew.equals(wordorig)) {
-                    textPane.setFinalInsert(true);
                     doc.remove(startWordPosition, endWordPosition - startWordPosition);
                     doc.insertString(startWordPosition, wordnew, null);
                     if (markCorrection) {
                         doc.setCharacterAttributes(startWordPosition, wordnew.length(), Sas.red, false);
                         nrCorrected++;
                     }
-                    textPane.setFinalInsert(false);
                 }
             } catch (BadLocationException ex) {
                 MsgTextPane.write("Bad Location in runDictionary ");
