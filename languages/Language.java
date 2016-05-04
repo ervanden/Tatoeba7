@@ -13,6 +13,9 @@ public interface Language {
 
     public  String letters();
         // returns a string with all the language-specific letters.
+    
+    public String diacriticsGroups();
+        // returns a string with characters and their corresponding diacritics, separated by blanks
 
     public String invertDiacritics(String word);
          // swap plain latin letters to letters with accents and vice versa

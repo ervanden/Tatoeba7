@@ -28,15 +28,7 @@ class WordNode {
         isTerminal=false; // last letter of  a word. children may be > 0
 
     }
-}
-
-
-    
-    
-    
-    
-    
-    
+}  
 
     WordNode root;
 

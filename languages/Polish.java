@@ -22,6 +22,10 @@ public class Polish extends GenericLanguage implements Language {
     public String letters() {
         return "ąćęłńóśżź";
     }
+    
+    public String diacriticsGroups(){
+        return "aąa cćc eęe lłl nńn oóo sśs zżźz AĄA CĆC EĘE LŁL OÓO SŚS ZŻŹZ";
+    }
 
     public String invertDiacritics(String word) {
 

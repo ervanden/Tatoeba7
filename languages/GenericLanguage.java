@@ -57,6 +57,10 @@ public class GenericLanguage {
     public String letters() {
         return "";
     }
+    
+    public String diacriticsGroups(){
+        return "";
+    }
 
     public String invertDiacritics(String word) {
         return word;
