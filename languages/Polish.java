@@ -24,16 +24,15 @@ public class Polish extends GenericLanguage implements Language {
     }
     
     public String diacriticsGroups(){
-//        return "aąa cćc eęe lłl nńn oóo sśs zżźz AĄA CĆC EĘE LŁL OÓO SŚS ZŻŹZ";
         return "aą cć eę lł nń oó sś zżź AĄ CĆ EĘ LŁ OÓ SŚ ZŻŹ";
     }
-
+/*
     public String invertDiacritics(String word) {
 
         return invertDiacriticsGeneric(word, "aąa cćc eęe lłl nńn oóo sśs zżźz AĄA CĆC EĘE LŁL OÓO SŚS ZŻŹZ");
 
     }
-
+*/
  
 /*
     public String removeDiacritics(String word) {

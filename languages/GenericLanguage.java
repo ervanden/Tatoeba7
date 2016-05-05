@@ -61,16 +61,14 @@ public class GenericLanguage {
     public String diacriticsGroups(){
         return "";
     }
-
+/*
     public String invertDiacritics(String word) {
         return word;
     }
 
     public String invertDiacriticsGeneric(String word, String letterGroups) {
 
-        /* letterGroups is a string containing contiguous substrings separated by a blank.
-         If a letter c occurs in a substring, it is replaced by the letter following immediately the first occurence of c
-         */
+
         ArrayList<Character> letterGroupsArray = new ArrayList<>();
         for (Character c : letterGroups.toCharArray()) {
             letterGroupsArray.add(c);
@@ -92,13 +90,14 @@ public class GenericLanguage {
         }
         return newword;
     }
-
+*/
+    
     public String removeDiacritics(String word) {
-        word = word.replaceAll("[âäàą]", "a");
+        word = word.replaceAll("[âäàąáâã]", "a");
         word = word.replaceAll("[éèêëę]", "e");
-        word = word.replaceAll("[îïı]", "i");
-        word = word.replaceAll("[ôöó]", "o");
-        word = word.replaceAll("[ûü]", "u");
+        word = word.replaceAll("[îïıí]", "i");
+        word = word.replaceAll("[ôöóõ]", "o");
+        word = word.replaceAll("[ûüú]", "u");
         word = word.replaceAll("[şś]", "s");
         word = word.replaceAll("[çć]", "c");
         word = word.replaceAll("ğ", "g");

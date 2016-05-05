@@ -22,8 +22,8 @@ public class Italian extends GenericLanguage implements Language {
         return "";    
     }
 
-    public String invertDiacritics(String word) {
-        return word;
+    public String diacriticsGroups() {
+        return "";    
     }
 
     public String removeDiacritics(String word) {

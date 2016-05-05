@@ -22,10 +22,6 @@ public class Dutch extends GenericLanguage implements Language {
         return "";
     }
 
-    public String invertDiacritics(String word) {
-        return word;
-    }
-
     public String removeDiacritics(String word) {
         return word;
     }

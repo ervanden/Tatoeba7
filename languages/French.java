@@ -22,13 +22,10 @@ public class French extends GenericLanguage implements Language {
     public String letters() {
         return "âàéèêîïôûç"; 
 
-        //http://leconjugueur.lefigaro.fr/frlistedeverbe.php
     }
 
-    public String invertDiacritics(String word) {
-
-        return invertDiacriticsGeneric(word,"aâàa eéèêe iîïi oôo uûu cçc AÂÀA EÉÈÊE IÎÏI OÔO UÛU CÇC");
- 
+    public String diacriticsGroups() {
+        return "aâà eèêé iîï oô uû cç AÂÀ EEÈÊÉ IÎÏ OÔ UÛ CÇ"; // é last since often to be replaced by e
     }
 
     

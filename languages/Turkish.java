@@ -35,10 +35,8 @@ public class Turkish extends GenericLanguage implements Language {
         return "şçğıöü";
     }
 
-    public String invertDiacritics(String word) {
-
-        return invertDiacriticsGeneric(word, "sşs cçc gğg iıi oöo uüu CÇC GĞG İIİ OÖO SŞS UÜU");
-
+    public String diacriticsGroups(String word) {
+        return "sş cç gğ iı oö uü CÇ GĞ İI OÖ SŞ UÜ";
     }
     
     /*

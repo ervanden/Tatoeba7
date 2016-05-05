@@ -229,32 +229,32 @@ public class LanguageTextPane extends JTextPane {
         }
 
         public void keyPressed(KeyEvent e) {
-//            System.out.println("Pressed <" + e.getKeyChar() + "> <" + e.getKeyCode() + "> " + " at position " + selectedPosition);
+//System.out.println("Pressed <" + e.getKeyChar() + "> <" + e.getKeyCode() + "> " + " at position " + selectedPosition);
         }
 
         public void keyReleased(KeyEvent e) {
-            //           System.out.println("Released <" + e.getKeyChar() + "> <" + e.getKeyCode() + "> " + " at position " + selectedPosition);
+//System.out.println("Released <" + e.getKeyChar() + "> <" + e.getKeyCode() + "> " + " at position " + selectedPosition);
             if (e.getKeyCode() == KeyEvent.VK_INSERT) {
 
                 try {
                     StyledDocument doc = thisTextPane.getStyledDocument();
                     String selection = doc.getText(selectedPosition - 1, 1);
                     String newSelection = invertChar(selection.charAt(0));
-// System.out.println("selection="+selection+" newselection="+newSelection) ;                  
+                  
                     if (!newSelection.equals(selection)) {
                         doc.remove(selectedPosition - 1, 1);
                         autoCorrect = false;
-                        doc.insertString(selectedPosition, newSelection, doc.getStyle("default")); // calls caretUpdate and advances selectedPosition!
+                        doc.insertString(selectedPosition, newSelection, doc.getStyle("default")); 
                         autoCorrect = true;
                         thisTextPane.setCaretPosition(selectedPosition); // because insertion advances caret
 
-                        //  put the words in the dictionary
+                        // put the words in the dictionary
+                        // this code handles text with multiple words
                         // First extend the selection to complete words
                         int wordposition = WordUtils.startOfWord(doc, selectedPosition);
                         int wordlength = WordUtils.endOfWord(doc, selectedPosition) - wordposition;
 
                         String selectedString = doc.getText(wordposition, wordlength);
-                        System.out.println("modified word <" + selectedString + ">");
 
                         // remove all punctuation from the selected string
                         for (int i = 0; i < selectedString.length(); i++) {
@@ -270,11 +270,10 @@ public class LanguageTextPane extends JTextPane {
                                 language.dictionary().addWord(word.replaceAll("I", "ı").replaceAll("İ", "i").toLowerCase());
                             }
                         }
-
                     }
 
                 } catch (BadLocationException ex) {
-                    System.out.println("pressed INSERT at end of text");
+                    // happens when pressed INSERT at beginning of text
                 };
 
             };
