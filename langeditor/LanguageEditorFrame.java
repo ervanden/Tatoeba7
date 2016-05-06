@@ -39,6 +39,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
 
         public void windowClosing(WindowEvent e) {
             if (dictionary.isModified()) {
+                dictionary.printModifications();
                 dictionary.dictionaryWindowVisible(true);
             }
         }

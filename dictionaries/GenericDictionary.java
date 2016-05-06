@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
@@ -69,6 +70,42 @@ public class GenericDictionary {
         markCorrection = b;
     }
 
+    private void printEntryList(HashSet set, HashMap map) {
+        Iterator iter = set.iterator();
+        while (iter.hasNext()) {
+            String key = (String) iter.next();
+            String entry = (String) map.get(key);
+            if (entry != null) {
+                dictFrame.writeDictArea(key + " >> " + entry + "\n", false);
+            } else {
+                dictFrame.writeDictArea(key + "\n", false);
+            }
+        }
+    }
+
+    public void printModifications() {
+       dictFrame.writeDictArea("\nDICTIONARY MODIFICATIONS\n", false);
+        if (!addedwords.isEmpty()) {
+            dictFrame.writeDictArea("WORDS ADDED\n", false);
+            printEntryList(addedwords, words);
+        }
+        if (!removedwords.isEmpty()) {
+            dictFrame.writeDictArea("WORDS REMOVED\n", false);
+            printEntryList(removedwords, words);
+        }
+        if (!addedstems.isEmpty()) {
+            dictFrame.writeDictArea("STEMS ADDED\n", false);
+            printEntryList(addedstems, stems);
+        }
+        if (!removedstems.isEmpty()) {
+            dictFrame.writeDictArea("STEMS REMOVED\n", false);
+            printEntryList(removedstems, stems);
+        }
+
+        dictFrame.scrollEnd();
+
+    }
+
     private boolean validCharacters(String word) {
         // to be called after removeDiacritics(). If letters other than a-z are present, return false.
         // Such words should not be in the dictionary  to avoid unknown letters that cause problems in WordTree
@@ -86,16 +123,16 @@ public class GenericDictionary {
         String key = language.removeDiacritics(word);
         if (validCharacters(key)) {
             words.put(key, word);
-            if (removedwords.contains(word)) {
-                removedwords.remove(word);
-            } else {
-                addedwords.add(word);
-            }
+
+            removedwords.remove(key);
+            addedwords.add(key);
+
             dictFrame.writeDictArea("Word added: ", false);
             dictFrame.writeSelectDictArea(word);
             dictFrame.writeDictArea("\n", false);
             dictFrame.scrollEnd();
-            dictFrame.isModified(isModified());
+            dictFrame.isModified(true);
+
         }
     }
 
@@ -103,45 +140,44 @@ public class GenericDictionary {
         String key = language.removeDiacritics(word);
         if (validCharacters(key)) {
             stems.put(key, word);
-            if (removedstems.contains(word)) {
-                removedstems.remove(word);
-            } else {
-                addedstems.add(word);
-            }
+
+            removedstems.remove(key);
+            addedstems.add(key);
+
             dictFrame.writeDictArea("Stem added: ", false);
             dictFrame.writeSelectDictArea(word);
             dictFrame.writeDictArea("\n", false);
             dictFrame.scrollEnd();
-            dictFrame.isModified(isModified());
+            dictFrame.isModified(true);
         }
     }
 
     public void removeWord(String word) {
-        words.remove(language.removeDiacritics(word));
-        if (addedwords.contains(word)) {
-            addedwords.remove(word);
-        } else {
-            removedwords.add(word);
-        }
+        String key = language.removeDiacritics(word);
+        words.remove(key);
+
+        addedwords.remove(key);
+        removedwords.add(key);
+
         dictFrame.writeDictArea("Word removed: ", false);
         dictFrame.writeDictArea(word, false);
         dictFrame.writeDictArea("\n", false);
         dictFrame.scrollEnd();
-        dictFrame.isModified(isModified());
+        dictFrame.isModified(true);
     }
 
     public void removeStem(String word) {
-        stems.remove(language.removeDiacritics(word));
-        if (addedstems.contains(word)) {
-            addedstems.remove(word);
-        } else {
-            removedstems.add(word);
-        }
+        String key = language.removeDiacritics(word);
+        stems.remove(key);
+
+        addedstems.remove(key);
+        removedstems.add(key);
+
         dictFrame.writeDictArea("Stem removed: ", false);
         dictFrame.writeSelectDictArea(word);
         dictFrame.writeDictArea("\n", false);
         dictFrame.scrollEnd();
-        dictFrame.isModified(isModified());
+        dictFrame.isModified(true);
     }
 
     public void reset() {

@@ -259,9 +259,9 @@ public class DictionaryFrame extends JFrame implements ActionListener {
     }
 
     public void close() {
-        System.out.println(" close dictionaryframe isModifed = " + isModified);
         if (isModified) {
             thisFrame.setVisible(true);
+            language.dictionary().printModifications();
             JOptionPane.showMessageDialog(thisFrame, "Dictionary was modified. Close window via Exit menu");
         } else {
             thisFrame.dispose();
