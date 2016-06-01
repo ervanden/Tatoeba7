@@ -1101,7 +1101,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
                 lineCount++;
                 ls = new ArrayList<String>(Arrays.asList(l.split("\u0009")));
-                System.out.println(l+ " "+ls.size());
+//                System.out.println(l+ " "+ls.size());
 
                 {
                     if (ls.get(0).matches(" *cluster *")) {
