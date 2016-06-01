@@ -557,7 +557,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                System.out.println("appending cluster");
                     saveCluster(c, bw);
                     if (editingCluster != null) {
-                        bw.write("replaces" + "\u0009" + c.nr + "\n");
+                        bw.write("replaces" + "\u0009" + c.nr);
+                        bw.newLine();
                     }
                    bw.close();
                 } catch (IOException e) {
@@ -1100,6 +1101,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
                 lineCount++;
                 ls = new ArrayList<String>(Arrays.asList(l.split("\u0009")));
+                System.out.println(l+ " "+ls.size());
 
                 {
                     if (ls.get(0).matches(" *cluster *")) {

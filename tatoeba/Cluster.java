@@ -72,7 +72,6 @@ public class Cluster {
             javax.swing.text.Element lineElement = (javax.swing.text.Element) root.getElement(i);
             int start = lineElement.getStartOffset();
             int end = lineElement.getEndOffset();
-         System.out.printf("comment %d %d \n",start,end);
             try {
                 String line = document.getText(start, end - start - 1);
                 Sentence s = new Sentence();
