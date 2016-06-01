@@ -10,11 +10,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.util.*;
@@ -46,6 +48,12 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
     JPanel content = new JPanel();
 
+    String clustersFileName = "?";
+
+    @Override
+    public void setTitle(String string) {
+        super.setTitle(string); //To change body of generated methods, choose Tools | Templates.
+    }
     JButton buttonPlus = new JButton("+");
     JButton buttonMinus = new JButton("-");
     JButton buttonNext = new JButton("Next");
@@ -305,7 +313,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             if (retval == JFileChooser.APPROVE_OPTION) {
                 File f = fileChooser.getSelectedFile();
                 clustersFileName = f.getAbsolutePath();
-
+                setTitle(clustersFileName);
                 enableMenuItem("Read clusters", false); // prevent starting two reading threads
                 enableMenuItem("Read Tatoeba Database", false);
                 Thread readClustersThread = new Thread(new readClustersThread(clustersFileName));
@@ -522,7 +530,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             } else {
 
                 Cluster c = editingCluster;
-                if (c == null) { // user created a new cluster
+                if (editingCluster == null) { // user created a new cluster
                     c = new Cluster();
                     c.nr = graph.maximumClusterNumber() + 1;
                     graph.clusters.put(c.nr, c);
@@ -541,6 +549,20 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 c.readCommentsFromDocument(commentArea.getStyledDocument(), selectionFrame);
 
                 c.unsaved = true;
+
+// append the modified cluster to the end of the database file
+                try {
+                    FileWriter fw = new FileWriter(clustersFileName, true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+               System.out.println("appending cluster");
+                    saveCluster(c, bw);
+                    if (editingCluster != null) {
+                        bw.write("replaces" + "\u0009" + c.nr + "\n");
+                    }
+                   bw.close();
+                } catch (IOException e) {
+                    MsgTextPane.write(" io exception while saving cluster");
+                }
 
                 editing = false;
                 buttonCommit.setEnabled(false);
@@ -963,8 +985,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         selectionFrame = new SelectionFrame(this);
     }
 
-    String clustersFileName = "?";
-
     public void readSentences(String dirName) {
 
         BufferedReader inputStream = null;
@@ -1096,6 +1116,14 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                             selectionFrame.allTags.add(tag);
                         }
 
+                    } else if (ls.get(0).matches("replaces")) {
+                        String clusterNrString = ls.get(1);
+                        int clusterNr = Integer.parseInt(clusterNrString);
+                        System.out.println("replacing cluster nr " + clusterNr);
+                        graph.clusters.remove(c.nr);  // remove the cluster with its current nr (just added)
+                        c.nr = clusterNr;             // give the cluster the number of the cluster it replaces
+                        graph.clusters.put(c.nr, c);
+
                     } else {
                         boolean isComment = false;
                         String language = "";
@@ -1133,7 +1161,6 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             }
 
             // remove clusters with too many sentences
-            
             Iterator it = graph.clusters.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
@@ -1162,6 +1189,29 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         return true;
     }
 
+    public void saveCluster(Cluster c, BufferedWriter outputStream) {
+        try {
+            outputStream.write("cluster");
+            for (String tag : c.tags) {
+                outputStream.write("\u0009");
+                outputStream.write(tag);
+            }
+            outputStream.newLine();
+            for (Sentence s : c.sentences) {
+                if (s.comment) {
+                    outputStream.write("[" + s.language + "]");
+                } else {
+                    outputStream.write(s.language);
+                }
+                outputStream.write("\u0009");
+                outputStream.write(s.sentence);
+                outputStream.newLine();
+            }
+        } catch (IOException io) {
+            MsgTextPane.write(" io exception while saving cluster");
+        }
+    }
+
     public void saveClusters(String mode) {
 
         String fileName;
@@ -1178,35 +1228,28 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 OutputStream is = new FileOutputStream(initialFile);
                 OutputStreamWriter isr = new OutputStreamWriter(is, "UTF-8");
                 BufferedWriter outputStream = new BufferedWriter(isr);
-                /*
-                 HashSet<String> usedLanguages;
-                 if (mode.equals("all")) {
-                 usedLanguages = new HashSet<String>(selectionFrame.usedLanguages);
-                 } else {
-                 usedLanguages = new HashSet<String>(selectionFrame.sourceLanguages);
-                 usedLanguages.addAll(selectionFrame.targetLanguages);
-                 }
-                 */
+
                 for (Cluster c : graph.clusters.values()) {
                     if (mode.equals("all") || c.selected) {
-                        outputStream.write("cluster");
-                        for (String tag : c.tags) {
-                            outputStream.write("\u0009");
-                            outputStream.write(tag);
-                        }
-                        outputStream.newLine();
-                        for (Sentence s : c.sentences) {
-//                            if (usedLanguages.contains(s.language)) {
-                            if (s.comment) {
-                                outputStream.write("[" + s.language + "]");
-                            } else {
-                                outputStream.write(s.language);
-                            }
-                            outputStream.write("\u0009");
-                            outputStream.write(s.sentence);
-                            outputStream.newLine();
-//                            }
-                        }
+                        saveCluster(c, outputStream);
+                        /*
+                         outputStream.write("cluster");
+                         for (String tag : c.tags) {
+                         outputStream.write("\u0009");
+                         outputStream.write(tag);
+                         }
+                         outputStream.newLine();
+                         for (Sentence s : c.sentences) {
+                         if (s.comment) {
+                         outputStream.write("[" + s.language + "]");
+                         } else {
+                         outputStream.write(s.language);
+                         }
+                         outputStream.write("\u0009");
+                         outputStream.write(s.sentence);
+                         outputStream.newLine();
+                         }
+                         */
                         c.unsaved = false;
                     }
                 }
