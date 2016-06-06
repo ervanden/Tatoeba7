@@ -71,12 +71,14 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
         }
 
         JLabel sourceLabel = new JLabel("source");
+        @SuppressWarnings("unchecked")
         JComboBox sourceLanguageBox = new JComboBox(languageArray);
         sourceLanguageBox.addActionListener(this);
         sourceLanguageBox.setActionCommand("sourceLanguageBox");
         sourceLanguageBox.setSelectedItem(LanguageNames.shortToLong(LanguageTrainer.sourceLanguage));
 
         JLabel targetLabel = new JLabel("target");
+        @SuppressWarnings("unchecked")
         JComboBox targetLanguageBox = new JComboBox(languageArray);
         targetLanguageBox.addActionListener(this);
         targetLanguageBox.setActionCommand("targetLanguageBox");
@@ -94,7 +96,7 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
             JButton button = buttons.get(tool);
             toolsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
             toolsPanel.add(button);
- //           System.out.println(" added to panel " + button.getText() + " " + button.getMinimumSize());
+            //           System.out.println(" added to panel " + button.getText() + " " + button.getMinimumSize());
         }
 
         JPanel mainPanel = new JPanel();
