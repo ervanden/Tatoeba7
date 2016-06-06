@@ -33,7 +33,7 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
 
     public LanguageTrainerFrame() {
 
-        tools.add("Editors");
+        tools.add("Writepad");
         tools.add("Sentences");
         tools.add("Numbers");
         tools.add("Colors");
@@ -42,13 +42,27 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
             tools.add(theme);
         }
 
+        int buttonHeight = 0;
+        int buttonWidth = 0;
         for (String tool : tools) {
             JButton button = new JButton(tool);
             buttons.put(tool, button);
             button.setActionCommand(tool);
             button.addActionListener(thisLanguageTrainer);
+            if (button.getPreferredSize().getWidth() > buttonWidth) {
+                buttonWidth = (int) button.getPreferredSize().getWidth();
+            }
+            if (button.getPreferredSize().getHeight() > buttonHeight) {
+                buttonHeight = (int) button.getPreferredSize().getHeight();
+            }
         }
 
+        for (JButton button : buttons.values()) {
+            // BoxLayout seems to take into account only MaximumSize
+            button.setMaximumSize(new Dimension(buttonWidth, buttonHeight));
+        }
+
+        System.out.println(buttonWidth + " " + buttonHeight);
         JPanel languagePanel = new JPanel();
 
         String[] languageArray = new String[LanguageTrainer.userLanguages.size()];
@@ -77,8 +91,10 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
         toolsPanel.setLayout(new BoxLayout(toolsPanel, BoxLayout.PAGE_AXIS));
 
         for (String tool : tools) {
+            JButton button = buttons.get(tool);
             toolsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-            toolsPanel.add(buttons.get(tool));
+            toolsPanel.add(button);
+ //           System.out.println(" added to panel " + button.getText() + " " + button.getMinimumSize());
         }
 
         JPanel mainPanel = new JPanel();
@@ -116,7 +132,7 @@ public class LanguageTrainerFrame extends JFrame implements ActionListener {
         } else if (action.equals("Colors")) {
             ColorTrainer n = new ColorTrainer();
             n.setVisible(true);
-        } else if (action.equals("Editors")) {
+        } else if (action.equals("Writepad")) {
             LanguageEditorFrame f = new LanguageEditorFrame(LanguageTrainer.targetLanguage);
             f.setVisible(true);
         } else if (action.equals("Sentences")) {
