@@ -120,11 +120,29 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
         }
 
         if (action.equals("buttonLookupBabla")) {
-            editArea.lookupWord(editArea.selectedPosition, "Babla");
+            // editArea.lookupWord(editArea.selectedPosition, "Babla");
+            if (editArea.lookupSource.equals("Babla")) {
+                editArea.lookupSource = "";
+                buttonLookupBabla.setBackground(Color.LIGHT_GRAY);
+            } else {
+                editArea.lookupSource = "Babla";
+                buttonLookupBabla.setBackground(Color.GREEN);
+                buttonLookupWiktionary.setBackground(Color.LIGHT_GRAY);
+            };
+            editArea.removeHighlights();
         }
 
         if (action.equals("buttonLookupWiktionary")) {
-            editArea.lookupWord(editArea.selectedPosition, "Wiktionary");
+            //editArea.lookupWord(editArea.selectedPosition, "Wiktionary");
+            if (editArea.lookupSource.equals("Wiktionary")) {
+                editArea.lookupSource = "";
+                buttonLookupWiktionary.setBackground(Color.LIGHT_GRAY);
+            } else {
+                editArea.lookupSource = "Wiktionary";
+                buttonLookupWiktionary.setBackground(Color.BLUE);
+                buttonLookupBabla.setBackground(Color.LIGHT_GRAY);
+            };
+            editArea.removeHighlights();
         }
 
     }

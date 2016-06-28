@@ -2,6 +2,7 @@ package langeditor;
 
 import languages.LanguageContext;
 import dictionaries.WordUtils;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
@@ -16,6 +17,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -29,7 +31,12 @@ public class LanguageTextPane extends JTextPane {
     LanguageTextPane thisTextPane;
     String languageCode;
     Language language;
-
+    DefaultHighlighter.DefaultHighlightPainter highlightPainter = null;
+    DefaultHighlighter.DefaultHighlightPainter highlightPainterBabla
+            = new DefaultHighlighter.DefaultHighlightPainter(Color.GREEN);
+    DefaultHighlighter.DefaultHighlightPainter highlightPainterWiktionary
+            = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
+    public String lookupSource = "";
     public boolean autoCorrect = true;
 
     // store position of caret and selected text (not used)
@@ -42,6 +49,10 @@ public class LanguageTextPane extends JTextPane {
 
     public void setAutoCorrect(boolean b) {
         autoCorrect = b;
+    }
+
+    public void removeHighlights() {
+        thisTextPane.getHighlighter().removeAllHighlights();
     }
 
     public LanguageTextPane(String lang) {
@@ -82,6 +93,10 @@ public class LanguageTextPane extends JTextPane {
             try {
                 wordposition = WordUtils.startOfWord(doc, position);
                 wordlength = WordUtils.endOfWord(doc, position) - wordposition;
+
+                thisTextPane.getHighlighter().removeAllHighlights();
+                thisTextPane.getHighlighter().addHighlight(wordposition, wordposition + wordlength,
+                        highlightPainter);
 
                 String selectedString = doc.getText(wordposition, wordlength);
                 if (selectedString.length() > 0) {
@@ -193,6 +208,14 @@ public class LanguageTextPane extends JTextPane {
             }
             selectedPosition = position;
             selectedLength = length;
+            if (lookupSource.equals("Babla")) {
+                highlightPainter = highlightPainterBabla;
+                lookupWord(selectedPosition, "Babla");
+            }
+            if (lookupSource.equals("Wiktionary")) {
+                highlightPainter = highlightPainterWiktionary;
+                lookupWord(selectedPosition, "Wiktionary");
+            }
         }
     };
 
@@ -206,15 +229,15 @@ public class LanguageTextPane extends JTextPane {
             String[] groups = letterGroups.split(" +");
 
             // create an array of characters so that every character is followed by the replacing character on INSERT
- //           System.out.println("---- groups");
+            //           System.out.println("---- groups");
             for (String group : groups) {
- //               System.out.println("group " + group);
+                //               System.out.println("group " + group);
                 for (Character cc : group.toCharArray()) {
                     letterGroupsArray.add(cc);
                 };
                 letterGroupsArray.add(group.charAt(0));
             }
- //          System.out.println("----");
+            //          System.out.println("----");
 
             if (letterGroupsArray.contains(c)) {
                 if (c != ' ') {
@@ -240,11 +263,11 @@ public class LanguageTextPane extends JTextPane {
                     StyledDocument doc = thisTextPane.getStyledDocument();
                     String selection = doc.getText(selectedPosition - 1, 1);
                     String newSelection = invertChar(selection.charAt(0));
-                  
+
                     if (!newSelection.equals(selection)) {
                         doc.remove(selectedPosition - 1, 1);
                         autoCorrect = false;
-                        doc.insertString(selectedPosition, newSelection, doc.getStyle("default")); 
+                        doc.insertString(selectedPosition, newSelection, doc.getStyle("default"));
                         autoCorrect = true;
                         thisTextPane.setCaretPosition(selectedPosition); // because insertion advances caret
 
