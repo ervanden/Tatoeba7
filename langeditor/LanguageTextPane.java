@@ -35,7 +35,7 @@ public class LanguageTextPane extends JTextPane {
     DefaultHighlighter.DefaultHighlightPainter highlightPainterBabla
             = new DefaultHighlighter.DefaultHighlightPainter(Color.GREEN);
     DefaultHighlighter.DefaultHighlightPainter highlightPainterWiktionary
-            = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
+            = new DefaultHighlighter.DefaultHighlightPainter(Color.CYAN);
     public String lookupSource = "";
     public boolean autoCorrect = true;
 
