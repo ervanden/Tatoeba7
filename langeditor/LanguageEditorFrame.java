@@ -139,7 +139,7 @@ public class LanguageEditorFrame extends JFrame implements ActionListener, ItemL
                 buttonLookupWiktionary.setBackground(Color.LIGHT_GRAY);
             } else {
                 editArea.lookupSource = "Wiktionary";
-                buttonLookupWiktionary.setBackground(Color.BLUE);
+                buttonLookupWiktionary.setBackground(Color.CYAN);
                 buttonLookupBabla.setBackground(Color.LIGHT_GRAY);
             };
             editArea.removeHighlights();
