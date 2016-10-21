@@ -37,7 +37,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
     public LanguageTextPane sourceArea;
     public LanguageTextPane targetArea;
-    public JTextPane commentArea;
+    public LanguageTextPane commentArea;
 
     JScrollPane scrollingSourceArea;
     JScrollPane scrollingTargetArea;
@@ -88,6 +88,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
     GenericTextFrame ngramFrame = null;
 
     boolean editing = false;
+
     Cluster editingCluster = null;   // cluster that is currently being edited
 
     class WindowUtils extends WindowAdapter {
@@ -111,13 +112,16 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
     }
 
-    public void writePane(JTextPane pane, String msg) {
+    public void writePane(LanguageTextPane pane, String msg) {
         Document doc = pane.getDocument();
         try {
             doc.insertString(doc.getLength(), msg + "\n", null);
         } catch (BadLocationException blex) {
         }
+        boolean lookupActive = pane.lookupActive;
+        pane.lookupActive = false;
         pane.setCaretPosition(doc.getLength());
+        pane.lookupActive = lookupActive;
     }
 
     public void setAutoCorrect(boolean b) {
@@ -163,6 +167,9 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         sourceDisplayed = false;
         targetDisplayed = false;
         editing = false;
+        sourceArea.lookupActive = true;
+        targetArea.lookupActive = true;
+        commentArea.lookupActive = true;
         editingCluster = null;
 
         erasePane(sourceArea);
@@ -336,6 +343,9 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             sourceDisplayed = false;
             targetDisplayed = false;
             editing = false;
+            sourceArea.lookupActive = true;
+            targetArea.lookupActive = true;
+            commentArea.lookupActive = true;
             editingCluster = null;
             buttonPrevious.setEnabled(false);
             buttonEdit.setEnabled(false);
@@ -554,18 +564,21 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 try {
                     FileWriter fw = new FileWriter(clustersFileName, true);
                     BufferedWriter bw = new BufferedWriter(fw);
-               System.out.println("appending cluster");
+                    System.out.println("appending cluster");
                     saveCluster(c, bw);
                     if (editingCluster != null) {
                         bw.write("replaces" + "\u0009" + c.nr);
                         bw.newLine();
                     }
-                   bw.close();
+                    bw.close();
                 } catch (IOException e) {
                     MsgTextPane.write(" io exception while saving cluster");
                 }
 
                 editing = false;
+                sourceArea.lookupActive = true;
+                targetArea.lookupActive = true;
+                commentArea.lookupActive = true;
                 buttonCommit.setEnabled(false);
                 buttonCancel.setEnabled(false);
             }
@@ -604,26 +617,26 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
             if (!editing) {
                 System.out.println("Cancel while not editing! Ignored");
+            } else if (editingCluster == null) { // user created a new cluster
+                erasePane(sourceArea);
+                erasePane(targetArea);
+                erasePane(commentArea);
             } else {
-
-                if (editingCluster == null) { // user created a new cluster
-                    erasePane(sourceArea);
-                    erasePane(targetArea);
-                    erasePane(commentArea);
-                } else {
-                    // The user was editing an existing cluster: redisplay the original sentences
-                    // The cluster is on the  stack so we can call ButtonNext and buttonTranslate
-                    sourceDisplayed = false;
-                    targetDisplayed = false;
-                    // when sourceDisplayed and targetDisplayed are false, buttonNext will pick a next cluster
-                    // or go one up in the stack. If we pop(), the latter will happen and we have our cluster redisplayed
-                    clusterFifo.pop();
-                    executeAction("buttonNext");
-                    executeAction("buttonTranslate");
-                }
+                // The user was editing an existing cluster: redisplay the original sentences
+                // The cluster is on the  stack so we can call ButtonNext and buttonTranslate
+                sourceDisplayed = false;
+                targetDisplayed = false;
+                // when sourceDisplayed and targetDisplayed are false, buttonNext will pick a next cluster
+                // or go one up in the stack. If we pop(), the latter will happen and we have our cluster redisplayed
+                clusterFifo.pop();
+                executeAction("buttonNext");
+                executeAction("buttonTranslate");
             }
 
             editing = false;
+            sourceArea.lookupActive = true;
+            targetArea.lookupActive = true;
+            commentArea.lookupActive = true;
             editingCluster = null;
 
             sourceArea.setBackground(Color.WHITE);
@@ -646,6 +659,9 @@ public class TatoebaFrame extends JFrame implements ActionListener {
         if (action.equals("buttonCreate")) {
 
             editing = true;
+            sourceArea.lookupActive = false;
+            targetArea.lookupActive = false;
+            commentArea.lookupActive = false;
             editingCluster = null;
             buttonCommit.setEnabled(true);
             buttonCancel.setEnabled(true);
@@ -686,6 +702,9 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
             if (sourceDisplayed) {  // if not, there is no cluster to edit
                 editing = true;
+                sourceArea.lookupActive = false;
+                targetArea.lookupActive = false;
+                commentArea.lookupActive = false;
                 editingCluster = clusterFifo.peekFirst();
 
                 System.out.println("Editing c" + editingCluster.nr);
@@ -873,6 +892,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
     public LanguageTextPane createTextPane(String language) {
         LanguageTextPane pane = new LanguageTextPane(language);
+        pane.lookupSource = "Babla";
+        pane.lookupActive = true;
         pane.displayParameters();
         return pane;
     }
@@ -881,7 +902,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
         sourceArea = createTextPane("generic");
         targetArea = createTextPane("generic");
-        commentArea = new JTextPane();
+        commentArea = createTextPane("generic");
 
         scrollingSourceArea = new JScrollPane(sourceArea);
         scrollingTargetArea = new JScrollPane(targetArea);

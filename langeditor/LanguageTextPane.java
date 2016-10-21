@@ -37,6 +37,7 @@ public class LanguageTextPane extends JTextPane {
     DefaultHighlighter.DefaultHighlightPainter highlightPainterWiktionary
             = new DefaultHighlighter.DefaultHighlightPainter(Color.CYAN);
     public String lookupSource = "";
+    public boolean lookupActive = true; 
     public boolean autoCorrect = true;
 
     // store position of caret and selected text (not used)
@@ -208,6 +209,7 @@ public class LanguageTextPane extends JTextPane {
             }
             selectedPosition = position;
             selectedLength = length;
+            if (lookupActive){
             if (lookupSource.equals("Babla")) {
                 highlightPainter = highlightPainterBabla;
                 lookupWord(selectedPosition, "Babla");
@@ -215,6 +217,7 @@ public class LanguageTextPane extends JTextPane {
             if (lookupSource.equals("Wiktionary")) {
                 highlightPainter = highlightPainterWiktionary;
                 lookupWord(selectedPosition, "Wiktionary");
+            }
             }
         }
     };
