@@ -156,7 +156,11 @@ public class LanguageTextPane extends JTextPane {
         }
 
         public void run() {
+            //System.out.println("correctText at caret "+position+"  getCaretPosition="+thisTextPane.getCaretPosition());
+            int caret=thisTextPane.getCaretPosition();
             language.dictionary().correctText(thisTextPane, position, length);
+            thisTextPane.setCaretPosition(caret);
+            //System.out.println("after correctText caret "+thisTextPane.getCaretPosition());
         }
     }
 
@@ -181,8 +185,10 @@ public class LanguageTextPane extends JTextPane {
     DocumentListener areaListener = new DocumentListener() {
 
         public void insertUpdate(DocumentEvent e) {
+
             int position = e.getOffset();
             int length = e.getLength();
+//System.out.println("insertUpdate "+position);
             if (autoCorrect) {
                 SwingUtilities.invokeLater(new RunDictionaryTask(position, length));
             }
