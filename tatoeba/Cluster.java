@@ -43,9 +43,8 @@ public class Cluster {
                     s.language = lineArray[0];
                     s.language = s.language.replaceAll("^ *", "");
                     s.language = s.language.replaceAll(" *$", "");
-                    s.sentence = lineArray[1];
-                    s.sentence = s.sentence.replaceAll("^ *", "");
-                    s.sentence = s.sentence.replaceAll(" *$", "");
+                    String sentence = lineArray[1];
+                    s.set(sentence);
 
                     // sanity check
                     if (!selectionFrame.sourceLanguages.contains(s.language)
@@ -76,7 +75,7 @@ public class Cluster {
                 String line = document.getText(start, end - start - 1);
                 Sentence s = new Sentence();
                 s.language = selectionFrame.targetLanguage();
-                s.sentence = line;
+                s.set(line);
                 s.comment = true;
                 sentences.add(s);
                 MsgTextPane.write("added [" + s.language + "] to cluster " + nr + " :" + s.sentence);

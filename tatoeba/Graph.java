@@ -7,8 +7,7 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-    class ClusterHashMap extends HashMap<Integer, Cluster> {
+class ClusterHashMap extends HashMap<Integer, Cluster> {
 
     /* ClusterHashMap stores a number that is equal to (or higher then, if clusters are removed) the largest
      assigned cluster number. This is needed to create a unique cluster number when the user creates a new cluster
@@ -31,32 +30,30 @@ import java.util.regex.Pattern;
     }
 }
 
-
 public class Graph {
 
-     HashMap<Integer, Sentence> sentences = new HashMap<Integer, Sentence>();
-     ClusterHashMap clusters = new ClusterHashMap();
-     LanguageMatrix languageMatrix;
+    HashMap<Integer, Sentence> sentences = new HashMap<Integer, Sentence>();
+    ClusterHashMap clusters = new ClusterHashMap();
+    LanguageMatrix languageMatrix;
 
-    public  int clusterCount = 0;
-    public  int selectedClusterCount = 0;
+    public int clusterCount = 0;
+    public int selectedClusterCount = 0;
 
-    public  int minComplexity;
-    public  int maxComplexity;
+    public int minComplexity;
+    public int maxComplexity;
 
-     ArrayList<Integer> complexityFreq = new ArrayList<>();
-     final int MAX_COMPLEXITY = 1000;
-   
+    ArrayList<Integer> complexityFreq = new ArrayList<>();
+    final int MAX_COMPLEXITY = 1000;
 
-    public  int maximumClusterNumber() {
+    public int maximumClusterNumber() {
         return clusters.maximumClusterNumber();
     }
 
-    public  void addSentence(Sentence s) {
+    public void addSentence(Sentence s) {
         sentences.put(s.nr, s);
     }
 
-    public  boolean addLink(int nr1, int nr2) {
+    public boolean addLink(int nr1, int nr2) {
         Sentence v1 = sentences.get(nr1);
         Sentence v2 = sentences.get(nr2);
 
@@ -86,19 +83,17 @@ public class Graph {
                 c2.add(v1);
                 v1.cluster = c2;
 
-            } else {  // c1!=null and c2!=null
+            } else // c1!=null and c2!=null
+            if (c1.nr != c2.nr) {
 
-                if (c1.nr != c2.nr) {
-
-                    // put vertices of c2 in c1 and remove c2
-                    for (Sentence v : c2.sentences) {
-                        c1.add(v);
-                        v.cluster = c1;
-                    }
-
-                    clusters.remove(c2.nr);
-
+                // put vertices of c2 in c1 and remove c2
+                for (Sentence v : c2.sentences) {
+                    c1.add(v);
+                    v.cluster = c1;
                 }
+
+                clusters.remove(c2.nr);
+
             }
             return true;
         }
@@ -111,7 +106,7 @@ public class Graph {
      countSelectedClusters() can then very quickly return the number of selected clusters when the complexity sliders are moved.
      To actually select the clusters (upon 'Apply'), selectClusters must be called.
      */
-    private  void calculateComplexity() {
+    private void calculateComplexity() {
         // complexity is the average length of the sentences in the cluster
         // only calculated for clusters already selected by language!!
         complexityFreq.clear();
@@ -119,13 +114,39 @@ public class Graph {
             complexityFreq.add(i, 0);
         }
 
+        boolean pclusters;
+                        if (clusters.values().size() > 100) {
+                    System.out.println("too many clusters to print");pclusters=false;
+                } else {pclusters=true;}
+                            
+                        
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
         for (Cluster c : clusters.values()) {
             if (c.selectedByParameters) {
+
+                if (pclusters==true) {
+                    System.out.println("cluster");
+                    for (String tag : c.tags) {
+                        System.out.print("\u0009");
+                        System.out.print(tag);
+                    }
+                    System.out.println();
+                    for (Sentence s : c.sentences) {
+                        if (s.comment) {
+                            System.out.print("[" + s.language + "]");
+                        } else {
+                            System.out.print(s.language);
+                        }
+                        System.out.print("\u0009");
+                        System.out.print(s.sentence);
+                        System.out.println(" [complexity="+s.sentence.length()+"]");
+                    }
+                }
+
                 int complexity = 0;
                 for (Sentence s : c.sentences) {
-                    complexity = complexity + s.sentence.length();
+                    complexity = complexity + s.complexity;
                 }
                 c.complexity = complexity / c.sentences.size();
                 if (c.complexity > MAX_COMPLEXITY) {
@@ -152,7 +173,7 @@ public class Graph {
         }
     }
 
-    public  void selectClustersByParameters(
+    public void selectClustersByParameters(
             HashSet<String> sourceLanguages,
             HashSet<String> targetLanguages,
             HashSet<String> selectedTags,
@@ -236,7 +257,7 @@ public class Graph {
         calculateComplexity();
     }
 
-    public  void selectClustersByComplexity(float minFraction, float maxFraction, boolean countOnly) {
+    public void selectClustersByComplexity(float minFraction, float maxFraction, boolean countOnly) {
 
         // cumulative frequency of complexity is only counting the clusters selected by language
         int cmin = Math.max(0, Math.round(maxComplexity * minFraction));
@@ -247,6 +268,8 @@ public class Graph {
         } else if (complexityFreq.get(MAX_COMPLEXITY) == 0) { // called with no clusters selected
             selectedClusterCount = 0;
         } else {
+            
+ //           System.out.println("cmin "+cmin+" cmax "+cmax);
             if (cmin == 0) {
                 selectedClusterCount = complexityFreq.get(cmax);
             } else {
@@ -260,14 +283,14 @@ public class Graph {
         }
     }
 
-    public  void selectClusters() {
+    public void selectClusters() {
         // selectClustersByLanguage and selectClustersByComplexity are supposed to be called already
         for (Cluster c : clusters.values()) {
             c.selected = c.selectedByParameters && c.selectedByComplexity;
         }
     }
 
-    public  void displayClusters(GenericTextFrame frame, String which,SelectionFrame selectionFrame) {
+    public void displayClusters(GenericTextFrame frame, String which, SelectionFrame selectionFrame) {
         frame.erase();
         for (Cluster c : clusters.values()) {
             if ((which.equals("selected") && c.selected)
@@ -287,9 +310,7 @@ public class Graph {
         }
     }
 
-
-
-    public  int unsavedClusters() {
+    public int unsavedClusters() {
         int i = 0;
         for (Cluster c : clusters.values()) {
             if (c.unsaved) {
@@ -299,11 +320,11 @@ public class Graph {
         return i;
     }
 
-     class LanguageMatrix {
+    class LanguageMatrix {
 
-         HashMap<String, Integer> ll = new HashMap<>();
+        HashMap<String, Integer> ll = new HashMap<>();
 
-        public  int value(String language1, String language2) {
+        public int value(String language1, String language2) {
             String key = language1 + ":" + language2;
             Integer i = ll.get(key);
             if (i == null) {
@@ -313,7 +334,7 @@ public class Graph {
             }
         }
 
-        public  void increment(String language1, String language2) {
+        public void increment(String language1, String language2) {
             String key1 = language1 + ":" + language2;
             Integer value;
 
@@ -325,7 +346,7 @@ public class Graph {
             ll.put(key1, value + 1);
         }
 
-        public  void generate() {
+        public void generate() {
 
             ArrayList<String> languages = new ArrayList<>();
 
@@ -349,9 +370,9 @@ public class Graph {
         }
 
     }
-     
-     public void generateLanguageMatrix(){
-         languageMatrix=new LanguageMatrix();
-     }
+
+    public void generateLanguageMatrix() {
+        languageMatrix = new LanguageMatrix();
+    }
 
 }

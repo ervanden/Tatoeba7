@@ -1030,7 +1030,7 @@ public class TatoebaFrame extends JFrame implements ActionListener {
                 String[] ls = l.split("\u0009");
                 Sentence s = new Sentence();
                 s.nr = Integer.parseInt(ls[0]);
-                s.sentence = ls[2];
+                s.set(ls[2]);
                 s.language = ls[1];
 
                 if (s.language.matches("[a-z]+")) {
@@ -1169,12 +1169,8 @@ public class TatoebaFrame extends JFrame implements ActionListener {
 
                         s = new Sentence();
                         s.language = language;
-                        s.sentence = sentence;
                         s.comment = isComment;
-                        if (!isComment) {
-                            s.sentence = s.sentence.replaceAll("^ *", "");
-                            s.sentence = s.sentence.replaceAll(" *$", "");
-                        }
+                        s.set(sentence);
                         c.sentences.add(s);
 
                         selectionFrame.usedLanguages.add(s.language);
