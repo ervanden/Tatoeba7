@@ -89,6 +89,7 @@ public class SelectionFrame implements ActionListener {
     int sliderScale = 100;
     JSlider sliderMin = new JSlider(0, sliderScale, 0);
     JSlider sliderMax = new JSlider(0, sliderScale, sliderScale);
+    boolean sliderValuesValid = false;
 
     JLabel statusLabel = new JLabel("...");
     JLabel minComplexityLabel = new JLabel("Minimum complexity");
@@ -105,8 +106,15 @@ public class SelectionFrame implements ActionListener {
     {
         StyleConstants.setBold(sas_selected, true);
         StyleConstants.setForeground(sas_selected, Color.BLUE);
-        sliderMin.setMajorTickSpacing(1);
-        sliderMax.setMajorTickSpacing(1);
+        System.out.println("init block");
+        sliderMin.setPaintTicks(true);
+        sliderMin.setMinorTickSpacing(1);
+                sliderMin.setMajorTickSpacing(5);
+                sliderMin.setSnapToTicks(false);
+                sliderMax.setPaintTicks(true);
+        sliderMax.setMinorTickSpacing(1);
+                sliderMax.setMajorTickSpacing(5);
+                sliderMax.setSnapToTicks(false);
     }
 
     class WindowCloser extends WindowAdapter {
@@ -134,7 +142,7 @@ public class SelectionFrame implements ActionListener {
 
     public void setVisible(boolean visible) {
         if (visible) {
-            tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
+            selectClustersByParameters();
             tatoebaFrame.graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
                     (float) sliderMax.getValue() / (float) sliderScale, true);
             statusMessage(true);
@@ -621,6 +629,24 @@ public class SelectionFrame implements ActionListener {
         }
     }
 
+    private void selectClustersByParameters() {
+        // call this method each time a parameter in the selectionFrame is changed
+        // It calls the corresponding graph method. This selects the clusters according to the new parameters, and also recalculates the frequency table of the cluster lengths.
+        // The sliders min and max values are then also adapted
+        tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
+        sliderScale = tatoebaFrame.graph.maxComplexity;
+        System.out.println("new slider scale = " + sliderScale);
+        sliderValuesValid = false; // the methods  below trigger the change listener. Avoid this until all values are set.
+        sliderMin.setMinimum(0);
+        sliderMax.setMinimum(0);
+        sliderMin.setMaximum(sliderScale);
+        sliderMax.setMaximum(sliderScale);
+        sliderMin.setValue(0);
+        sliderMax.setValue(sliderScale);
+        sliderValuesValid = true;
+
+    }
+
     public SelectionFrame(TatoebaFrame t) {
         tatoebaFrame = t;
         sourceLanguages.add(languagetrainer.LanguageTrainer.sourceLanguage);
@@ -659,7 +685,7 @@ public class SelectionFrame implements ActionListener {
         sourcePatternField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 sourcePattern = sourcePatternField.getText();
-                tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
+                selectClustersByParameters();
                 statusMessage(true);
             }
         ;
@@ -668,7 +694,7 @@ public class SelectionFrame implements ActionListener {
         targetPatternField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 targetPattern = targetPatternField.getText();
-                tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
+                selectClustersByParameters();
                 statusMessage(true);
             }
         ;
@@ -683,7 +709,7 @@ public class SelectionFrame implements ActionListener {
                 allLanguagesSelected.clear();
                 sourceLanguagesSelected.clear();
                 statusMessage(false);
-                tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
+                selectClustersByParameters();
                 statusMessage(true);
                 enableCaretListener = true;
             }
@@ -698,7 +724,7 @@ public class SelectionFrame implements ActionListener {
                 allLanguagesSelected.clear();
                 sourceLanguagesSelected.clear();
                 statusMessage(false);
-                tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
+                selectClustersByParameters();
                 statusMessage(true);
                 enableCaretListener = true;
             }
@@ -717,7 +743,7 @@ public class SelectionFrame implements ActionListener {
                     allLanguagesSelected.clear();
                     targetLanguagesSelected.clear();
                     statusMessage(false);
-                    tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
+                    selectClustersByParameters();
                     statusMessage(true);
                     enableCaretListener = true;
                 }
@@ -735,7 +761,7 @@ public class SelectionFrame implements ActionListener {
                 allLanguagesSelected.clear();
                 targetLanguagesSelected.clear();
                 statusMessage(false);
-                tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
+                selectClustersByParameters();
                 statusMessage(true);
                 enableCaretListener = true;
             }
@@ -750,7 +776,7 @@ public class SelectionFrame implements ActionListener {
                 allTagsSelected.clear();
                 selectedTagsSelected.clear();
                 statusMessage(false);
-                tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
+                selectClustersByParameters();
                 statusMessage(true);
                 enableCaretListener = true;
             }
@@ -765,7 +791,7 @@ public class SelectionFrame implements ActionListener {
                 allTagsSelected.clear();
                 selectedTagsSelected.clear();
                 statusMessage(false);
-                tatoebaFrame.graph.selectClustersByParameters(sourceLanguages, targetLanguages, selectedTags, sourcePattern, targetPattern);
+                selectClustersByParameters();
                 statusMessage(true);
                 enableCaretListener = true;
             }
@@ -777,23 +803,27 @@ public class SelectionFrame implements ActionListener {
         sliderMin.addChangeListener((new ChangeListener() {
 
             public void stateChanged(ChangeEvent changeEvent) {
-                if (sliderMin.getValue() > sliderMax.getValue()) {
-                    sliderMin.setValue(sliderMax.getValue());
+                if (sliderValuesValid) {
+                    if (sliderMin.getValue() > sliderMax.getValue()) {
+                        sliderMin.setValue(sliderMax.getValue());
+                    }
+                    tatoebaFrame.graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
+                            (float) sliderMax.getValue() / (float) sliderScale, true); // true = count only
+                    statusMessage(true);
                 }
-                tatoebaFrame.graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
-                        (float) sliderMax.getValue() / (float) sliderScale, true); // true = count only
-                statusMessage(true);
             }
         }));
 
         sliderMax.addChangeListener((new ChangeListener() {
             public void stateChanged(ChangeEvent changeEvent) {
-                if (sliderMin.getValue() > sliderMax.getValue()) {
-                    sliderMax.setValue(sliderMin.getValue());
+                if (sliderValuesValid) {
+                    if (sliderMin.getValue() > sliderMax.getValue()) {
+                        sliderMax.setValue(sliderMin.getValue());
+                    }
+                    tatoebaFrame.graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
+                            (float) sliderMax.getValue() / (float) sliderScale, true); // true = count only
+                    statusMessage(true);
                 }
-                tatoebaFrame.graph.selectClustersByComplexity((float) sliderMin.getValue() / (float) sliderScale,
-                        (float) sliderMax.getValue() / (float) sliderScale, true); // true = count only
-                statusMessage(true);
             }
         }));
 
