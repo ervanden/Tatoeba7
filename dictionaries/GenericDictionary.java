@@ -84,7 +84,7 @@ public class GenericDictionary {
     }
 
     public void printModifications() {
-       dictFrame.writeDictArea("\nDICTIONARY MODIFICATIONS\n", false);
+        dictFrame.writeDictArea("\nDICTIONARY MODIFICATIONS\n", false);
         if (!addedwords.isEmpty()) {
             dictFrame.writeDictArea("WORDS ADDED\n", false);
             printEntryList(addedwords, words);
@@ -310,6 +310,7 @@ public class GenericDictionary {
 
     public String correctWord(String word) {
         // word is expected to be lowercase and diacritics removed
+//        System.out.println("correctWord(" + word + ")");
         if (words.containsKey(word)) {
             return correctWordByDictionary(word);
         } else {
@@ -364,14 +365,14 @@ public class GenericDictionary {
                 startWordPosition = WordUtils.nextAlphabetic(doc, position);
                 endWordPosition = WordUtils.nextNonAlphabetic(doc, startWordPosition);
                 wordorig = doc.getText(startWordPosition, endWordPosition - startWordPosition);
-                word = language.removeDiacritics(wordorig);
-                wordlc = language.toLowerCase(word);
+                word = language.toLowerCase(wordorig);
+                wordlc = language.removeDiacritics(word);
                 wordnewlc = correctWord(wordlc);  // dictionary lookup for words and stems              
                 // make characters uppercase if they were originally
                 wordnew = "";
                 for (int i = 0; i < word.length(); i++) {
                     char nextChar = wordnewlc.charAt(i);
-                    if (Character.isUpperCase(word.charAt(i))) {
+                    if (Character.isUpperCase(wordorig.charAt(i))) {
                         wordnew = wordnew + language.toUpperCase(nextChar); // DocUtils does I correctly
                     } else {
                         wordnew = wordnew + nextChar;
