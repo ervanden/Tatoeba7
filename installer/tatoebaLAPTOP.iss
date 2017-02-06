@@ -7,14 +7,14 @@
 #define MyAppExeName "Tatoeba7.jar"
 
 ; settings on asus
-;#define TatoebaLocation "C:\Users\erikv\Documents"
-;#define MyProjectsLocation "C:\Users\erikv\Documents\NetBeansProjects"
-;#define MyOutputDir "C:\Users\erikv\Documents"
+#define TatoebaLocation "C:\Users\erikv\Documents"
+#define MyProjectsLocation "C:\Users\erikv\Documents\NetBeansProjects"
+#define MyOutputDir "C:\Users\erikv\Documents"
 
 ; settings on dell
-#define TatoebaLocation "C:\Users\ervanden\Documents"
-#define MyProjectsLocation "C:\Users\ervanden\Documents\NetBeansProjects"
-#define MyOutputDir "C:\Users\ervanden\Documents"
+;#define TatoebaLocation "C:\Users\ervanden\Documents"
+;#define MyProjectsLocation "C:\Users\ervanden\Documents\NetBeansProjects"
+;#define MyOutputDir "C:\Users\ervanden\Documents"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.

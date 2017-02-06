@@ -41,13 +41,14 @@ public class GenericDictionary {
 
     Language language;
 
-    DictionaryFrame dictFrame = null;
+    DictionaryFrameInterface dictFrame = null;
     Boolean markCorrection = false;
     Boolean matchInfo = true;
 
     public GenericDictionary(Language l) {
         language = l;
-        dictFrame = new DictionaryFrame(language);
+ //       dictFrame = new DictionaryFrameDevNull(language);
+        dictFrame =(DictionaryFrameInterface) new DictionaryFrame(language);
         dictFrame.setVisible(false);
     }
 
@@ -70,6 +71,7 @@ public class GenericDictionary {
         markCorrection = b;
     }
 
+    
     private void printEntryList(HashSet set, HashMap map) {
         Iterator iter = set.iterator();
         while (iter.hasNext()) {
