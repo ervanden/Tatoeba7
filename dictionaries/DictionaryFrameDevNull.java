@@ -6,7 +6,7 @@ import languages.Language;
 
 
 
-public class DictionaryFrameDevNull extends JFrame implements DictionaryFrameInterface {
+public class DictionaryFrameDevNull  implements DictionaryFrameInterface {
 
     public DictionaryFrameDevNull(Language l){};
 

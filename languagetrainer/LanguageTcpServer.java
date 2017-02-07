@@ -23,29 +23,33 @@ class LanguageServerThread extends Thread {
 
             String inputline;
             inputline = inFromClient.readLine();
-            System.out.println("Server received " + inputline);
+//            System.out.println("Server received " + inputline);
 
             String[] parts = inputline.split("=");
-String lang=parts[0];
-String sentence=parts[1];
-String response; //="Language=<"+lang+">\nSentence=<"+sentence+">";
+            String lang = parts[0];
+            String sentence = parts[1];
+            String response; 
 
-Language language = LanguageContext.get(lang);
-GenericDictionary dictionary = language.dictionary();
-dictionary.dictionaryWindowVisible(false);
-dictionary.setMatchInfo(false);
-dictionary.setMarkCorrection(false);
+            Language language = LanguageContext.get(lang);
+            GenericDictionary dictionary = language.dictionary();
+            dictionary.dictionaryWindowVisible(false);
+            dictionary.setMatchInfo(false);
+            dictionary.setMarkCorrection(false);
 
-response=  dictionary.correctWordByDictionary(sentence);
-  
+            response = dictionary.correctWordByDictionary(sentence);
+
+//            System.out.println("Server replies <" + response + ">");
+            byte[] ba={};
             try {
-                outToClient.writeBytes(response);
+                try {
+                    ba = response.getBytes("UTF8");
+                } catch (Exception e) {
+                };
+                outToClient.write(ba,0,ba.length);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            System.out.println("Server replied <" + response+">");
             socket.close();
 
         } catch (IOException e) {

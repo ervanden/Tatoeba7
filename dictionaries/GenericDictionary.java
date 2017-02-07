@@ -25,6 +25,7 @@ import javax.swing.text.StyledDocument;
 import langeditor.ConfirmDialog;
 import langeditor.LanguageTextPane;
 import languages.Language;
+import languagetrainer.LanguageServer;
 import utils.ByteOrderMark;
 import utils.MsgTextPane;
 import utils.Sas;
@@ -47,8 +48,11 @@ public class GenericDictionary {
 
     public GenericDictionary(Language l) {
         language = l;
- //       dictFrame = new DictionaryFrameDevNull(language);
-        dictFrame =(DictionaryFrameInterface) new DictionaryFrame(language);
+        if (LanguageServer.server_mode) {
+            dictFrame = new DictionaryFrameDevNull(language);
+        } else {
+            dictFrame = (DictionaryFrameInterface) new DictionaryFrame(language);
+        }
         dictFrame.setVisible(false);
     }
 
@@ -71,7 +75,6 @@ public class GenericDictionary {
         markCorrection = b;
     }
 
-    
     private void printEntryList(HashSet set, HashMap map) {
         Iterator iter = set.iterator();
         while (iter.hasNext()) {
