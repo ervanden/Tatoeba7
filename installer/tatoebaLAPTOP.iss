@@ -13,7 +13,7 @@
 
 ; settings on dell
 #define TatoebaLocation "C:\Users\ervanden\Documents"
-#define MyProjectsLocation "C:\Users\ervanden\Documents\NetBeansProjects"
+#define MyProjectsLocation "C:\Users\ervanden\Documents\NetBeansProject"
 #define MyOutputDir "C:\Users\ervanden\Documents"
 
 [Setup]
