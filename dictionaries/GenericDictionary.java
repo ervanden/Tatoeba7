@@ -1,5 +1,6 @@
 package dictionaries;
 
+import static dictionaries.WordUtils.isLetter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.StyledDocument;
 import langeditor.ConfirmDialog;
 import langeditor.LanguageTextPane;
@@ -419,6 +421,64 @@ public class GenericDictionary {
             }
             markCorrection = false;
         }
+    }
+
+    public static int stringNextAlphabetic(String s, int position) {
+        while (position < s.length() && !(isLetter(s.charAt(position)))) {
+            position++;
+        };
+        return position;
+
+    }
+
+    public static int stringNextNonAlphabetic(String s, int position) {
+        while (position < s.length() && (isLetter(s.charAt(position)))) {
+            position++;
+        };
+        return position;
+    }
+
+    public String correctString(String line) {
+        /* same as correctText() */
+        String wordorig, word, wordlc, wordnew, wordnewlc;
+        int position;
+        int startWordPosition;
+        int endWordPosition;
+        int wordlength;
+        StringBuilder newline = new StringBuilder(line);
+
+        position = 0;
+        while (position < line.length()) {
+            System.out.println("\nposition <" + position + ">");
+            startWordPosition = stringNextAlphabetic(line, position);
+            endWordPosition = stringNextNonAlphabetic(line, startWordPosition);
+            System.out.println("start word position <" + startWordPosition + ">");
+            System.out.println("end word position <" + endWordPosition + ">");
+            wordlength = endWordPosition - startWordPosition;
+            wordorig = line.substring(startWordPosition, endWordPosition);
+
+            System.out.println("wordorig <" + wordorig + ">");
+            word = language.toLowerCase(wordorig);
+            wordlc = language.removeDiacritics(word);
+            wordnewlc = correctWord(wordlc);  // dictionary lookup for words and stems              
+            // make characters uppercase if they were originally
+            wordnew = "";
+            for (int i = 0; i < wordlength; i++) {
+                char nextChar = wordnewlc.charAt(i);
+                if (Character.isUpperCase(wordorig.charAt(i))) {
+                    wordnew = wordnew + language.toUpperCase(nextChar); // DocUtils does I correctly
+                } else {
+                    wordnew = wordnew + nextChar;
+                }
+            }
+            System.out.println("wordnew <" + wordnew + ">");
+
+            if (!wordnew.equals(wordorig)) {
+                newline.replace(startWordPosition, endWordPosition, wordnew);
+            }
+            position = endWordPosition+1;
+        }
+        return newline.toString();
     }
 
     public void optimizeWords() {

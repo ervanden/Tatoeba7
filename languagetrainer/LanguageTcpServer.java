@@ -28,7 +28,7 @@ class LanguageServerThread extends Thread {
             String[] parts = inputline.split("=");
             String lang = parts[0];
             String sentence = parts[1];
-            String response; 
+            String response;
 
             Language language = LanguageContext.get(lang);
             GenericDictionary dictionary = language.dictionary();
@@ -39,13 +39,13 @@ class LanguageServerThread extends Thread {
             response = dictionary.correctWordByDictionary(sentence);
 
 //            System.out.println("Server replies <" + response + ">");
-            byte[] ba={};
+            byte[] ba = {};
             try {
                 try {
                     ba = response.getBytes("UTF8");
                 } catch (Exception e) {
                 };
-                outToClient.write(ba,0,ba.length);
+                outToClient.write(ba, 0, ba.length);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -77,5 +77,17 @@ public class LanguageTcpServer extends Thread {
             System.out.println("Could not listen on port " + portNumber + ". Exiting...");
             System.exit(-1);
         }
+    }
+
+    public static String correctionTest(String lang, String sentence) {
+
+        Language language = LanguageContext.get(lang);
+        GenericDictionary dictionary = language.dictionary();
+        dictionary.dictionaryWindowVisible(false);
+        dictionary.setMatchInfo(false);
+        dictionary.setMarkCorrection(false);
+
+        return dictionary.correctString(sentence);
+
     }
 }

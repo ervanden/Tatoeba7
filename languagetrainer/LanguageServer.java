@@ -6,6 +6,10 @@ public class LanguageServer {
 
     public static void main(String[] args) {
 
+        
+        System.out.println(LanguageTcpServer.correctionTest("pol","Mysle, ze to nie mozliwe"));
+
+ /*       
         int server_port = 0;
 
         if (args.length == 0) {
@@ -30,5 +34,6 @@ public class LanguageServer {
                 new LanguageTcpServer(server_port).start();
             }
         }
+*/
     }
 }
