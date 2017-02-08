@@ -238,15 +238,16 @@ public class LanguageTextPane extends JTextPane {
             String[] groups = letterGroups.split(" +");
 
             // create an array of characters so that every character is followed by the replacing character on INSERT
-            //           System.out.println("---- groups");
-            for (String group : groups) {
-                //               System.out.println("group " + group);
+ //                      System.out.println("---- groups in <"+letterGroups+">");
+ //                      System.out.println("---- lang <"+languageCode+">");
+                       for (String group : groups) {
+ //                              System.out.println("group " + group);
                 for (Character cc : group.toCharArray()) {
                     letterGroupsArray.add(cc);
                 };
                 letterGroupsArray.add(group.charAt(0));
             }
-            //          System.out.println("----");
+//                      System.out.println("----");
 
             if (letterGroupsArray.contains(c)) {
                 if (c != ' ') {

@@ -1,5 +1,8 @@
 package languages;
 
+import dictionaries.DictionaryFrame;
+import dictionaries.DictionaryFrameDevNull;
+import dictionaries.DictionaryFrameInterface;
 import dictionaries.GenericDictionary;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JFileChooser;
+import languagetrainer.LanguageServer;
 import tatoeba.PictureTrainer;
 import utils.*;
 
@@ -30,8 +34,13 @@ public class GenericLanguage {
     HashMap<String, HashMap<String, String>> wordMaps = new HashMap<>();
 
     public String dictionaryFileName() {
-        String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-        return defaultFolder + "\\Tatoeba\\" + languageName + "Dictionary.txt";
+        if (LanguageServer.server_mode) {
+            return "/home/pi/Tatoeba/" + languageName + "Dictionary.txt";
+        } else {
+            String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
+            return defaultFolder + "\\Tatoeba\\" + languageName + "Dictionary.txt";
+        }
+
     }
 
     public GenericDictionary dictionary() {
@@ -57,41 +66,41 @@ public class GenericLanguage {
     public String letters() {
         return "";
     }
-    
-    public String diacriticsGroups(){
+
+    public String diacriticsGroups() {
         return "";
     }
-/*
-    public String invertDiacritics(String word) {
-        return word;
-    }
+    /*
+     public String invertDiacritics(String word) {
+     return word;
+     }
 
-    public String invertDiacriticsGeneric(String word, String letterGroups) {
+     public String invertDiacriticsGeneric(String word, String letterGroups) {
 
 
-        ArrayList<Character> letterGroupsArray = new ArrayList<>();
-        for (Character c : letterGroups.toCharArray()) {
-            letterGroupsArray.add(c);
-        }
+     ArrayList<Character> letterGroupsArray = new ArrayList<>();
+     for (Character c : letterGroups.toCharArray()) {
+     letterGroupsArray.add(c);
+     }
 
-        char c;
-        String newword = "";
-        for (int i = 0; i <= word.length() - 1; i++) {
-            c = word.charAt(i);
-            if (letterGroupsArray.contains(c)) {
-                if (c != ' ') {
-                    int j = letterGroupsArray.indexOf(c);
-                    if (j >= 0) {
-                        c = letterGroupsArray.get(j + 1);
-                    } // if c is not in the array it is not replaced
-                }
-            }
-            newword = newword + c;
-        }
-        return newword;
-    }
-*/
-    
+     char c;
+     String newword = "";
+     for (int i = 0; i <= word.length() - 1; i++) {
+     c = word.charAt(i);
+     if (letterGroupsArray.contains(c)) {
+     if (c != ' ') {
+     int j = letterGroupsArray.indexOf(c);
+     if (j >= 0) {
+     c = letterGroupsArray.get(j + 1);
+     } // if c is not in the array it is not replaced
+     }
+     }
+     newword = newword + c;
+     }
+     return newword;
+     }
+     */
+
     public String removeDiacritics(String word) {
         word = word.replaceAll("[âäàąáâã]", "a");
         word = word.replaceAll("[éèêëę]", "e");
@@ -104,7 +113,7 @@ public class GenericLanguage {
         word = word.replaceAll("ł", "l");
         word = word.replaceAll("ń", "n");
         word = word.replaceAll("[źż]", "z");
-        
+
         return word;
     }
 

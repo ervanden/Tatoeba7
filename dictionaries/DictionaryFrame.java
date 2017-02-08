@@ -12,7 +12,7 @@ import utils.AreaFont;
 import utils.MsgTextPane;
 import utils.Sas;
 
-public class DictionaryFrame extends JFrame implements ActionListener {
+public class DictionaryFrame extends JFrame implements ActionListener,DictionaryFrameInterface {
 
     private Language language;
     private JFrame thisFrame = (JFrame) this;
@@ -73,6 +73,8 @@ public class DictionaryFrame extends JFrame implements ActionListener {
             close();
         }
     }
+    
+    public void setVisible(boolean b){super.setVisible(b);};
 
     DocumentListener dictAreaListener = new DocumentListener() {
 

@@ -7,9 +7,9 @@
 #define MyAppExeName "Tatoeba7.jar"
 
 ; settings on asus
-;#define TatoebaLocation "C:\Users\erikv\Documents"
-;#define MyProjectsLocation "C:\Users\erikv\Documents\NetBeansProjects"
-;#define MyOutputDir "C:\Users\erikv\Documents"
+#define TatoebaLocation "C:\Users\erikv\Documents"
+#define MyProjectsLocation "C:\Users\erikv\Documents\NetBeansProjects"
+#define MyOutputDir "C:\Users\erikv\Documents"
 
 ; settings on dell
 #define TatoebaLocation "C:\Users\ervanden\Documents"

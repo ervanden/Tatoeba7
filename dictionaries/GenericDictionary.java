@@ -25,6 +25,7 @@ import javax.swing.text.StyledDocument;
 import langeditor.ConfirmDialog;
 import langeditor.LanguageTextPane;
 import languages.Language;
+import languagetrainer.LanguageServer;
 import utils.ByteOrderMark;
 import utils.MsgTextPane;
 import utils.Sas;
@@ -41,13 +42,17 @@ public class GenericDictionary {
 
     Language language;
 
-    DictionaryFrame dictFrame = null;
+    DictionaryFrameInterface dictFrame = null;
     Boolean markCorrection = false;
     Boolean matchInfo = true;
 
     public GenericDictionary(Language l) {
         language = l;
-        dictFrame = new DictionaryFrame(language);
+        if (LanguageServer.server_mode) {
+            dictFrame = new DictionaryFrameDevNull(language);
+        } else {
+            dictFrame = (DictionaryFrameInterface) new DictionaryFrame(language);
+        }
         dictFrame.setVisible(false);
     }
 
