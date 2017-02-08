@@ -10,6 +10,20 @@ public class WordUtils {
         return (Character.isAlphabetic(c) || (c == '\''));
     }
 
+    public static int stringNextAlphabetic(String s, int position) {
+        while (position < s.length() && !(isLetter(s.charAt(position)))) {
+            position++;
+        };
+        return position;
+
+    }
+
+    public static int stringNextNonAlphabetic(String s, int position) {
+        while (position < s.length() && (isLetter(s.charAt(position)))) {
+            position++;
+        };
+        return position;
+    }
 
 
     public static int nextAlphabetic(Document doc, int position) {

@@ -1,6 +1,6 @@
 package dictionaries;
 
-import static dictionaries.WordUtils.isLetter;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,7 +22,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import javax.swing.text.StyledDocument;
 import langeditor.ConfirmDialog;
 import langeditor.LanguageTextPane;
@@ -423,20 +422,6 @@ public class GenericDictionary {
         }
     }
 
-    public static int stringNextAlphabetic(String s, int position) {
-        while (position < s.length() && !(isLetter(s.charAt(position)))) {
-            position++;
-        };
-        return position;
-
-    }
-
-    public static int stringNextNonAlphabetic(String s, int position) {
-        while (position < s.length() && (isLetter(s.charAt(position)))) {
-            position++;
-        };
-        return position;
-    }
 
     public String correctString(String line) {
         /* same as correctText() */
@@ -449,15 +434,15 @@ public class GenericDictionary {
 
         position = 0;
         while (position < line.length()) {
-            System.out.println("\nposition <" + position + ">");
-            startWordPosition = stringNextAlphabetic(line, position);
-            endWordPosition = stringNextNonAlphabetic(line, startWordPosition);
-            System.out.println("start word position <" + startWordPosition + ">");
-            System.out.println("end word position <" + endWordPosition + ">");
+//           System.out.println("\nposition <" + position + ">");
+            startWordPosition = WordUtils.stringNextAlphabetic(line, position);
+            endWordPosition = WordUtils.stringNextNonAlphabetic(line, startWordPosition);
+//            System.out.println("start word position <" + startWordPosition + ">");
+//            System.out.println("end word position <" + endWordPosition + ">");
             wordlength = endWordPosition - startWordPosition;
             wordorig = line.substring(startWordPosition, endWordPosition);
 
-            System.out.println("wordorig <" + wordorig + ">");
+//            System.out.println("wordorig <" + wordorig + ">");
             word = language.toLowerCase(wordorig);
             wordlc = language.removeDiacritics(word);
             wordnewlc = correctWord(wordlc);  // dictionary lookup for words and stems              
@@ -471,7 +456,7 @@ public class GenericDictionary {
                     wordnew = wordnew + nextChar;
                 }
             }
-            System.out.println("wordnew <" + wordnew + ">");
+//            System.out.println("wordnew <" + wordnew + ">");
 
             if (!wordnew.equals(wordorig)) {
                 newline.replace(startWordPosition, endWordPosition, wordnew);

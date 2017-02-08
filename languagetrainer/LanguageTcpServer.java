@@ -23,30 +23,26 @@ class LanguageServerThread extends Thread {
 
             String inputline;
             inputline = inFromClient.readLine();
-//            System.out.println("Server received " + inputline);
-
-            String[] parts = inputline.split("=");
-            String lang = parts[0];
-            String sentence = parts[1];
+//            System.out.println("Server receives <" + inputline+">");
             String response;
+            String[] parts = inputline.split("=");
+            if (parts.length < 2) {
+                response = "";
+            } else {
+                String lang = parts[0];
+                String sentence = parts[1];
+                Language language = LanguageContext.get(lang);
+                GenericDictionary dictionary = language.dictionary();
+                response = dictionary.correctString(sentence);
+            };
 
-            Language language = LanguageContext.get(lang);
-            GenericDictionary dictionary = language.dictionary();
-            dictionary.dictionaryWindowVisible(false);
-            dictionary.setMatchInfo(false);
-            dictionary.setMarkCorrection(false);
+            response = "=" + response + "=";   // otherwise leading and trailing blanks get lost
 
-            response = dictionary.correctWordByDictionary(sentence);
-
-//            System.out.println("Server replies <" + response + ">");
+            //           System.out.println("Server replies " + response );
             byte[] ba = {};
             try {
-                try {
-                    ba = response.getBytes("UTF8");
-                } catch (Exception e) {
-                };
+                ba = response.getBytes("UTF8");
                 outToClient.write(ba, 0, ba.length);
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -77,17 +73,5 @@ public class LanguageTcpServer extends Thread {
             System.out.println("Could not listen on port " + portNumber + ". Exiting...");
             System.exit(-1);
         }
-    }
-
-    public static String correctionTest(String lang, String sentence) {
-
-        Language language = LanguageContext.get(lang);
-        GenericDictionary dictionary = language.dictionary();
-        dictionary.dictionaryWindowVisible(false);
-        dictionary.setMatchInfo(false);
-        dictionary.setMarkCorrection(false);
-
-        return dictionary.correctString(sentence);
-
     }
 }
