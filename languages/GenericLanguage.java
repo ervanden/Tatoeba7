@@ -34,9 +34,9 @@ public class GenericLanguage {
     HashMap<String, HashMap<String, String>> wordMaps = new HashMap<>();
 
     public String dictionaryFileName() {
-        if (LanguageServer.server_mode) {
-            return "/home/pi/Tatoeba/" + languageName + "Dictionary.txt";
-        } else {
+        if (LanguageServer.server_mode) { // supposed to be running on Linux PI
+            return "/home/pi/Tatoeba/data/" + languageName + "Dictionary.txt";
+        } else {  // supposed to be running on Windows laptop
             String defaultFolder = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
             return defaultFolder + "\\Tatoeba\\" + languageName + "Dictionary.txt";
         }

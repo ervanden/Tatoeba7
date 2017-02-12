@@ -36,9 +36,6 @@ class LanguageServerThread extends Thread {
                 response = dictionary.correctString(sentence);
             };
 
-            response = "=" + response + "=";   // otherwise leading and trailing blanks get lost
-
-            //           System.out.println("Server replies " + response );
             byte[] ba = {};
             try {
                 ba = response.getBytes("UTF8");
