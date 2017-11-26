@@ -5,7 +5,6 @@ import java.util.HashMap;
 public class LanguageContext {
 
     // static object that translates a language name to its corresponding language object
-    
     static HashMap<String, Language> languageMap = new HashMap<>();
 
     public static Language get(String lang) {
@@ -26,6 +25,8 @@ public class LanguageContext {
                 language = new French();
             } else if (lang.equals("nld")) {
                 language = new Dutch();
+            } else if (lang.equals("ind")) {
+                language = new Indonesian();
             } else {
                 language = new Other();
             }
