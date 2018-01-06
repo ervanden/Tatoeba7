@@ -52,7 +52,16 @@ public class Indonesian extends GenericLanguage implements Language {
         if (color.equals("blue")) {
             tcolor = "biru";
         }
+                if (color.equals("dark blue")) {
+            tcolor = "biru";
+        }
+                        if (color.equals("light blue")) {
+            tcolor = "biru";
+        }
         if (color.equals("purple")) {
+            tcolor = "ungu";
+        }
+                if (color.equals("violet")) {
             tcolor = "ungu";
         }
         if (color.equals("pink")) {

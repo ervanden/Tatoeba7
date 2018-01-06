@@ -1028,18 +1028,30 @@ public class TatoebaFrame extends JFrame implements ActionListener {
             count = 0;
             while ((count < Integer.MAX_VALUE) && ((l = inputStream.readLine()) != null)) {
                 String[] ls = l.split("\u0009");
+                
+ if ((selectionFrame.targetLanguages.contains(ls[1]))
+|| (selectionFrame.sourceLanguages.contains(ls[1]))
+         ) {
+ 
+     // System.out.println(ls[2]);  
+ 
+
                 Sentence s = new Sentence();
                 s.nr = Integer.parseInt(ls[0]);
                 s.set(ls[2]);
                 s.language = ls[1];
 
                 if (s.language.matches("[a-z]+")) {
-
+ 
                     graph.addSentence(s);
 
                     selectionFrame.usedLanguages.add(s.language);
                     count++;
                 }
+                
+                if (count%1000==0){System.out.println(count);};
+ }
+ 
             }
         } catch (FileNotFoundException fnf) {
             MsgTextPane.write("file not found : " + fileName);
